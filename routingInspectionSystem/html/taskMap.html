@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>routingInspectionSystem</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/taskMap.css">
+    <script type="text/javascript" src="../script/api.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <div id="header">
+            <div>巡检地图</div>
+        </div>
+        <div id="main">
+            <!-- 简易地图系列 -->
+            <div class="easymap" style="display:none;">
+                
+            </div>
+            <!-- 高德地图内容 -->
+            <div class="amap">
+                <div class="mapInfo" id="mapContainer">
+                    
+                </div>
+            </div>
+            <!-- 其他组件内容 -->
+            <div class="func-operation" style="display:none;">
+                
+            </div>
+        </div>
+        <div id="footer">
+            <h5>Copyright &copy;<span id="year"></span> </h5>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.6&key=c4f2a5badc50ec4704a2c0f4b6cf62b6"></script> 
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/taskMap.js"></script>
+</html>
