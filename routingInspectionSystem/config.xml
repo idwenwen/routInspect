@@ -30,8 +30,8 @@
 	<permission name="bootCompleted" />
 	<permission name="hardware" />
 	<permission name="location" />
-	
-	<feature name="aMap">
+
+	<feature name="aMapLocation">
     	<param name="android_api_key" value="54b8a17b13b01af767a45203b8cc2d85" />
     	<param name="ios_api_key" value="d70fcb6fe4587a70eea838bd7448fe4d" />
     </feature>
