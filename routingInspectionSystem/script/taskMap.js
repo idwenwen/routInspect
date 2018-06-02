@@ -88,6 +88,7 @@ apiready = function(){
 		}
 
 		startPos();
+		initMap()
 		setTimeout(function(){
 			stopLocation();
 		}, 30000)
