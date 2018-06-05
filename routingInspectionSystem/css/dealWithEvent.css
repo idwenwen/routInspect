@@ -1,0 +1,97 @@
+#main{
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(../image/background.jpg);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.list-content{
+  width: 96%;
+	height: 96%;
+	position: relative;
+	margin: auto;
+	padding: 10px;
+	z-index: 0;
+  overflow-y: auto;
+}
+
+ul{
+  position: relative;
+  list-style: none;
+}
+
+li {
+  list-style: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  line-height: 30px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 5px;
+  position: relative;
+}
+
+li > span{
+  padding: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-left: 40px;
+  height: 30px;
+}
+
+li > button{
+  width: 25%;
+  height: 30px;
+  line-height: 30px;
+  background-color: #336699;
+	border-radius: 5px;
+	box-shadow: 1px 1px 5px #444;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  left: 40%;
+}
+
+.doing-it{
+  left: 70%;
+}
+
+.right{
+  position: absolute;
+  width: 55%;
+  padding: 0px;
+  left: 40%;
+  padding-top: 5px;
+}
+
+#textareaContent{
+  width: 100%;
+  height: 200px;
+  position: relative;
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px solid #aaa;
+  box-shadow: 0px 0px 5px #ccc;
+  word-break: break-all;
+  color: #777;
+  border-radius: 5px;
+}
+
+.submitresponse{
+  width: 92%;
+	height: 50px;
+	line-height: 50px;
+	background-color: #336699;
+	border-radius: 5px;
+	box-shadow: 1px 1px 5px #444;
+	position: relative;
+	color: #fff;
+	bottom: 25px;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+}

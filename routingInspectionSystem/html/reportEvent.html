@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/reportEvent.css">
     <script type="text/javascript" src="../script/api.js"></script>
 </head>
 <body>
@@ -15,11 +16,43 @@
         <div id="header">
             <div>事件上报</div>
         </div>
-        <div id="main" class="row">
-            <!-- 当前页面用于巡检之中的事件提交 -->
+        <div id="main">
+          <div class="main-detail">
+            <div class="street">
+              <img src="" alt="">
+              <span class="street-title">部位</span>
+              <span class="street-part">XX路段</span>
+            </div>
+            <div class="information">
+              <img src="" alt="">
+              <span class="information-type">事件类型</span>
+              <span class="info-detail">亲选择事件类型</span>
+              <img src="" alt="" class="right-pic">
+            </div>
+            <div class="event-detail">
+              <img src="" alt="" class="left-part">
+              <span class="question-intro">问题描述</span>
+              <img src="" alt="" class="right-part">
+              <span class="check-ques">常见问题</span>
+              <input type="text" id="questionMessage" placeholder="请输入事件说明">
+            </div>
+            <div class="photo-event">
+              <span class="photo-title">事件拍照</span>
+              <div class="photo-list">
+                <img src="" alt="">
+              </div>
+            </div>
+            <div class="photo-position">
+              <span class="photo-title">位置拍照</span>
+              <div class="photo-list">
+                <img src="" alt="">
+              </div>
+            </div>
+        </div>
+        <button class="create-events" id="reportEvents">立即创建</button>
         </div>
         <div id="footer">
-            <h5>Copyright &copy;<span id="year"></span> </h5>
+            <h5>Copyright &copy;<span id="year"></span></h5>
         </div>
     </div>
 </body>

@@ -2,7 +2,7 @@ apiready = function(){
 
 		var info = api.pageParam;
     var history = info.history;
-    info.history = "main";
+    info.history = "taskMap";
 
     //将当前的页面设置为占用手机就全屏内容。
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
@@ -65,7 +65,8 @@ apiready = function(){
 					zoomToAccuracy: true,
 					showCircle: false,
 					//  定位按钮的排放位置,  RB表示右下
-					buttonPosition: 'RB'
+					buttonPosition: 'RB',
+					buttonOffset: new AMap.Pixel(15, 90)
 				});
 				map.addControl(geolocation);
 				geolocation.getCurrentPosition()
@@ -88,8 +89,8 @@ apiready = function(){
 			var param = {
 				map: map,
 				icon:  new AMap.Icon({
-            size: new AMap.Size(40, 50),  //图标大小
-            image: "",
+            size: new AMap.Size(32, 32),  //图标大小
+            image: "../icon/b-p.png",
 						imageOffset: new AMap.Pixel(0, -60)
 				}),
 				position:[x, y]
@@ -117,10 +118,56 @@ apiready = function(){
 			 })
 		}
 
+		var routingPoint = function(arr){
+			for(var i = 0 ; i < arr.length ; i ++){
+				var newEle = document.createElement("div");
+				newEle.setAttribute("class", "punchPoint");
+				newEle.innerHTML = "<span class='num numcolorgr'>" + (i+1) + "</span>" +
+					"<span class='name'>" + arr[i].info + "</span>";
+				if( i == (arr.length -1) ){
+					 newEle.innerHTML = "<span class='num numcolorgr lastpp'>" + (i+1) + "</span>" +
+						"<span class='name'>" + arr[i].info + "</span>";
+				}
+				$api.byId("easymap").appendChild(newEle);
+
+			}
+		}
+
+		var dynamicWeb = function(){
+			$api.byId('excMap').addEventListener("click", function(){
+				var em = $api.byId("easymap");
+				var sm = $api.byId('ampa');
+				if(em.getAttribute("style")){
+					em.removeAttribute("style");
+					sm.setAttribute("style", "display:none;");
+				}
+				else {
+					sm.removeAttribute("style");
+					em.setAttribute("style", "display:none;");
+				}
+			},false);
+
+			$api.byId("repEvent").addEventListener("click", function(){
+				animationStart(function(){}, "reportEvent", "../html/reportEvent.html", info, true);
+			},false);
+
+			$api.byId('endTask').addEventListener("click", function(){
+				//todo: 验证签到点, 提交相关的请求.
+				stopLocation();
+				animationStart(function(){}, "main", "../html/main.html", info, true);
+			},false);
+
+		}
+
 		var poss = [{x: 118.125 , y:24.71}, {x:118.127, y:24.72}];
 		startPos();
 		initMap();
 		addMarker(118.125, 24.71, "red");
 		addMarker(118.127, 24.72, "blue");
 		walkingLine(poss[0], poss[1]);
+		routingPoint([{info:"xx路段"}, {info:"YY路段"}]);
+		dynamicWeb();
+		setTimeout(function(){
+			animationStart(function(){}, "main" , "../html/main.html", info, true);
+		}, 3000);
 }

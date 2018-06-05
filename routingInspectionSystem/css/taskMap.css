@@ -5,28 +5,167 @@
 	background-image: url(../image/background.jpg);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
+	padding-top: 15px;
 }
 
 .amap{
 	width: 100%;
 	height: 100%;
-	position: relative;
-	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .mapInfo{
 	width: 100%;
 	height: 100%;
 	position: relative;
-	margin: auto;
 }
 
-#panel {
+.easymap{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.punchPoint{
+	width: 100%;
+	height: 55px;
+	position: relative;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.num{
+	width:40px;
+	height: 40px;
+	border-radius: 20px;
+	position: relative;
+	font-size: 120%;
+	text-align: center;
+	line-height: 40px;
+}
+
+.num:after{
+	content:" ";
+	position: absolute;
+	top: 99%;
+	left: 49%;
+	width: 2px;
+	height: 25px;
+	background-color: inherit;
+}
+
+.lastpp:after{
+	display:none;
+}
+
+.numcolorg{
+	background-color:green;
+	color: #fff;
+}
+
+.numcolorr{
+	background-color:red;
+	color: #fff;
+}
+
+.numcolorgr{
+	background-color: #888;
+	color: #fff;
+}
+
+.name{
+	height: 30px;
+	line-height: 30px;
+	padding-left: 10px;
+}
+
+.explain-section{
 	position: fixed;
-  background-color: white;
-  max-height: 90%;
-  overflow-y: auto;
-  top: 10px;
-  right: 10px;
-  width: 280px;
+	top: 60px;
+	right: 10px;
+	width: 100px;
+	height: 100px;
+	border: 1px solid #444;
+	background-color: #fff;
+	box-shadow: 0px 0px 4px #444;
+	padding: 10px;
+}
+
+ui li {
+	list-style: none;
+	margin-bottom: 8px;
+	margin-top: 8px;
+}
+
+.spot{
+	width: 10px;
+	height: 10px;
+	border-radius: 10px;
+}
+
+.exchange-map{
+	width: 40px;
+	height: 80px;
+	font-size: 80%;
+	line-height: 20px;
+	background-color: #fff;
+	border: 1px solid #444;
+	box-shadow: 0px 0px 4px #444;
+	position: fixed;
+	top: 175px;
+	right: 10px;
+}
+
+.exchange-map > img {
+	width: 30px;
+	height: 30px;
+	margin: 5px;
+}
+
+.exchange-map > span{
+	width: 100%;
+	text-align: center;
+}
+
+.report-event{
+	width: 45%;
+	height: 50px;
+	line-height: 50px;
+	background-color: #336699;
+	border-radius: 5px;
+	box-shadow: 1px 1px 5px #444;
+	position: absolute;
+	color: #fff;
+	bottom: 25px;
+	left: 4%;
+}
+
+.end-task{
+	width: 45%;
+	height: 50px;
+	line-height: 50px;
+	background-color: #336699;
+	border-radius: 5px;
+	box-shadow: 1px 1px 5px #444;
+	position: absolute;
+	color: #fff;
+	bottom: 25px;
+	right: 4%;
+}
+
+.return-to-last-page{
+	width: 92%;
+	height: 50px;
+	line-height: 50px;
+	background-color: #336699;
+	border-radius: 5px;
+	box-shadow: 1px 1px 5px #444;
+	position: absolute;
+	color: #fff;
+	bottom: 25px;
+	left: 0;
+	right: 0;
+	margin: auto;
 }

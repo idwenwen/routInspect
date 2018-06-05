@@ -8,15 +8,67 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/dealWithEvent.css">
     <script type="text/javascript" src="../script/api.js"></script>
 </head>
 <body>
     <div id="wrap">
         <div id="header">
-            <div>事件处理</div>
+            <div id='questionName'>事件处理</div>
         </div>
-        <div id="main" class="row">
-            <!-- 当前页面用于事件的处理和查看 -->
+        <div id="main">
+            <div class="list-content">
+              <ul>
+                <li>
+                  <img src="" alt="">
+                  <span>问题操作:</span>
+                  <button class="hangup">挂起</button>
+                  <button class="doing-it">接单</button>
+                </li>
+                <li>
+                  <img src="" alt="">
+                  <span>接单人:</span>
+                  <span class=" right name" id="name">XXX</span>
+                </li>
+                <li>
+                  <img src="" alt="">
+                  <span>检查项:</span>
+                  <span class="right things" id="things">XXXXXX</span>
+                </li>
+                <li>
+                  <img src="" alt="">
+                  <span>检查部位:</span>
+                  <span class="right parts" id="parts">3项</span>
+                </li>
+                <li>
+                  <img src="" alt="">
+                  <span>截止时间:</span>
+                  <span class="right time" id="time">2018-01-24</span>
+                </li>
+                <li>
+                  <img src="" alt="">
+                  <span>截止时间:</span>
+                  <span class="right time" id="time">2018-01-24</span>
+                </li>
+                <li>
+                  <img src="" alt="">
+                  <span>截止时间:</span>
+                  <span class="right time" id="time">2018-01-24</span>
+                </li>
+                <li>
+                  <span>事件照片:</span>
+                  <div class="photo-list">
+
+                  </div>
+                </li>
+                <li>
+                  <span>位置照片:</span>
+                  <div class="photo-list">
+
+                  </div>
+                </li>
+              </ul>
+            </div>
         </div>
         <div id="footer">
             <h5>Copyright &copy;<span id="year"></span> </h5>
@@ -24,5 +76,5 @@
     </div>
 </body>
 <script type="text/javascript" src="../script/common.js"></script>
-<script type="text/javascript" src="../script/reportEvent.js"></script>
+<script type="text/javascript" src="../script/dealWithEvent.js"></script>
 </html>

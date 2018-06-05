@@ -53,10 +53,10 @@ apiready = function(){
     	var container = document.createElement("div");
         container.setAttribute("class", "eves-detail");
         container.setAttribute("type", "" + eventsType[(type-1)]);
-        container.innerHTML = "<div class='head-pic'><img src=" + ("" + headPic) + "></div>"+
+        container.innerHTML = /*"<div class='head-pic'><img src=" + ("" + headPic) + "></div>"+*/
                 "<span class='name-info'>" + ("" + name) + "</span>" +
-                "<span class='task-status'>" + ("任务[ " + status + " ]") + "</span>" + 
-                "<span class='task-info'>" + ( "" + info ) + "</span>" + 
+                "<span class='task-status'>" + ("任务[ " + status + " ]") + "</span>" +
+                "<span class='task-info'>" + ( "" + info ) + "</span>" +
                 "<span class='task-time'>剩余" + ( "" + leftTime ) + "</span>";
         $api.first($api.byId("topPartContent")).appendChild(container);
         var funcdescide = null;
@@ -65,19 +65,19 @@ apiready = function(){
         if(type == 1){
             if(status == "待执行"){
                 funcdescide = function(){
-                    animationStart(function(){}, "inspectionTask", 
+                    animationStart(function(){}, "inspectionTask",
                         "./inspectionTask.html", info, true);
                 }
             }
             else if(status == "进行中"){
                 funcdescide = function(){
-                    animationStart(function(){}, "taskMap", "./taskMap.html", 
+                    animationStart(function(){}, "taskMap", "./taskMap.html",
                         info, true);
                 }
             }
             else if(status == "异常报告"){
                 funcdescide = function(){
-                    animationStart(function(){}, "mistakeForTask", "./mistakeForTask.html", 
+                    animationStart(function(){}, "mistakeForTask", "./mistakeForTask.html",
                         info, true);
                 }
             }
@@ -118,7 +118,7 @@ apiready = function(){
         }
         else if(type == 2){
             funcdescide = function(){
-                animationStart(function(){}, "mistakeForTask", "./mistakeForTask.html", 
+                animationStart(function(){}, "mistakeForTask", "./mistakeForTask.html",
                     info, true);
             }
         }
@@ -146,17 +146,20 @@ apiready = function(){
         noticeShowing();
         var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
         $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
+        $api.byId('reportEve').addEventListener("click", function(){
+          animationStart(function(){}, "reportEvent", "../html/reportEvent.html", info, true);
+        });
+
     }
 
     addMessage('m1', 1 , "../icon/atm.png", "刘甫庚", "待执行", "【巡检任务】巡检重要路线", "1天");
     addMessage('m2', 1 , "../icon/atm.png", "庆朱楠", "进行中", "【巡检任务】巡检重要路线", "2天");
     addMessage('m3', 1 , "../icon/atm.png", "李福莲", "异常报告", "【任务超期】巡检人物超期确定", "1天");
     addMessage('m4', 2 , "../icon/atm.png", "刘甫庚", "待处理", "【上报事件】巡检事件待处理", "1天");
-    
+
     addNotcie('n1', 1, "2018-5-29 11:28:40", "路线一", "[xxxx]相关巡检路线详细情况见...", "点1 -> 点2 -> 点3...");
     addNotcie('n2', 2, "2018-5-29 11:28:40", "警告通知", "漏检了巡检点");
-    
 
-    dynamicPage(); 
+
+    dynamicPage();
 }
-    

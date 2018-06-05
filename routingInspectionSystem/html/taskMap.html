@@ -18,21 +18,40 @@
         </div>
         <div id="main">
             <!-- 简易地图系列 -->
-            <div class="easymap" style="display:none;">
+            <div class="easymap" id="easymap">
 
             </div>
             <!-- 高德地图内容 -->
-            <div class="amap" >
+            <div class="amap" id="ampa"  style="display:none;">
                 <div class="mapInfo" id="mapContainer"></div>
-                <div id="panel"></div>
             </div>
             <!-- 其他组件内容 -->
-            <div class="func-operation" style="display:none;">
-
+            <div class="explain-section">
+              <ul class="exp-detal">
+                <li>
+                  <span class="spot" style="background-color:green"></span>
+                  <span class="spot-claim">已签到</span>
+                </li>
+                <li>
+                  <span class="spot" style="background-color:red"></span>
+                  <span class="spot-claim">未签到</span>
+                </li>
+                <li>
+                  <span class="spot" style="background-color:#999"></span>
+                  <span class="spot-claim">待签到</span>
+                </li>
+              </ul>
             </div>
+            <div class="exchange-map" id="excMap">
+              <img src="../icon/exchangemap.png" alt="">
+              <span>切换视图</span>
+            </div>
+            <button class="return-to-last-page">返回巡检任务页面</button>
+            <button class="report-event" id="repEvent" style="display:none;">事件上报</button>
+            <button class="end-task" id="endTask" style="display:none;">结束巡检</button>
         </div>
         <div id="footer">
-            <h5>Copyright &copy;<span id="year"></span> </h5>
+            <h5>Copyright &copy;<span id="year"></span></h5>
         </div>
     </div>
 </body>

@@ -5,8 +5,8 @@ apiready = function(){
 
     //将当前的页面设置为占用手机就全屏内容。
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
-    $api.byId("main").setAttribute("style", "height:" + mainH + "px;");      
-    
+    $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
+
 
     //存储选择的巡检任务人员，存储其ID以及名称。
     var checkList = [];
@@ -47,7 +47,7 @@ apiready = function(){
     			}
     		}
     	})
-    }  
+    }
 
     var dynamicWeb = function(){
 
@@ -108,7 +108,7 @@ apiready = function(){
     			}
     			var height = $api.offset($api.byId("main")).h -
     				$api.offset($api.byId("chooseWorker")).h -
-    				$api.offset($api.byId("taskMessage")).h - 
+    				$api.offset($api.byId("taskMessage")).h -
     				$api.offset($api.byId("signInBtn")).h - 65;
     			$api.byId("pictureUp").setAttribute("src", url);
     			$api.byId("pictureUp").removeAttribute("hidden");
@@ -127,6 +127,13 @@ apiready = function(){
     addPersons("p2", "../icon/atm.png", "p2", "p2", "list-info2");
     addPersons("p3", "../icon/atm.png", "p3", "p3");
     addPersons("p4", "../icon/atm.png", "p4", "p4", "list-info2");
+    addPersons("p5", "../icon/atm.png", "p1", "p1");
+    addPersons("p6", "../icon/atm.png", "p2", "p2", "list-info2");
+    addPersons("p7", "../icon/atm.png", "p3", "p3");
+    addPersons("p8", "../icon/atm.png", "p4", "p4", "list-info2");
+    addPersons("p9", "../icon/atm.png", "p1", "p1");
+    addPersons("p10", "../icon/atm.png", "p2", "p2", "list-info2");
+    addPersons("p11", "../icon/atm.png", "p3", "p3");
+    addPersons("p12", "../icon/atm.png", "p4", "p4", "list-info2");
     dynamicWeb();
 }
-    
