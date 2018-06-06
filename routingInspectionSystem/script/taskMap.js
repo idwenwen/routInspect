@@ -13,6 +13,7 @@ apiready = function(){
 		var myy = 0;
 		var mytimestamp = 0;
 		var mytotaltamp = 0;
+
 		//打开地图，并设定人物展示位置
 		var startPos = function(){
 			var param = { accuracy: 20, filter: 5, autoStop: false };
@@ -30,10 +31,12 @@ apiready = function(){
 			amapLocation.startLocation(param, resultCallback);
 		}
 
+		//结束相关的定位功能
 		var stopLocation = function(){
 			amapLocation.stopLocation();
 		}
 
+		//初始化高德地图相关内容
   	var map = "";
 		var points = [];
 		var markers = [];
@@ -53,6 +56,7 @@ apiready = function(){
 			});
 		}
 
+		//用户定位函数内容
 		var geolocation = "";
 		var userPos = function(success, fail){
 			map.plugin('AMap.Geolocation', function() {
@@ -85,15 +89,19 @@ apiready = function(){
 			});
 		}
 
+
+		//地图相关的点标记
 		var addMarker = function(x, y, color){
 			var param = {
 				map: map,
-				icon:  new AMap.Icon({
-            size: new AMap.Size(32, 32),  //图标大小
-            image: "../icon/b-p.png",
-						imageOffset: new AMap.Pixel(0, -60)
-				}),
-				position:[x, y]
+				// icon:  new AMap.Icon({
+        //     size: new AMap.Size(32, 32),  //图标大小
+        //     image: "../icon/b-p.png",
+				// 		imageOffset: new AMap.Pixel(0, -60)
+				// }),
+				icon: (color == "blue" ? '../icon/b-p.png' : "../icon/r-p.png"),
+				position:[x, y],
+				offset: new AMap.Pixel(-20, -30)
 			}
 			var marker = new AMap.Marker(param);
 			if(map){
@@ -105,6 +113,8 @@ apiready = function(){
 			markers.push(marker);
 		}
 
+
+		//两点之间的点标记内容
 		var walkingLine = function(posOne, posTwo){
 			 AMap.plugin('AMap.Walking', function() {
 				 var walking = new AMap.Walking({
@@ -118,6 +128,8 @@ apiready = function(){
 			 })
 		}
 
+
+		//绘制简易打卡点页面
 		var routingPoint = function(arr){
 			for(var i = 0 ; i < arr.length ; i ++){
 				var newEle = document.createElement("div");
@@ -133,6 +145,15 @@ apiready = function(){
 			}
 		}
 
+		var clickToInit = function(){
+			initMap();
+			addMarker(118.125, 24.71, "red");
+			addMarker(118.127, 24.72, "blue");
+			walkingLine(poss[0], poss[1]);
+		}
+
+		//动态页面绑定
+		var inited = false;
 		var dynamicWeb = function(){
 			$api.byId('excMap').addEventListener("click", function(){
 				var em = $api.byId("easymap");
@@ -144,6 +165,10 @@ apiready = function(){
 				else {
 					sm.removeAttribute("style");
 					em.setAttribute("style", "display:none;");
+					if(!inited){
+						inited = true;
+						clickToInit();
+					}
 				}
 			},false);
 
@@ -156,15 +181,10 @@ apiready = function(){
 				stopLocation();
 				animationStart(function(){}, "main", "../html/main.html", info, true);
 			},false);
-
 		}
 
 		var poss = [{x: 118.125 , y:24.71}, {x:118.127, y:24.72}];
 		startPos();
-		initMap();
-		addMarker(118.125, 24.71, "red");
-		addMarker(118.127, 24.72, "blue");
-		walkingLine(poss[0], poss[1]);
 		routingPoint([{info:"xx路段"}, {info:"YY路段"}]);
 		dynamicWeb();
 		// setTimeout(function(){

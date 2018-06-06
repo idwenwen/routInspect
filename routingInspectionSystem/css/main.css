@@ -82,16 +82,16 @@
 	right: 0;
 	margin: auto;
 	z-index: 0;
-	transition:height 1s;
-	-moz-transition:height 1s; /* Firefox 4 */
-	-webkit-transition:height 1s; /* Safari and Chrome */
-	-o-transition:height 1s; /* Opera */
+	/*transition:height 1s;
+	-moz-transition:height 1s;
+	-webkit-transition:height 1s;
+	-o-transition:height 1s;*/
 }
 
 .content > div {
 	display: none;
-	animation: dispear 0.5s 1;
-	animation-fill-mode:forwards;
+	/*animation: dispear 0.5s 1;
+	animation-fill-mode:forwards;*/
 }
 
 .content1{
@@ -105,17 +105,17 @@
 	margin: auto;
 	overflow-y: auto;
 	z-index: 0;
-	transition:height 1s;
-	-moz-transition:height 1s; /* Firefox 4 */
-	-webkit-transition:height 1s; /* Safari and Chrome */
-	-o-transition:height 1s; /* Opera */
+	/*transition:height 1s;
+	-moz-transition:height 1s;
+	-webkit-transition:height 1s;
+	-o-transition:height 1s;*/
 }
 
 .content1 > div{
-	opacity: 0;
-	animation: showing 1s 1;
+	opacity: 1;
+	/*animation: showing 1s 1;
 	animation-delay: 1s;
-	animation-fill-mode:forwards;
+	animation-fill-mode:forwards;*/
 }
 
 .eves-detail{
@@ -201,10 +201,10 @@
 	width: 100%;
 	margin-top: 8px;
 	position: relative;
-	transition:margin-top 0.7s;
-	-moz-transition:margin-top 0.7s; /* Firefox 4 */
-	-webkit-transition:margin-top 0.7s; /* Safari and Chrome */
-	-o-transition:margin-top 0.7s; /* Opera */
+	/*transition:margin-top 0.7s;
+	-moz-transition:margin-top 0.7s;
+	-webkit-transition:margin-top 0.7s;
+	-o-transition:margin-top 0.7s; */
 }
 
 .notice-detail{

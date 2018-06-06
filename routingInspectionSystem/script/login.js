@@ -1,4 +1,8 @@
 apiready = function(){
+
+    var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
+    $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
+    
     api.addEventListener({
         name: 'online'
     }, function(ret, err) {
@@ -36,14 +40,14 @@ apiready = function(){
 
 	    alert('userName:'+ username + ' password:' + password);
 
-	    /*connectToService("http://dgjxj.liveej.com/appapi.ashx?action=login", 
+	    /*connectToService("http://dgjxj.liveej.com/appapi.ashx?action=login",
 	    	{
 		        values: {"username": "" + username , "password": "" + password }
-		    }, 
+		    },
 		    function(ret){
                 alert(JSON.stringify(ret));
 		    	// animationStart(function(){}, 'main', './main.html', {username: username})
-		    }, 
+		    },
 		    function(ret){
                 alert(JSON.stringify(ret));
 		    	alert("用户名或密码有错误！");
@@ -52,5 +56,5 @@ apiready = function(){
 	    animationStart(function(){}, 'main', './main.html', {username: username});
 
     }, false);
-    
+
 }
