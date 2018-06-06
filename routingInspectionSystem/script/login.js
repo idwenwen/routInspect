@@ -2,7 +2,7 @@ apiready = function(){
 
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
-    
+
     api.addEventListener({
         name: 'online'
     }, function(ret, err) {

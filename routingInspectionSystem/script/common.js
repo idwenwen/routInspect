@@ -28,7 +28,7 @@
 		api.ajax({
 		    url: urls,
 		    method: 'post',
-		    data: data
+		    data: data || "",
 		}, function(ret, err) {
 		    if (ret) {
 		        success.call(null, ret);
