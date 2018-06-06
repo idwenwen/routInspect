@@ -14,42 +14,73 @@
 <body>
     <div id="wrap">
         <div id="header">
+          <div class="return-btn">
+        		<img src="../icon/back.png">
+        	</div>
             <div>事件上报</div>
         </div>
         <div id="main">
           <div class="main-detail">
             <div class="street">
-              <img src="" alt="">
+              <img src="../icon/position.png" alt="">
               <span class="street-title">部位</span>
               <span class="street-part">XX路段</span>
             </div>
-            <div class="information">
-              <img src="" alt="">
+            <div class="information" id="information">
+              <img src="../icon/type.png" alt="" class="type-events">
               <span class="information-type">事件类型</span>
               <span class="info-detail">亲选择事件类型</span>
-              <img src="" alt="" class="right-pic">
+              <img src="../icon/arrow-right.png" alt="" class="right-pic">
             </div>
             <div class="event-detail">
-              <img src="" alt="" class="left-part">
+              <img src="../icon/explain.png" alt="" class="left-part">
               <span class="question-intro">问题描述</span>
-              <img src="" alt="" class="right-part">
+              <img src="../icon/common-ques.png" alt="" class="right-part">
               <span class="check-ques">常见问题</span>
               <input type="text" id="questionMessage" placeholder="请输入事件说明">
             </div>
             <div class="photo-event">
               <span class="photo-title">事件拍照</span>
               <div class="photo-list">
-                <img src="" alt="">
+                <img src="../icon/addpic.png" alt="" class="add-picture-stuff">
               </div>
             </div>
             <div class="photo-position">
               <span class="photo-title">位置拍照</span>
               <div class="photo-list">
-                <img src="" alt="">
+                <img src="../icon/addpic.png" alt="" class="add-picture-stuff">
               </div>
             </div>
         </div>
         <button class="create-events" id="reportEvents">立即创建</button>
+        <div class="black-mode" id="blackMode"></div>
+        <div class="check-type-list" id="checkTypeList">
+          <div class="list-content-title">
+            请选择问题类型
+          </div>
+          <div class="type-list-content">
+            <span class="type-de" id="type1">环卫问题</span>
+            <span class="type-de" id="type2">市政问题</span>
+            <span class="type-de" id="type3">绿化管理</span>
+            <span class="type-de" id="type4">市容管理</span>
+            <span class="type-de" id="type5">消防设施</span>
+            <span class="type-de" id="type6">环保</span>
+          </div>
+          <div class="type-list-detail">
+            <div class="ty-de-content" id="detil1">
+              <span class="ty-de-content-list">其他问题</span>
+              <span class="ty-de-content-list">绿化带卫生差</span>
+              <span class="ty-de-content-list">乱搭建</span>
+              <span class="ty-de-content-list">违规牌子未拆除</span>
+              <span class="ty-de-content-list">堆放杂物</span>
+            </div>
+            <div class="ty-de-content" id="detil2"></div>
+            <div class="ty-de-content" id="detil3"></div>
+            <div class="ty-de-content" id="detil4"></div>
+            <div class="ty-de-content" id="detil5"></div>
+            <div class="ty-de-content" id="detil6"></div>
+          </div>
+        </div>
         </div>
         <div id="footer">
             <h5>Copyright &copy;<span id="year"></span></h5>

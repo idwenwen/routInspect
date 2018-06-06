@@ -167,7 +167,7 @@ apiready = function(){
 		walkingLine(poss[0], poss[1]);
 		routingPoint([{info:"xx路段"}, {info:"YY路段"}]);
 		dynamicWeb();
-		setTimeout(function(){
-			animationStart(function(){}, "main" , "../html/main.html", info, true);
-		}, 3000);
+		// setTimeout(function(){
+		// 	animationStart(function(){}, "main" , "../html/main.html", info, true);
+		// }, 3000);
 }

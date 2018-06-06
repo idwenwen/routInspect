@@ -8,4 +8,15 @@ apiready = function(){
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
+		var dynamicWeb = function(){
+				$api.byId("information").addEventListener("click", function(){
+					$api.byId("blackMode").removeAttribute("style");
+					$api.byId("checkTypeList").removeAttribute("style");
+				})
+				$api.byId("blackMode").addEventListener("click", function(){
+					$api.byId("blackMode").setAttribute("style", "display:none;");
+					$api.byId("checkTypeList").setAttribute("style", "display:none;");
+				})
+		}
+		dynamicWeb();
 }

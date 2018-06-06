@@ -14,6 +14,7 @@
 	margin: auto;
 	padding: 10px;
 	z-index: 0;
+  padding-bottom: 50px;
 }
 
 .street{
@@ -27,13 +28,14 @@
 }
 
 .street > img {
-  width: 30px;
-  height: 30px;
+  width: 14px;
+  height: 14px;
   position: absolute;
-  top: 0;
+  /*top: 0;
   height: 0;
-  margin: auto;
-  left: 10px;
+  margin: auto;*/
+  top: 16px;
+  left: 20px;
 }
 
 .street-title{
@@ -73,14 +75,12 @@
 	background-color: rgba(255,255,255,0.4);;
 }
 
-.information > img{
-  width: 30px;
-  height: 30px;
+.type-events{
+  width: 14px;
+  height: 14px;
   position: absolute;
-  top: 0;
-  height: 0;
-  margin: auto;
-  left: 10px;
+  top: 16px;
+  left: 20px;
 }
 
 .information-type{
@@ -102,7 +102,7 @@
   top: 0;
   bottom: 0;
   margin: auto;
-  right: 50px;
+  right: 35px;
   width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -110,12 +110,10 @@
 }
 
 .right-pic{
-  width: 30px;
-  height: 30px;
+  width: 14px;
+  height: 14px;
   position: absolute;
-  top: 0;
-  height: 0;
-  margin: auto;
+  top: 16px;
   right: 10px;
 }
 
@@ -130,19 +128,19 @@
 }
 
 .left-part{
-  width: 30px;
-  height: 30px;
+  width: 14px;
+  height: 14px;
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 16px;
+  left: 20px;
 }
 
 .right-part{
-  width: 30px;
-  height: 30px;
+  width: 14px;
+  height: 14px;
   position: absolute;
-  top: 10px;
-  right: 85px;
+  top: 16px;
+  right: 100px;
 }
 
 .question-intro{
@@ -217,6 +215,14 @@
   width: 80px;
   height: 80px;
   margin-right: 10px;
+  position: relative;
+  border: 1px solid #bbb;
+  padding: 2px;
+  box-shadow: 0px 0px 5px #aaa;
+}
+
+.add-picture-stuff{
+  padding: 10px;
 }
 
 .create-events{
@@ -232,4 +238,90 @@
 	left: 0;
 	right: 0;
 	margin: auto;
+}
+
+.black-mode{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 10;
+}
+
+.check-type-list{
+  width: 100%;
+  height: 80%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  z-index: 11;
+  border-top: 2px solid #aaa;
+  box-shadow: 0px 0px 5px #999;
+}
+
+.list-content-title{
+  position: absolute;
+  height: 50px;
+  line-height: 50px;
+  font-size: 120%;
+  text-align: center;
+  color: #fff;
+  background-color: #336699;
+  width: 100%;
+  top: -50px;
+  left: 0;
+}
+
+.type-list-content{
+  display:inline-block;
+  width: 35%;
+  height: 99%;
+  overflow-y: auto;
+  /*border-right: 1px solid #336699;*/
+}
+
+.type-list-detail{
+  display: inline-block;
+  width: 64%;
+  height: 99%;
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.type-de {
+  display: block;
+  height: 50px;
+  line-height: 50px;
+  color:#00BFFF;
+  text-align: center;
+  position: relative;
+  width: 80%;
+  border: 1px solid #00BFFF;
+  margin-left: 12.5%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.ty-de-content{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.ty-de-content-list{
+  width: 94%;
+  height: 50px;
+  line-height: 50px;
+  color: #336699;
+  border-left: 1px solid #00BFFF;
+  border-bottom: 1px solid #00BFFF;
+  margin-top: 10px;
+  padding-left: 10px;
 }

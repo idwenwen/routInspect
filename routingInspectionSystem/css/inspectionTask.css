@@ -141,14 +141,15 @@
 }
 
 .title > img{
-	width: 20px;
-	height: 20px;
+	width: 14px;
+	height: 14px;
 	border-radius: 10px;
 	border: 1px solid #003366;
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	margin: auto;
+	left: 10px;
 }
 
 .title > span{
@@ -232,7 +233,7 @@
 	position: relative;
 	display: none;
 	margin: 0 auto;
-	margin-top: 3%; 
+	margin-top: 3%;
 	opacity: 0;
 	animation: showing 1s 1;
 	animation-delay: 1s;
@@ -246,7 +247,7 @@
 	background-color: #336699;
 	border-radius: 5px;
 	box-shadow: 1px 1px 5px #444;
-	position: absolute; 
+	position: absolute;
 	left: 0;
 	right: 0;
 	margin: auto;
@@ -307,7 +308,7 @@
 	background-color: #336699;
 	color: #fff;
 	text-align: center;
-	position: fixed;
+	position: absolute;
 	margin-top: -1px;
 	z-index: 12;
 }

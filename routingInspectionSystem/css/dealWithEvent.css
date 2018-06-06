@@ -15,6 +15,7 @@
 	padding: 10px;
 	z-index: 0;
   overflow-y: auto;
+  padding-bottom: 50px;
 }
 
 ul{
@@ -68,27 +69,36 @@ li > button{
   padding-top: 5px;
 }
 
-#textareaContent{
-  width: 100%;
-  height: 200px;
+.photo-list{
+  width: 96%;
   position: relative;
-  margin: 0 auto;
-  padding: 10px;
-  border: 1px solid #aaa;
-  box-shadow: 0px 0px 5px #ccc;
-  word-break: break-all;
-  color: #777;
-  border-radius: 5px;
+  margin-left: 2.1%;
+  padding: 5px;
 }
 
-.submitresponse{
+.list-photo{
+  width:100px;
+  height: 100px;
+  display:inline-block;
+  margin: 5px;
+  border: 1px solid #aaa;
+  box-shadow: 0px 0px 4px #bbb;
+  overflow: hidden;
+}
+
+.list-photo > img{
+  width: 100%;
+  height: 100%;
+}
+
+.check-events{
   width: 92%;
 	height: 50px;
 	line-height: 50px;
 	background-color: #336699;
 	border-radius: 5px;
 	box-shadow: 1px 1px 5px #444;
-	position: relative;
+	position: fixed;
 	color: #fff;
 	bottom: 25px;
 	left: 0;
