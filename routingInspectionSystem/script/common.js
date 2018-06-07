@@ -1,3 +1,5 @@
+	var commonURL = "http://dgjxj.liveej.com/appapi.ashx";
+
 	var transferToPage = function(pname, purl, info, reload){
 		api.openWin({
 			name: pname,
@@ -31,9 +33,9 @@
 		    data: data || "",
 		}, function(ret, err) {
 		    if (ret) {
-		        success.call(null, ret);
+		        success.call(null, ret, err);
 		    } else {
-		    	fail.call(null, ret);
+		    	fail.call(null, ret, err);
 		    }
 		});
 	}

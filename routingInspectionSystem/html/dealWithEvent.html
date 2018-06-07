@@ -20,80 +20,88 @@
           <div class="blackmode"></div>
           <div class="picture-showing"></div>
             <div class="list-content">
-              <ul>
+              <ul id="ulList">
                 <li>
-                  <img src="" alt="">
-                  <span>问题操作:</span>
-                  <button class="hangup">挂起</button>
-                  <button class="doing-it">接单</button>
+                  <img src="../icon/operation.png" alt="">
+                  <span class="etitle">问题操作:</span>
+                  <button class="hangup" id="hangup">挂起</button>
+                  <button class="doing-it" id="accept">接单</button>
+                  <span class="right" style="display:none;" id="statusmessage">处理中...</span>
                 </li>
                 <li>
-                  <img src="" alt="">
-                  <span>接单人:</span>
-                  <span class=" right name" id="name">XXX</span>
+                  <img src="../icon/name.png" alt="">
+                  <span class="etitle">接单人:</span>
+                  <span class="right name" id="name">XXX</span>
                 </li>
                 <li>
-                  <img src="" alt="">
-                  <span>检查项:</span>
+                  <img src="../icon/road.png" alt="">
+                  <span class="etitle">事件路段:</span>
                   <span class="right things" id="things">XXXXXX</span>
                 </li>
                 <li>
-                  <img src="" alt="">
-                  <span>检查部位:</span>
+                  <img src="../icon/type.png" alt="">
+                  <span class="etitle">事件类型:</span>
                   <span class="right parts" id="parts">3项</span>
                 </li>
                 <li>
-                  <img src="" alt="">
-                  <span>截止时间:</span>
+                  <img src="../icon/express.png" alt="">
+                  <span class="etitle">问题描述:</span>
+                  <span class="right-long explain" id="explain">2018-01-24</span>
+                </li>
+                <li>
+                  <img src="../icon/tiktok.png" alt="">
+                  <span class="etitle">截止时间:</span>
                   <span class="right time" id="time">2018-01-24</span>
                 </li>
                 <li>
-                  <img src="" alt="">
-                  <span>截止时间:</span>
-                  <span class="right time" id="time">2018-01-24</span>
-                </li>
-                <li>
-                  <img src="" alt="">
-                  <span>截止时间:</span>
-                  <span class="right time" id="time">2018-01-24</span>
-                </li>
-                <li>
-                  <span>事件照片:</span>
-                  <div class="photo-list">
-                      <div class="list-photo">
-                        <img src="../icon/adding.png" alt="">
-                      </div>
-                      <div class="list-photo">
-                        <img src="../icon/adding.png" alt="">
-                      </div>
-                      <div class="list-photo">
-                        <img src="../icon/adding.png" alt="">
-                      </div>
-                      <div class="list-photo">
-                        <img src="../icon/adding.png" alt="">
-                      </div>
+                  <img src="../icon/event.png" alt=""/>
+                  <span class="etitle">事件照片:</span>
+                  <div class="photo-list" id="eventPhoto">
+
                   </div>
                 </li>
                 <li>
-                  <span>位置照片:</span>
+                  <img src="../icon/position.png" alt="">
+                  <span class="etitle">位置描述:</span>
+                  <span class="right-long express" id="express">XXXxxxxxxxxxxxxxxxXXXXXXXXXXXX</span>
+                </li>
+                <li>
+                  <img src="../icon/picture.png" alt="">
+                  <span class="etitle">位置照片:</span>
+                  <div class="photo-list" id="positionPhoto">
+
+                  </div>
+                </li>
+                <li id="responseMessage">
+                  <img src="../icon/responseMessage.png" alt="">
+                  <span class="etitle">反馈信息</span>
+                  <div class="message-list">
+                    <span class="message-title">XXX</span>
+                    <span class="message-content">XXXXXXXXXXXXxxxx</span>
+                    <span class="messsage-title">2018-10-11 10:23:10</span>
+                  </div>
+                </li>
+                <li id="responseList">
+                  <img src="../icon/response.png" alt="">
+                  <span class="etitle">事件反馈:</span>
+                  <input type="text" id="responseEvent" placeholder="处理结果反馈"/>
                   <div class="photo-list">
                     <div class="list-photo">
-                      <img src="../icon/adding.png" alt="">
-                    </div>
-                    <div class="list-photo">
-                      <img src="../icon/adding.png" alt="">
-                    </div>
-                    <div class="list-photo">
-                      <img src="../icon/adding.png" alt="">
-                    </div>
-                    <div class="list-photo">
-                      <img src="../icon/adding.png" alt="">
+                      <img src="../icon/addpic.png" alt="" class="add-pic-btn">
                     </div>
                   </div>
                 </li>
               </ul>
             </div>
-            <button class="check-events">确认完成</button>
+            <button class="check-events" id="completeStuff">提交</button>
+            <div class="black-mode" id="blackMode" style="display:none;"></div>
+            <div class="showingPhoto" id="showingPhoto" style="display:none;">
+              <img src="" alt="" id="checkPhoto">
+            </div>
+            <div class="hangup-reason" id="hangupReason" style="display:none;">
+              <textarea name="name" rows="8" cols="80" class="input-reason" id="inputReason"></textarea>
+              <button class="hangup-check" id="hangupCheck"></button>
+            </div>
         </div>
         <div id="footer">
             <h5>Copyright &copy;<span id="year"></span> </h5>

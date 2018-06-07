@@ -1,7 +1,8 @@
 apiready = function(){
-    var info = api.pageParam;
-    var history = info.history;
-    info.history = "main";
+    var info = api.pageParam.info;
+    var history = info.history ;
+    info.history.page = "main";
+    info.history.url = "../html/main.html"
 
     //所有的message可查看项目具体跳转到相关的内容表页面detailMessage.html
     //相关通知内容内容通过不同色系内容表述可以点击与否。部分点击内容可跳转到巡检任务页面。并进行内容提交。
@@ -160,7 +161,7 @@ apiready = function(){
     addNotcie('n1', 1, "2018-5-29 11:28:40", "路线一", "[xxxx]相关巡检路线详细情况见...", "点1 -> 点2 -> 点3...");
     addNotcie('n2', 2, "2018-5-29 11:28:40", "警告通知", "漏检了巡检点");
 
-    
+
 
     dynamicPage();
 }

@@ -38,22 +38,30 @@ apiready = function(){
 
     	checkBoxStuff(username, password);
 
-	    alert('userName:'+ username + ' password:' + password);
-
-	    /*connectToService("http://dgjxj.liveej.com/appapi.ashx?action=login",
+	    connectToService( commonURL + "?action=login",
 	    	{
-		        values: {"username": "" + username , "password": "" + password }
+		        values: {"username": "admin" , "password": "admin88" }
 		    },
 		    function(ret){
-                alert(JSON.stringify(ret));
-		    	// animationStart(function(){}, 'main', './main.html', {username: username})
+          if(ret.result){
+            var param = {user:{}, history:{}};
+            param.user.userid = ret.data.id;
+            param.user.name = ret.data.name;
+            param.user.username = ret.data.username;
+            param.user.departmentid = ret.data.departmentid;
+            param.user.departmentname = ret.data.departmentname;
+            param.history.page = "login";
+            param.history.url = "../html/login.html";
+  		    	animationStart(function(){}, 'main', './main.html', param);
+          }
+          else {
+            alert("用户名或密码有错误！");
+          }
 		    },
-		    function(ret){
-                alert(JSON.stringify(ret));
-		    	alert("用户名或密码有错误！");
+		    function(ret,err){
+		    	alert(JSON.stringify(err));
 		    }
-		);*/
-	    animationStart(function(){}, 'main', './main.html', {username: username});
+		  );
 
     }, false);
 
