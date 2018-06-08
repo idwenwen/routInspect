@@ -336,9 +336,17 @@ apiready = function(){
 				$api.byId('showingPhoto').setAttribute("style", "display:none;");
 			});
 
-			$api.byId('reportEvents').addEventListener("click", function(){
+			$api.byId('reportEvents').addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
 				sendData();
-			});``
+			});
+
+			$api.byId('returnBtn').addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				animationStart(function(){}, "main", "../html/main.html", info, false);
+			});
 		}
 		getLocalPosition();
 		dynamicWeb();

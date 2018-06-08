@@ -14,6 +14,9 @@
 <body>
     <div id="wrap">
         <div id="header">
+            <div class="return-btn" id="returnBtn">
+          		<img src="../icon/back.png">
+          	</div>
             <div id='questionName'>事件处理</div>
         </div>
         <div id="main">
@@ -46,7 +49,7 @@
                 <li>
                   <img src="../icon/express.png" alt="">
                   <span class="etitle">问题描述:</span>
-                  <span class="right-long explain" id="explain">2018-01-24</span>
+                  <span class="right-long explain" id="explain">XXXX</span>
                 </li>
                 <li>
                   <img src="../icon/tiktok.png" alt="">
@@ -75,18 +78,14 @@
                 <li id="responseMessage">
                   <img src="../icon/responseMessage.png" alt="">
                   <span class="etitle">反馈信息</span>
-                  <div class="message-list">
-                    <span class="message-title">XXX</span>
-                    <span class="message-content">XXXXXXXXXXXXxxxx</span>
-                    <span class="messsage-title">2018-10-11 10:23:10</span>
-                  </div>
+
                 </li>
                 <li id="responseList">
                   <img src="../icon/response.png" alt="">
                   <span class="etitle">事件反馈:</span>
                   <input type="text" id="responseEvent" placeholder="处理结果反馈"/>
-                  <div class="photo-list">
-                    <div class="list-photo">
+                  <div class="photo-list" id="responsePhotoList">
+                    <div class="list-photo" id="addResponsePic">
                       <img src="../icon/addpic.png" alt="" class="add-pic-btn">
                     </div>
                   </div>
@@ -99,8 +98,9 @@
               <img src="" alt="" id="checkPhoto">
             </div>
             <div class="hangup-reason" id="hangupReason" style="display:none;">
+              <span class="hangup-reason-title">挂起原因说明:</span>
               <textarea name="name" rows="8" cols="80" class="input-reason" id="inputReason"></textarea>
-              <button class="hangup-check" id="hangupCheck"></button>
+              <button class="hangup-check" id="hangupCheck">提交反馈</button>
             </div>
         </div>
         <div id="footer">
