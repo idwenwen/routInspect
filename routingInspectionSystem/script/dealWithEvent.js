@@ -382,6 +382,12 @@ apiready = function(){
 				animationStart(function(){}, "main", "../html/main.html", info, true);
 			});
 
+			api.addEventListener({
+				name: 'keyback'
+			}, function(ret, err) {
+				animationStart(function(){}, "main", "../html/main.html", info, true);
+			});
+
 		}
 
 		displayPic(eventStatus);

@@ -229,6 +229,12 @@ apiready = function(){
   				e.stopPropagation();
   				animationStart(function(){}, "login", "../html/login.html", info, true);
   			});
+
+        api.addEventListener({
+          name: 'keyback'
+        }, function(ret, err) {
+          animationStart(function(){}, "login", "../html/login.html", info, true);
+        });
     }
 
     request();

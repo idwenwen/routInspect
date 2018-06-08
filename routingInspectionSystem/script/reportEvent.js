@@ -206,16 +206,13 @@ apiready = function(){
 				}
 				var explain = $api.byId('questionMessage').value || "";
 				var address = $api.byId("positionMessage").value || "";
-				alert(JSON.stringify({"message": addMessageP, "position": addPositionP}));
-				alert(JSON.stringify({"road": chooseid, "type": sectionid, "explain": explain, "address": address, "lat": position.lat, "lon": position.lon, "userid": userid}));
-				connectToService( commonURL + "?action=event",
+			  connectToService( commonURL + "?action=event",
 					{
 						values: {"road": chooseid, "type": sectionid, "explain": explain, "address": address,
 						 	"lat": position.lat, "lon": position.lon, "userid": userid},
 						files: {"accident": addMessageP, "position": addPositionP}
 					},
 					function(ret){
-						  alert(JSON.stringify(ret));
 							if(ret.result){
 								alert("事件上报成功!");
 								animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
@@ -347,6 +344,13 @@ apiready = function(){
 				e.stopPropagation();
 				animationStart(function(){}, "main", "../html/main.html", info, false);
 			});
+
+			api.addEventListener({
+				name: 'keyback'
+			}, function(ret, err) {
+				animationStart(function(){}, "main", "../html/main.html", info, true);
+			});
+
 		}
 		getLocalPosition();
 		dynamicWeb();

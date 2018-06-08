@@ -18,7 +18,8 @@ html, body{
 
 #header{
 	width: 100%;
-	height: 50px;
+	height: 70px;
+	padding-top: 20px;
 	position: fixed;
 	background-color: #01579b;
 	color: #fff;
@@ -32,7 +33,7 @@ html, body{
 	width: 50px;
 	height: 50px;
 	position: absolute;
-	top: 0px;
+	bottom: 0px;
 	left: 0px;
 	padding: 10px;
 }
@@ -55,7 +56,7 @@ html, body{
 .header-right-btn{
 	height: 50px;
 	position: absolute;
-	top: 0px;
+	bottom: 0px;
 	right: 0px;
 	font-family: "微软雅黑";
 	font-size: 90%;
@@ -67,7 +68,7 @@ html, body{
 .header-right-btn:before{
 	content:"";
 	position: absolute;
-	top: 5px;
+	bottom: 5px;
 	left: 0px;
 	width: 1px;
 	height: 40px;
@@ -85,7 +86,7 @@ html, body{
 
 #main{
 	position: relative;
-	top: 50px;
+	top: 70px;
 	width: 100%;
 	height: 100%;
 	padding: 20px;
