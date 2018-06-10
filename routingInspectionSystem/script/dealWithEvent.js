@@ -38,6 +38,9 @@ apiready = function(){
 				el.appendChild(img);
 				if(photo){
 					uploadPic.unshift(imgUrl);
+					if(uploadPic >= 5){
+						$api.byId('deleteBtn').setAttribute("style", "display:none;");
+					}
 				}
 				el.addEventListener("click", function(e){
 					e.preventDefault();
@@ -46,6 +49,10 @@ apiready = function(){
 						target = id;
 						deleteUrl = imgUrl;
 						pidcheck = pid;
+						$api.byId("deleteBtn").removeAttribute("style");
+					}
+					else {
+						$api.byId('deleteBtn').setAttribute("style", "display:none;");
 					}
 					$api.byId("checkPhoto").setAttribute("src", imgUrl);
 					$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
@@ -61,6 +68,7 @@ apiready = function(){
 				else {
 					$api.byId('' + pid).insertBefore(el, $api.byId('' + pid).children[0]);
 				}
+				el.setAttribute("style", "height:" + el.offsetWidth + "px;");
 			}
 		}
 
@@ -73,6 +81,7 @@ apiready = function(){
 			    destinationType: 'url',
 			    allowEdit: true,
 			    quality: 45,
+					targetWidth: 450,
 			    saveToPhotoAlbum: false
 			}, function(ret, err) {
 			    if (ret) {
@@ -126,48 +135,67 @@ apiready = function(){
 				addExhibitionPic(data.position[i], "positionPhoto");
 			}
 			if(data.response){
-				addResponse(data.response, []);
-			}
-			if(data.responsepic){
-
+				alert(JSON.stringify(data));
+				addResponse(data.response);
 			}
 		}
 
-		var addResponse = function(response, pic){
-			for(var i = 0 ; i < response.length ; i ++){
-				var str = "<div class='message-list'>"+
-					"<span class='message-title'>" + (response[i].name) + "</span>" +
-					"<span class='message-content'>" + (response[i].info) + "</span>";
-					var id = response[i].name;
-					for(var j = 0 ; j < pic.length ; j++){
-						var picstr = "<div class='message-photo'>"+
-							"<div class='list-photo' id=" + (id + j) + ">"+
-								"<img src=" + pic[j] + " alt=" + " class='add-pic-btn'>"+
-							"</div>"+
-						"</div>";
-						str += picstr;
+		// var addResponse = function(response, pic){
+		// 	for(var i = 0 ; i < response.length ; i ++){
+		// 		var str = "<div class='message-list'>"+
+		// 			"<span class='message-title'>" + (response[i].name) + "</span>" +
+		// 			"<span class='message-content'>" + (response[i].info) + "</span>";
+		// 			var id = response[i].name;
+		// 			for(var j = 0 ; j < pic.length ; j++){
+		// 				var picstr = "<div class='message-photo'>"+
+		// 					"<div class='list-photo' id=" + (id + j) + ">"+
+		// 						"<img src=" + pic[j] + " alt=" + " class='add-pic-btn'>"+
+		// 					"</div>"+
+		// 				"</div>";
+		// 				str += picstr;
+		// 			}
+		// 			str += "<span class='message-time'>"+ (response[i].requesttime) +"</span>" +
+		// 		"</div>";
+		// 		$api.append($api.byId("responseMessage"), str);
+		// 		for(var a = 0 ; a < pic.length ; a++){
+		// 			(function(){
+		// 				var elid= id+a;
+		// 				$api.byId(elid).addEventListener("click", function(e){
+		// 					e.preventDefault();
+		// 					e.stopPropagation();
+		// 					$api.byId("checkPhoto").setAttribute("src", imgUrl);
+		// 					$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
+		// 					$api.byId('showingPhoto').removeAttribute("style");
+		// 					if(check == 2){
+		// 						$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
+		// 					}
+		// 					$api.byId('blackMode').removeAttribute("style");
+		// 				});
+		// 			})
+		// 		}
+		// 	}
+		// }
+		//new addResponse
+		var addResponse = function(data){
+			alert(JSON.stringify(data));
+			for(var i = 0 ; i < data.length ; i++){
+					var str = "<div class='message-list'>"+
+						"<span class='message-title'>挂起说明</span>" +
+						"<span class='message-content'>" + (data[i].requestcontent) + "</span>" +
+						"<span class='message-time'>"+ (data[i].requesttime) +"</span>" +
+					"</div>";
+					var str2 = "<div class='message-list'>"+
+						"<span class='message-title'>" + ("审核人:" + data[i].responsename) + "</span>" +
+						"<span class='message-content'>" + (data[i].responsecontent) + "</span>" +
+						"<span class='message-time'>"+ (data[i].responsetime) +"</span>" +
+					"</div>";
+					$api.append($api.byId("responseMessage"), str);
+					if(data.responsename){
+						$api.append($api.byId("responseMessage"), str2);
 					}
-					str += "<span class='messsage-title'>"+ (response[i].time) +"</span>" +
-				"</div>";
-				$api.append($api.byId("responseMessage"), str);
-				for(var a = 0 ; a < pic.length ; a++){
-					(function(){
-						var elid= id+a;
-						$api.byId(elid).addEventListener("click", function(e){
-							e.preventDefault();
-							e.stopPropagation();
-							$api.byId("checkPhoto").setAttribute("src", imgUrl);
-							$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
-							$api.byId('showingPhoto').removeAttribute("style");
-							if(check == 2){
-								$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
-							}
-							$api.byId('blackMode').removeAttribute("style");
-						});
-					})
 				}
-			}
 		}
+
 
 		//挂起状态请求
 		var hangUp = function(){
@@ -382,6 +410,21 @@ apiready = function(){
 				animationStart(function(){}, "main", "../html/main.html", info, true);
 			});
 
+			$api.byId('deleteBtn').addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				$api.byId(pidcheck).removeChild($api.byId(id));
+				for(var i = 0 ; i < uploadPic.length ; i++){
+					if(uploadPic[i] == deleteUrl){
+						uploadPic.splice(i, 1);
+						break;
+					}
+				}
+				if(uploadPic.length <= 5){
+					$api.byId('deleteBtn').setAttribute("style", "height:" + $api.byId('deleteBtn').offset + "px;");
+				}
+			});
+
 			api.addEventListener({
 				name: 'keyback'
 			}, function(ret, err) {
@@ -390,6 +433,8 @@ apiready = function(){
 
 		}
 
+		var el = $api.byId('addResponsePic');
+		el.setAttribute("style", "height:"+el.offsetWidth +'px;');
 		displayPic(eventStatus);
 		requestForData(eventId);
 		dynamicWeb();

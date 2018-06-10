@@ -103,10 +103,9 @@ li > img{
 }
 
 .list-photo{
-  width: 100px;
-  height: 100px;
+  width: 29%;
+  margin: 2%;
   display:inline-block;
-  margin: 5px;
   border: 1px solid #aaa;
   box-shadow: 0px 0px 4px #bbb;
   overflow: hidden;
@@ -166,6 +165,7 @@ li > img{
   left: 50%;
   background-color: #fff;
   z-index: 11;
+  padding-bottom: 100px;
 }
 
 .black-mode{
@@ -186,6 +186,7 @@ li > img{
   right: 0;
   bottom: 0;
   margin: auto;
+  padding-bottom: 60px;
 }
 
 .checkPhoto2{
@@ -196,6 +197,7 @@ li > img{
   right: 0;
   bottom: 0;
   margin: auto;
+  padding-bottom: 60px;
 }
 
 .picture1{
@@ -279,7 +281,7 @@ li > img{
   word-break: break-all;
 }
 
-.messsage-title{
+.message-time{
   display: block;
   padding: 2px;
   line-height: 20px;
@@ -293,4 +295,19 @@ li > img{
   position: relative;
   margin-left: 2.1%;
   padding: 5px;
+}
+
+.deleteBtn{
+  width: 92%;
+  height: 50px;
+  line-height: 50px;
+  background-color: #336699;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px #444;
+  position: absolute;;
+  left: 0;
+  right: 0;
+  color: #fff;
+  margin: auto;
+  bottom: 15px;
 }

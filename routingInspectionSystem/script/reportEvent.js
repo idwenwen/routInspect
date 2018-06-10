@@ -68,6 +68,7 @@ apiready = function(){
 			    destinationType: 'url',
 			    allowEdit: true,
 			    quality: 45,
+					targetWidth: 500,
 			    saveToPhotoAlbum: false
 			}, function(ret, err) {
 			    if (ret) {
@@ -190,6 +191,7 @@ apiready = function(){
 					$api.byId('blackMode').removeAttribute("style");
 				})
 				$api.byId('' + pid).insertBefore(el, $api.byId('' + pid).children[0]);
+				el.setAttribute("style", "height:" + el.offsetWidth + "px;");
 			}
 		}
 
@@ -327,7 +329,8 @@ apiready = function(){
 				}
 				container.removeChild($api.byId(target));
 				if(list.length < 5){
-					btn.removeAttribute("style");
+					btn.setAttribute("style", "height:"+ btn.offsetWidth + "px;");
+
 				}
 				$api.byId('blackMode').setAttribute("style", "display:none;");
 				$api.byId('showingPhoto').setAttribute("style", "display:none;");
@@ -352,6 +355,11 @@ apiready = function(){
 			});
 
 		}
+
+		var el = $api.byId('photoing');
+		el.setAttribute("style", "height:"+el.offsetWidth +'px;');
+		el = $api.byId('photoing2');
+		el.setAttribute("style", "height:"+el.offsetWidth + 'px;');
 		getLocalPosition();
 		dynamicWeb();
 }
