@@ -135,7 +135,6 @@ apiready = function(){
 				addExhibitionPic(data.position[i], "positionPhoto");
 			}
 			if(data.response){
-				alert(JSON.stringify(data));
 				addResponse(data.response);
 			}
 		}
@@ -199,7 +198,7 @@ apiready = function(){
 		}
 		//new addResponse
 		var addResponse = function(data){
-			alert(JSON.stringify(data));
+			// alert(JSON.stringify(data));
 			for(var i = 0 ; i < data.length ; i++){
 					var str = "<div class='message-list'>"+
 						"<span class='message-title'>挂起说明:</span>" +
