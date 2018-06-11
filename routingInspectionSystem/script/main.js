@@ -96,13 +96,18 @@ apiready = function(){
       }
       var date = new Date(leftTime.replace(/-/g,"/"));
       var nowDate = new Date();
-    	var container = document.createElement("div");
+      var ms = (date.getTime() - nowDate.getTime()) / 1000 / 60;
+      var time = Math.floor(ms / 60) + '小时' + Math.floor(ms%60) + '分钟';
+      if(Math.floor(ms / 60) <= 0){
+        time = "已超时";
+      }
+     	var container = document.createElement("div");
         container.setAttribute("class", "eves-detail");
         container.innerHTML =
                 "<span class='name-info'>" + ("" + name) + "</span>" +
                 "<span class='task-status'>" + ("状态[" + showStatus + "]") + "</span>" +
                 "<span class='task-info'>" + ( "说明:" + information ) + "</span>" +
-                "<span class='task-time'>" + ( "" + leftTime ) + "</span>";
+                "<span class='task-time'>" + ( "" + time ) + "</span>";
         $api.first($api.byId("topPartContent")).appendChild(container);
         container.addEventListener('click', function(e){
             e.preventDefault();
@@ -111,10 +116,9 @@ apiready = function(){
         }, false);
     }
 
-    var addNotcie = function(noticeId, type, time, name, information, routing, funcdescide){
+    var addNotcie = function(noticeId, time, name, information, routing, funcdescide){
     	var container = document.createElement("div");
         container.setAttribute("class", "notice-detail");
-        container.setAttribute("type", "" + type);
         container.innerHTML = "<div class='notice-time'>" + ("" + time) + "</div>" +
             "<div class='notice-content'>"+
             "<span class='notice-name'>" + ("" + name) + "</span>" +
@@ -125,7 +129,7 @@ apiready = function(){
         container.addEventListener('click', function(e){
             e.preventDefault();
             e.stopPropagation();
-            funcdescide && funcdescide(e, noticeId, type, time, name, information, routing);
+            funcdescide && funcdescide(e, noticeId, time, name, information, routing);
         }, false)
     }
 
@@ -134,8 +138,32 @@ apiready = function(){
         var num = data.length;
         $api.byId('noticeNumber').innerHTML = num;
 
-        for(var i = 0 ; i < data.length ; i++){}
+        for(var i = 0 ; i < data.length ; i++){
+          //获取服务器护具内容，进行页面信息的展示
+          (function(){
+          var id = data[i].id;
+          var name = data[i].reportname;
+          var routing = data[i].routing;
+          var information = data[i].explain;
+          var time = data[i].time;
+          var type = data[i].type
+          addNotcie(id, time, name, information, routing,
+            function(e, id, time, name, information, routing){
+              //依据type来进行页面的跳转。如果是进行之中的任务则直接跳转到地图页面.
+              //如果是为开始跳转到inspectionRouting页面，警告跳转到处理界面。
+              if(type == 1){
+                animationStart(function(){}, "inspectionTask" , "../html/inspectionTask.html" , info, true);
+              }
+              else if(type == 2){
+                animationStart(function(){}, "taskMap" , "../html/taskMap.html" , info, true);
+              }
+              else if(type == 3){
+                animationStart(function(){}, "mistakeForTask" , "../html/mistakeForTask.html" , info, true);
+              }
+            });
+        })();
       }
+    }
       else {
         $api.byId('noticeNumber').innerHTML = 0;
         if(initShowing == "notice"){

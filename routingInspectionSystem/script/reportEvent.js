@@ -67,7 +67,7 @@ apiready = function(){
 			    mediaValue: 'pic',
 			    destinationType: 'url',
 			    allowEdit: true,
-			    quality: 45,
+			    quality: 40,
 					targetWidth: 500,
 			    saveToPhotoAlbum: false
 			}, function(ret, err) {

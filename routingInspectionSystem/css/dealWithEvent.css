@@ -261,6 +261,7 @@ li > img{
   border: 1px solid #aaa;
   box-shadow: 0px 0px 5px #bbb;
   position: relative;
+  margin-top: 10px;
 }
 
 .message-title{

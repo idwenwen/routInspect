@@ -72,7 +72,7 @@ apiready = function(){
 			}
 		}
 
-		//getPicture
+		//
 		var getPicture = function(success, fail){
 			api.getPicture({
 			    sourceType: 'camera',
@@ -140,47 +140,69 @@ apiready = function(){
 			}
 		}
 
-		// var addResponse = function(response, pic){
-		// 	for(var i = 0 ; i < response.length ; i ++){
-		// 		var str = "<div class='message-list'>"+
-		// 			"<span class='message-title'>" + (response[i].name) + "</span>" +
-		// 			"<span class='message-content'>" + (response[i].info) + "</span>";
-		// 			var id = response[i].name;
-		// 			for(var j = 0 ; j < pic.length ; j++){
-		// 				var picstr = "<div class='message-photo'>"+
-		// 					"<div class='list-photo' id=" + (id + j) + ">"+
-		// 						"<img src=" + pic[j] + " alt=" + " class='add-pic-btn'>"+
-		// 					"</div>"+
-		// 				"</div>";
-		// 				str += picstr;
-		// 			}
-		// 			str += "<span class='message-time'>"+ (response[i].requesttime) +"</span>" +
-		// 		"</div>";
-		// 		$api.append($api.byId("responseMessage"), str);
-		// 		for(var a = 0 ; a < pic.length ; a++){
-		// 			(function(){
-		// 				var elid= id+a;
-		// 				$api.byId(elid).addEventListener("click", function(e){
-		// 					e.preventDefault();
-		// 					e.stopPropagation();
-		// 					$api.byId("checkPhoto").setAttribute("src", imgUrl);
-		// 					$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
-		// 					$api.byId('showingPhoto').removeAttribute("style");
-		// 					if(check == 2){
-		// 						$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
-		// 					}
-		// 					$api.byId('blackMode').removeAttribute("style");
-		// 				});
-		// 			})
-		// 		}
-		// 	}
-		// }
+		var addResponseRepair = function(response){
+			for(var i = 0 ; i < response.length ; i ++){
+				var pic = response.photo;
+				var str = "<div class='message-list'>"+
+					"<span class='message-title'>处理说明:</span>" +
+					"<span class='message-content'>" + (response[i].requestcontent) + "</span>";
+					var id = "response" + (i + 1);
+					for(var j = 0 ; j < pic.length ; j++){
+						var picstr = "<div class='message-photo'>"+
+							"<div class='list-photo' id=" + (id + "" + j) + ">"+
+								"<img src=" + pic[j] + " alt=" + " class='add-pic-btn'>"+
+							"</div>"+
+						"</div>";
+						str += picstr;
+					}
+					str += "<span class='message-time'>"+ (response[i].requesttime) +"</span>" +
+				"</div>";
+				$api.append($api.byId("responseMessage"), str);
+				for(var a = 0 ; a < pic.length ; a++){
+					(function(){
+						var elid= id+a;
+						var img = new Image();
+						img.src = pic[a];
+						var check = 0;
+						img.onload = function(){
+							if(img.width > img.height){
+								check = 1;
+							}
+							else {
+								check = 2;
+							}
+							$api.byId(elid).addEventListener("click", function(e){
+								e.preventDefault();
+								e.stopPropagation();
+								$api.byId("checkPhoto").setAttribute("src", imgUrl);
+								$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
+								$api.byId('showingPhoto').removeAttribute("style");
+								if(check == 2){
+									$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
+								}
+								$api.byId('blackMode').removeAttribute("style");
+							});
+						}
+					})();
+				}
+
+				//添加回复内容
+				var str2 = "<div class='message-list'>"+
+					"<span class='message-title'>" + ("审核人:" + data[i].responsename) + "</span>" +
+					"<span class='message-content'>" + (data[i].responsecontent) + "</span>" +
+					"<span class='message-time'>"+ (data[i].responsetime) +"</span>" +
+				"</div>";
+				if(data.responsename){
+					$api.append($api.byId("responseMessage"), str2);
+				}
+			}
+		}
 		//new addResponse
 		var addResponse = function(data){
 			alert(JSON.stringify(data));
 			for(var i = 0 ; i < data.length ; i++){
 					var str = "<div class='message-list'>"+
-						"<span class='message-title'>挂起说明</span>" +
+						"<span class='message-title'>挂起说明:</span>" +
 						"<span class='message-content'>" + (data[i].requestcontent) + "</span>" +
 						"<span class='message-time'>"+ (data[i].requesttime) +"</span>" +
 					"</div>";
@@ -190,7 +212,7 @@ apiready = function(){
 						"<span class='message-time'>"+ (data[i].responsetime) +"</span>" +
 					"</div>";
 					$api.append($api.byId("responseMessage"), str);
-					if(data.responsename){
+					if(data[i].responsename){
 						$api.append($api.byId("responseMessage"), str2);
 					}
 				}
@@ -288,26 +310,31 @@ apiready = function(){
 					$api.byId('responseMessage').setAttribute("style", "display:none;");
 					$api.byId('responseList').removeAttribute("style");
 					$api.byId('completeStuff').removeAttribute("style");
+					$api.byId('statusmessage').innerHTML = "处理中";
 				}
 				else if(statusinfo == 4){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').setAttribute("style", "display:none;");
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').innerHTML = "挂起中";
 				}
 				else if(statusinfo == 8){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').setAttribute("style", "display:none;");
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').innerHTML = "处理中";
 				}
 				else if(statusinfo == 32){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').removeAttribute("style");
 					$api.byId('completeStuff').removeAttribute("style");
+					$api.byId('statusmessage').innerHTML = "审核中";
 				}
 				else if(statusinfo == 64){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').setAttribute("style", "display:none;");
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').innerHTML = "超时完成";
 				}
 			}
 		}
