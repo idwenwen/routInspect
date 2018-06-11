@@ -55,7 +55,7 @@ apiready = function(){
 					choosename = e.target.innerHTML;
 					callback && callback(chooseid, choosename);
 				});
-				$api.byId('typeListDetail').appendChild(spde);
+				$api.byId('typeListDetails').appendChild(spde);
 			}
 		}
 
@@ -95,7 +95,7 @@ apiready = function(){
 					sectionname = e.target.innerHTML;
 					callback && callback(sectionid, sectionname);
 				});
-				$api.byId('positionList').appendChild(sp);
+				$api.byId('positionLists').appendChild(sp);
 			}
 		}
 
