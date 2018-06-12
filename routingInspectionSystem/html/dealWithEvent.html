@@ -27,9 +27,9 @@
                 <li>
                   <img src="../icon/operation.png" alt="">
                   <span class="etitle">问题操作:</span>
-                  <button class="doing-it" id="accept">接单</button>
-                  <button class="hangup" id="hangup">挂起</button>
-                  <button class="middle" id="middle" style= "display:none;">延时</button>
+                  <button class="middle" id="accept">接单</button>
+                  <button class="doing-it" id="middle" style= "display:none;">延时</button>
+                  <button class="hangup" id="hangup" style= "display:none;">挂起</button>
                   <span class="right" style="display:none;" id="statusmessage">处理中...</span>
                 </li>
                 <li>
@@ -96,7 +96,9 @@
             <button class="check-events" id="completeStuff">提交</button>
             <div class="black-mode" id="blackMode" style="display:none;"></div>
             <div class="showingPhoto" id="showingPhoto" style="display:none;">
-              <img src="" alt="" id="checkPhoto">
+              <div class="img-container">
+                <img src="" alt="" id="checkPhoto">
+              </div>
               <button class="deleteBtn" id="deleteBtn" style="display:none;">删除</button>
             </div>
             <div class="hangup-reason" id="hangupReason" style="display:none;">

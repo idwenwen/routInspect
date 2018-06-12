@@ -14,10 +14,9 @@ apiready = function(){
 
 
     //添加用户选择列表项目,并未其添加点击选择事件。
-    var addPersons = function(userId, headPic, name, info, classes){
+    var addPersons = function(userId, name, info, classes){
     	var str = "<img src='../icon/checkbox.png' class='checkbox'/>"+
             "<img src='../icon/checkbox-check.png' class='checkbox-check' id="+("checkbox"+userId)+" hidden='hidden'/>" +
-            "<img src='" + ("" + headPic) + "' class='list-header'></img>" +
             "<span class='list-worker-name'>"+ ("" + name) + "</span>" +
             "<span class='list-worker-info'>" + ("" + info) + "</span>";
     	var ele = document.createElement("div");

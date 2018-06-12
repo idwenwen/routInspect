@@ -1,5 +1,8 @@
 apiready = function(){
 
+    var intervalTime = 5000;
+    var requestTime = 1*60*1000;
+
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
@@ -30,35 +33,59 @@ apiready = function(){
     	});
     }
 
-    var amapLocation = api.require('aMapLocation');
-  	var myx = 0;
-  	var myy = 0;
-  	var mytimestamp = 0;
-  	var mytotaltamp = 0;
+    var aMapLBS = api.require('aMapLBS');
+  	var positions = [];
+  	var send = false;
 
-  	//打开地图，并设定人物展示位置
-  	var startPos = function(){
-  		var param = { accuracy: 20, filter: 1, autoStop: false };
-  		var resultCallback = function(ret, err) {
-  				if (ret.status) {
-  						//alert("经度：" + ret.longitude + "\n纬度：" + ret.latitude + "\n时间：" + ret.timestamp);
-  						myx = ret.latitude;
-  						myy = ret.longitude;
-  						mytimestamp = ret.timestamp;
-  						mytotaltamp += mytimestamp;
-              $api.setStorage('position', JSON.stringify({"lat": myx, "lon":myy, "timestamp": mytimestamp, "totalTime": mytotaltamp}));
-              //TODO:发送相关的请求内容
-  				} else {
-  						alert(err.code + ',' + err.msg);
-  				}
-  		}
-  		amapLocation.startLocation(param, resultCallback);
-  	}
+  	var startlbsPO = function(ms, ms2, userid){
+  	aMapLBS.configManager({
+  			accuracy: 'best',
+  			filter: 1
+  	}, function(ret, err) {
+  			if (ret.status) {
+  				setInterval(function(){
+  					aMapLBS.singleLocation({
+  							timeout: 5
+  					}, function(ret, err) {
+  							if (ret.status) {
+  								//TODO：此处记录一个位置信息信息内容，并发送位置信息。信息
+  								if(positions.length >= 10){
+  									positions.shift();
+  								}
+  								positions.push([ret.lat, ret.lon]);
+  								$api.setStorage('position', JSON.stringify(positions));
+  								if(!send)
+  								{
+  									sned = true;
+  								}
+  								else {
+  									//发送请求。
+  								}
+  							}
+    					});
+    				},ms);
 
-  	//结束相关的定位功能
-  	var stopLocation = function(){
-  		amapLocation.stopLocation();
-  	}
+            setInterval(function(){
+              var pos = positions[positions.length - 1];
+              connectToService(commonURL + "?action=position",
+        	    	{
+                  values:{"userid": userid, "lat":pos[0], "lon":pos[1]}
+                },function(ret){
+                	if(ret.result == true){
+        						drawingDetail(ret.data, showStuffO);
+        					}
+        		    },
+        		    function(ret){
+                  alert(JSON.stringify(ret.desc));
+        		    }
+        			);
+            }, ms2)
+    			}
+    			else {
+    				alert("当前无法进行定位。")
+    			}
+    	});
+    }
 
     window.$api.byId('submitBtn').addEventListener("click", function(){
 
@@ -70,10 +97,11 @@ apiready = function(){
 
 	    connectToService( commonURL + "?action=login",
 	    	{
-		        values: {"username": "admin" , "password": "admin88" }
+		        values: {"username": username , "password": password }
 		    },
 		    function(ret){
           if(ret.result){
+            startlbsPO(intervalTime, requestTime, ret.data.id);
             var param = {user:{}, history:{}};
             param.user.userid = ret.data.id;
             param.user.name = ret.data.name;
@@ -82,7 +110,6 @@ apiready = function(){
             param.user.departmentname = ret.data.departmentname;
             param.history.page = "login";
             param.history.url = "../html/login.html";
-            startPos();
   		    	animationStart(function(){}, 'main', './main.html', param);
           }
           else {
@@ -101,5 +128,4 @@ apiready = function(){
     }, function(ret, err) {
       return false;
     });
-
 }

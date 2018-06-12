@@ -34,33 +34,14 @@ apiready = function(){
 	// 	amapLocation.startLocation(param, resultCallback);
 	// }
 
-	var aMapLBS = api.require('aMapLBS');
-	var startlbsPO = function(){
-		aMapLBS.configManager({
-		    accuracy: 'best',
-		    filter: 1
-		}, function(ret, err) {
-		    if (ret.status) {
-					aMapLBS.startLocation(function(ret, err) {
-						if(ret.status){
-							var el = document.createElement("span");
-							el.innerHTML = "lbs : " + " x:" + ret.lat + "  y:" + ret.lon;
-							$api.byId('info').appendChild(el);
-						}
-					});
-		    }
-		});
-}
-
 	//结束相关的定位功能
 	// var stopLocation = function(){
 	// 	amapLocation.stopLocation();
 	// }
 
 	// startPos();
-	startlbsPO();
 	// if(!userInfo){
-		// transferToPage('login', 'html/login.html', info);
+	transferToPage('login', 'html/login.html', info);
 	// }
 	// else {
 	// 	connectToService("",

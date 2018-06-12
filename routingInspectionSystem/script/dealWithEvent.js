@@ -25,8 +25,8 @@ apiready = function(){
 			var img = new Image();
 			img.src = imgUrl;
 			img.onload = function(){
-				var width = img.widht;
-				var height = img.height;
+				var width = parseInt(img.width);
+				var height = parseInt(img.height);
 				var check = 0;
 				if(width > height){
 					check = 1
@@ -34,6 +34,7 @@ apiready = function(){
 				else {
 					check = 2;
 				}
+				// alert("check:" + check + " width:" + img.width + " height:" + img.height);
 				img.setAttribute("class", (check == 1 ? "picture1" : "picture2"));
 				el.appendChild(img);
 				if(photo){
@@ -133,34 +134,38 @@ apiready = function(){
 			for(var i = 0 ; i < data.position.length ; i++){
 				addExhibitionPic(data.position[i], "positionPhoto");
 			}
-			if(data.response){
-				addResponse(data.response);
+			if(data.repaired){
+				addResponseRepair(data.repaired);
 			}
 		}
 
 		var addResponseRepair = function(response){
 			for(var i = 0 ; i < response.length ; i ++){
-				var pic = response.photo;
+				var pic = response[i].picture || [];
 				var str = "<div class='message-list'>"+
 					"<span class='message-title'>处理说明:</span>" +
 					"<span class='message-content'>" + (response[i].requestcontent) + "</span>";
 					var id = "response" + (i + 1);
-					for(var j = 0 ; j < pic.length ; j++){
-						var picstr = "<div class='message-photo'>"+
-							"<div class='list-photo' id=" + (id + "" + j) + ">"+
-								"<img src=" + pic[j] + " alt=" + " class='add-pic-btn'>"+
-							"</div>"+
-						"</div>";
-						str += picstr;
+					if(pic.length > 0){
+						str += "<div class='message-photo'>";
+						for(var j = 0 ; j < pic.length ; j++){
+							var picstr =
+								"<div class='list-photo' id=" + (id + "" + j) + ">"+
+									"<img src=" + pic[j] + " id= " + (id + "img" + j) + " />"+
+								"</div>";
+							str += picstr;
+						}
+						str += "</div>";
 					}
-					str += "<span class='message-time'>"+ (response[i].requesttime) +"</span>" +
-				"</div>";
+				str += "<span class='message-time'>"+ (response[i].requesttime) +"</span></div>";
 				$api.append($api.byId("responseMessage"), str);
 				for(var a = 0 ; a < pic.length ; a++){
 					(function(){
-						var elid= id+a;
+						var elid = id+a;
+						var imgid = id + "img" + a;
 						var img = new Image();
 						img.src = pic[a];
+						var imgUrl = pic[a];
 						var check = 0;
 						img.onload = function(){
 							if(img.width > img.height){
@@ -169,6 +174,8 @@ apiready = function(){
 							else {
 								check = 2;
 							}
+							$api.byId(imgid).setAttribute("class", (check == 1 ? "picture1" : "picture2"));
+							$api.byId(elid).setAttribute("style", "height:" + $api.byId(elid).offsetWidth + "px;");
 							$api.byId(elid).addEventListener("click", function(e){
 								e.preventDefault();
 								e.stopPropagation();
@@ -186,18 +193,18 @@ apiready = function(){
 
 				//添加回复内容
 				var str2 = "<div class='message-list'>"+
-					"<span class='message-title'>" + ("审核人:" + data[i].responsename) + "</span>" +
-					"<span class='message-content'>" + (data[i].responsecontent) + "</span>" +
-					"<span class='message-time'>"+ (data[i].responsetime) +"</span>" +
+					"<span class='message-title'>" + ("审核人:" + response[i].responsename) + "</span>" +
+					"<span class='message-content'>" + (response[i].responsecontent) + "</span>" +
+					"<span class='message-time'>"+ (response[i].responsetime) +"</span>" +
 				"</div>";
-				if(data.responsename){
+				if(response.responsename){
 					$api.append($api.byId("responseMessage"), str2);
 				}
 			}
 		}
 		//new addResponse
 		var addResponse = function(data){
-			// alert(JSON.stringify(data));
+			alert(JSON.stringify(data));
 			for(var i = 0 ; i < data.length ; i++){
 					var str = "<div class='message-list'>"+
 						"<span class='message-title'>挂起说明:</span>" +
@@ -225,7 +232,7 @@ apiready = function(){
 			var delay = $api.byId('inputOne').value;
 			connectToService(commonURL + "?action=eventsuspend",
 				{
-					values:{"userid": userid, "eventid": eventId, "explain": value, "delay":delay }
+					values:{"userid": userid, "eventid": eventId, "explain": value, "delay":delay  "type":"4" }
 				}
 				,function(ret){
 					if(ret.result){
@@ -255,7 +262,7 @@ apiready = function(){
 			var delay = $api.byId('inputTwo').value;
 			connectToService(commonURL + "?action=eventsuspend",
 				{
-					values:{"userid": userid, "eventid": eventId, "explain": value, "delay":delay }
+					values:{"userid": userid, "eventid": eventId, "explain": value, "delay":delay , "type":'8'}
 				}
 				,function(ret){
 					if(ret.result){
@@ -289,7 +296,7 @@ apiready = function(){
 				,function(ret){
 					if(ret.result){
 								$api.byId('name').innerHTML = info.user.username;
-								$api.byId('hangup').setAttribute("style", "display:none;");
+								$api.byId('hangup').removeAttribute("style");
 								$api.byId('accept').setAttribute("style", "display:none;");
 								$api.byId('middle').removeAttribute("style");
 								$api.byId('responseList').removeAttribute("style");
@@ -318,13 +325,13 @@ apiready = function(){
 				$api.byId('completeStuff').setAttribute("style", "display:none;");
 			}
 			else {
-				$api.byId('hangup').setAttribute("style", "display:none;");
 				$api.byId('accept').setAttribute("style", "display:none;");
 				if(statusinfo == 2){
 					$api.byId('responseMessage').setAttribute("style", "display:none;");
 					$api.byId('responseList').removeAttribute("style");
 					$api.byId('completeStuff').removeAttribute("style");
 					$api.byId('middle').removeAttribute("style");
+					$api.byId('hangup').removeAttribute("style");
 					$api.byId('statusmessage').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "处理中";
 				}
@@ -334,6 +341,7 @@ apiready = function(){
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').removeAttribute("style");
 					$api.byId('middle').setAttribute("style", "display:none;");
+					$api.byId('hangup').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "挂起中";
 				}
 				else if(statusinfo == 8){
@@ -341,6 +349,7 @@ apiready = function(){
 					$api.byId('responseList').setAttribute("style", "display:none;");
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
 					$api.byId('middle').removeAttribute("style");
+					$api.byId('hangup').removeAttribute("style");
 					$api.byId('statusmessage').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "处理中";
 				}
@@ -350,6 +359,7 @@ apiready = function(){
 					$api.byId('completeStuff').removeAttribute("style");
 					$api.byId('statusmessage').removeAttribute("style");
 					$api.byId('middle').setAttribute("style", "display:none;");
+					$api.byId('hangup').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "审核中";
 				}
 				else if(statusinfo == 64){
@@ -358,6 +368,7 @@ apiready = function(){
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').removeAttribute("style");
 					$api.byId('middle').setAttribute("style", "display:none;");
+					$api.byId('hangup').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "待审核";
 				}
 				else if(statusinfo == 128){
@@ -366,6 +377,7 @@ apiready = function(){
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').removeAttribute("style");
 					$api.byId('middle').setAttribute("style", "display:none;");
+					$api.byId('hangup').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "超时完成";
 				}
 			}

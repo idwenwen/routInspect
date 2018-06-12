@@ -10,17 +10,32 @@ apiready = function(){
 
 		userid = info.user.userid || "";
 		//获取当前的位置信息
-		var amapLocation = api.require("aMapLocation");
+		var aMapLBS = api.require('aMapLBS');
 		var position = {};
-		var getLocalPosition = function(){
-			amapLocation.startLocation({
-				accuracy: 20, filter: 1, autoStop: true
-			}, function(ret, err){
-					if(ret.status){
-						position.lat = ret.latitude;
-						position.lon = ret.longitude;
+		var getLocalPosition = function(func){
+			var positions = JSON.parse($api.getStorage('position'));
+			if(positions && positions.length > 0){
+				var pos = {lat : positions[positions.length - 1][0], lon : positions[positions.length -1][1]};
+				func && func(pos);
+			}
+			else {
+				aMapLBS.configManager({
+	  			accuracy: 'best',
+	  			filter: 1
+		  	}, function(ret, err) {
+					if(err){
+						alert(JSON.stringify(err));
 					}
-			});
+					if (ret.status) {
+						position.lat = ret.lat;
+						position.lon = ret.lon;
+						func && func(position);
+					}
+					else {
+						alert("定位出现错误!");
+					}
+				});
+			}
 		}
 
 		//绘制问题类型选择
@@ -99,13 +114,7 @@ apiready = function(){
 			}
 		}
 
-		//测试数据内容
-		var testingData = [{id: "p1", name: "环保" ,items: [{id: 'ch1', name:'环保问题1'}]},
-			{id: "p2", name: "环测" ,items: [{id: 'ch2', name:'环测问题1'}]},
-			{id: "p3", name: "环俐" ,items: [{id: 'ch3', name:'环俐问题1'}]}];
-
-		var routDetail = [{id:'r1', name:'路段1'},{id:'r2', name:'路段2'}];
-
+		//测试数据内
 		//绘制当前的页面数据内容
 		var drawingDetail = function(td, showStuffO){
 			td.forEach(function(x, index){
@@ -196,7 +205,7 @@ apiready = function(){
 		}
 
 		//发送相关数据内容
-		var sendData = function(){
+		var sendData = function(position){
 				//选取的问题类别， 路段内容，相关的数据的file内容。
 				if(addMessageP.length == 0){
 					alert("请上传相关信息图片");
@@ -220,7 +229,7 @@ apiready = function(){
 								animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
 							}
 							else {
-								alert("事件未上报成功");
+								alert("事件未上报成功:" + ret.desc);
 							}
 			    },
 			    function(ret, err){
@@ -339,7 +348,7 @@ apiready = function(){
 			$api.byId('reportEvents').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				sendData();
+				getLocalPosition(sendData);
 			});
 
 			$api.byId('returnBtn').addEventListener("click", function(e){
@@ -360,6 +369,5 @@ apiready = function(){
 		el.setAttribute("style", "height:"+el.offsetWidth +'px;');
 		el = $api.byId('photoing2');
 		el.setAttribute("style", "height:"+el.offsetWidth + 'px;');
-		getLocalPosition();
 		dynamicWeb();
 }
