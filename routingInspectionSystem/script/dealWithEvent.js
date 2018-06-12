@@ -232,7 +232,7 @@ apiready = function(){
 			var delay = $api.byId('inputOne').value;
 			connectToService(commonURL + "?action=eventsuspend",
 				{
-					values:{"userid": userid, "eventid": eventId, "explain": value, "delay":delay  "type":"4" }
+					values:{"userid": userid, "eventid": eventId, "explain": value, "delay":delay,  "type":"4" }
 				}
 				,function(ret){
 					if(ret.result){
