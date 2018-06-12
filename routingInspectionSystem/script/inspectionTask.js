@@ -178,17 +178,9 @@ apiready = function(){
       );
     }
 
-    addPersons("p1", "../icon/atm.png", "p1", "p1");
-    addPersons("p2", "../icon/atm.png", "p2", "p2", "list-info2");
-    addPersons("p3", "../icon/atm.png", "p3", "p3");
-    addPersons("p4", "../icon/atm.png", "p4", "p4", "list-info2");
-    addPersons("p5", "../icon/atm.png", "p1", "p1");
-    addPersons("p6", "../icon/atm.png", "p2", "p2", "list-info2");
-    addPersons("p7", "../icon/atm.png", "p3", "p3");
-    addPersons("p8", "../icon/atm.png", "p4", "p4", "list-info2");
-    addPersons("p9", "../icon/atm.png", "p1", "p1");
-    addPersons("p10", "../icon/atm.png", "p2", "p2", "list-info2");
-    addPersons("p11", "../icon/atm.png", "p3", "p3");
-    addPersons("p12", "../icon/atm.png", "p4", "p4", "list-info2");
+    addPersons("p1", "吴玉碧", "工程部");
+    addPersons("p2", "李武志", "信息部", "list-info2");
+    addPersons("p3", "王婷婷", "工程部");
+    addPersons("p4", "李翔", "工程部", "list-info2");
     dynamicWeb();
 }
