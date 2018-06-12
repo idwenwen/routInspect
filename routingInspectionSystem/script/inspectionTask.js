@@ -60,6 +60,13 @@ apiready = function(){
     		},1000);
     	});
 
+      $api.byId("blackMode").addEventListener("click", function(e){
+			  e.preventDefault();
+    		e.stopPropagation();
+    		$api.byId("blackMode").setAttribute("style", "display:none;");
+    		$api.byId("chooseConn").setAttribute("style", "display:none;");
+    	});
+
     	$api.byId("toChooseConnect").addEventListener("click", function(e){
 			  e.preventDefault();
     		e.stopPropagation();
