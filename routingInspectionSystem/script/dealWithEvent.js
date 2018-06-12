@@ -204,7 +204,6 @@ apiready = function(){
 		}
 		//new addResponse
 		var addResponse = function(data){
-			alert(JSON.stringify(data));
 			for(var i = 0 ; i < data.length ; i++){
 					var str = "<div class='message-list'>"+
 						"<span class='message-title'>挂起说明:</span>" +
@@ -399,7 +398,6 @@ apiready = function(){
 			connectToService(commonURL + "?action=eventrepair",
 				data
 				,function(ret){
-					alert(JSON.stringify(ret));
 					if(ret.result){
 						api.alert({
 						    title: '提示',
