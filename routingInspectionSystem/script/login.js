@@ -36,6 +36,8 @@ apiready = function(){
     var aMapLBS = api.require('aMapLBS');
   	var positions = [];
   	var send = false;
+    var showingErrMessage = false;
+    var showingFailMessage = false;
 
   	var startlbsPO = function(ms, ms2, userid){
   	aMapLBS.configManager({
@@ -70,13 +72,23 @@ apiready = function(){
               connectToService(commonURL + "?action=position",
         	    	{
                   values:{"userid": userid, "lat":pos[0], "lon":pos[1]}
-                },function(ret){
+                },
+                function(ret){
                 	if(ret.result == true){
-        						drawingDetail(ret.data, showStuffO);
+
         					}
+                  else{
+                    if(!showingFailMessage){
+                      showingErrMessage = true;
+                      alert("当前网络信号不佳， 无法进行实时定位！");
+                    }
+                  }
         		    },
         		    function(ret){
-                  alert(JSON.stringify(ret.desc));
+                  if(!showingErrMessage){
+                    showingErrMessage = true;
+                    alert("程序错误，程序员正在奋斗中！");
+                  }
         		    }
         			);
             }, ms2)
