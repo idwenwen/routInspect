@@ -367,10 +367,10 @@
 	height: 70px;
 	border-bottom: 1px solid #003366;
 	position: relative;
-	opacity: 0;
-	animation: showing 1s 1;
+	opacity: 1;
+	/*animation: showing 1s 1;
 	animation-delay: 1s;
-	animation-fill-mode:forwards;
+	animation-fill-mode:forwards;*/
 }
 
 .list-info2{
