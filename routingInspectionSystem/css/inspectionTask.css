@@ -451,6 +451,5 @@
 .list-content{
 	height: 100%;
 	width: 100%;
-	padding-top: 80px;
 	overflow-y: auto;
 }
