@@ -232,7 +232,7 @@ apiready = function(){
 		routingPoint([{info:"梧桐路", color:"green"}, {info:"二环南路", color:"red"}, {info:"吉安路"}, {info:"同宏路"}]);
 		if(visit){
 			$api.byId('returnBtn').setAttribute("style", "display:none;");
-			$api.byId('returnBtn').removeAttribute("style");
+			$api.byId('repEvent').removeAttribute("style");
 			$api.byId('endTask').removeAttribute("style");
 		}
 		dynamicWeb();
