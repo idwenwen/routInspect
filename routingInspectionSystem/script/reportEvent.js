@@ -68,7 +68,7 @@ apiready = function(){
 			    destinationType: 'url',
 			    allowEdit: true,
 			    quality: 40,
-					targetWidth: 500,
+					targetWidth: 1000,
 			    saveToPhotoAlbum: false
 			}, function(ret, err) {
 			    if (ret) {
@@ -345,13 +345,13 @@ apiready = function(){
 			$api.byId('returnBtn').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				animationStart(function(){}, "main", "../html/main.html", info, false);
+				animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
 			});
 
 			api.addEventListener({
 				name: 'keyback'
 			}, function(ret, err) {
-				animationStart(function(){}, "main", "../html/main.html", info, true);
+				animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
 			});
 
 		}

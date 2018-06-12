@@ -69,8 +69,12 @@ li > img{
   top: 20px;
 }
 
-.doing-it{
+.hangup{
   left: 70%;
+}
+
+.middle{
+  left: 45%;
 }
 
 .right{
@@ -222,17 +226,37 @@ li > img{
 }
 
 .hangup-reason-title{
-  height: 30px;
-  line-height: 30px;
+  height: 25px;
+  line-height: 25px;
   padding-left: 4%;
-  font-weight: bold;
-  padding-top: 10px;
+  padding-top: 5px;
+}
+
+.hangup-delay-count{
+  height: 25px;
+  line-height: 25px;
+  padding-left: 4%;
+  padding-top: 15px;
+}
+
+.delay-time{
+  width: 80%;
+  height: 50px;
+  padding: 5px;
+  padding-left: 10px;
+  margin-left: 4.3%;
+  border:1px solid #aaa;
+  box-shadow: 0px 0px 5px #bbb;
+}
+
+.unit{
+  padding-left: 5px;
 }
 
 .input-reason{
   width: 92%;
   height: 295px;
-  margin: 4.3%;
+  margin-left: 4.3%;
   border:1px solid #aaa;
   box-shadow: 0px 0px 5px #bbb;
 }

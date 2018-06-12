@@ -27,8 +27,9 @@
                 <li>
                   <img src="../icon/operation.png" alt="">
                   <span class="etitle">问题操作:</span>
-                  <button class="hangup" id="hangup">挂起</button>
                   <button class="doing-it" id="accept">接单</button>
+                  <button class="hangup" id="hangup">挂起</button>
+                  <button class="middle" id="middle" style= "display:none;">延时</button>
                   <span class="right" style="display:none;" id="statusmessage">处理中...</span>
                 </li>
                 <li>
@@ -99,9 +100,18 @@
               <button class="deleteBtn" id="deleteBtn" style="display:none;">删除</button>
             </div>
             <div class="hangup-reason" id="hangupReason" style="display:none;">
+              <span class="hangup-delay-count">申请延长时间（最多30天）</span>
+              <input type="text" class="delay-time" id="inputOne" placeholder="0"/><span class="unit">天</span>
               <span class="hangup-reason-title">挂起原因说明:</span>
               <textarea name="name" rows="8" cols="80" class="input-reason" id="inputReason"></textarea>
               <button class="hangup-check" id="hangupCheck">提交反馈</button>
+            </div>
+            <div class="hangup-reason" id="hangupReason2" style="display:none;">
+              <span class="hangup-delay-count">申请延长时间（最多56小时）</span>
+              <input type="text" class="delay-time" id="inputTwo" placeholder="0"/><span class="unit">小时</span>
+              <span class="hangup-reason-title">延时原因说明:</span>
+              <textarea name="name" rows="8" cols="80" class="input-reason" id="inputReason2"></textarea>
+              <button class="hangup-check" id="hangupCheck2">提交反馈</button>
             </div>
         </div>
         <div id="footer">

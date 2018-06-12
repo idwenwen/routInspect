@@ -80,8 +80,8 @@ apiready = function(){
 			    mediaValue: 'pic',
 			    destinationType: 'url',
 			    allowEdit: true,
-			    quality: 45,
-					targetWidth: 450,
+			    quality: 40,
+					targetWidth: 1000,
 			    saveToPhotoAlbum: false
 			}, function(ret, err) {
 			    if (ret) {
@@ -108,7 +108,6 @@ apiready = function(){
 			    }
 				);
 		}
-
 
 		//添加回馈内容：
 		var addResponseExhibition = function(data){
@@ -220,18 +219,49 @@ apiready = function(){
 
 		//挂起状态请求
 		var hangUp = function(){
-			//传递eventID，uerId，和状态数据
+			//TODO: 修改传递的参数内容
 			var userid = info.user.userid;
 			var value = $api.byId('inputReason').value;
+			var delay = $api.byId('inputOne').value;
 			connectToService(commonURL + "?action=eventsuspend",
 				{
-					values:{"userid": userid, "eventid": eventId, "explain": value}
+					values:{"userid": userid, "eventid": eventId, "explain": value, "delay":delay }
 				}
 				,function(ret){
 					if(ret.result){
 						api.alert({
 								title: '提示',
 								msg: '任务已挂起，正在接受审核!',
+						}, function(ret, err){
+								if(err){
+									alert(JSON.stringify(err));
+								}
+						});
+						info.eventid = "";
+						info.eventstatus = "";
+						animationStart(function(){}, "main", "../html/main.html", info ,true);
+					}
+				},
+				function(ret, err){
+					alert(JSON.stringify(err));
+				}
+			);
+		}
+
+		var delayTime = function(){
+			//TODO:修改访问的内容接口
+			var userid = info.user.userid;
+			var value = $api.byId('inputReason2').value;
+			var delay = $api.byId('inputTwo').value;
+			connectToService(commonURL + "?action=eventsuspend",
+				{
+					values:{"userid": userid, "eventid": eventId, "explain": value, "delay":delay }
+				}
+				,function(ret){
+					if(ret.result){
+						api.alert({
+								title: '提示',
+								msg: '延时申请已经提交，正在接受审核!',
 						}, function(ret, err){
 								if(err){
 									alert(JSON.stringify(err));
@@ -258,29 +288,14 @@ apiready = function(){
 				}
 				,function(ret){
 					if(ret.result){
-						api.confirm({
-					    title: '提示',
-					    msg: '任务已经接受，接下来怎么做呢？',
-					    buttons: ['返回首页', '留在当页']
-					}, function(ret, err) {
-					    var index = ret.buttonIndex;
-							if(index == 1){
-								info.eventid = "";
-								info.eventstatus = "";
-								animationStart(function(){}, "main", "../html/main.html", info, true);
-							}
-							else {
 								$api.byId('name').innerHTML = info.user.username;
 								$api.byId('hangup').setAttribute("style", "display:none;");
 								$api.byId('accept').setAttribute("style", "display:none;");
-								$api.byId('statusmessage').removeAttribute("style");
+								$api.byId('middle').removeAttribute("style");
 								$api.byId('responseList').removeAttribute("style");
 								$api.byId('completeStuff').removeAttribute("style");
 							}
-					});
-
-					}
-				},
+					},
 				function(ret, err){
 					alert(JSON.stringify(err));
 				}
@@ -296,6 +311,7 @@ apiready = function(){
 			if(statusinfo == 1){
 				$api.byId('hangup').removeAttribute("style");
 				$api.byId('accept').removeAttribute("style");
+				$api.byId('middle').setAttribute("style", "display:none;");
 				$api.byId('statusmessage').setAttribute("style", "display:none;");
 				$api.byId('responseMessage').setAttribute("style", "display:none;");
 				$api.byId('responseList').setAttribute("style", "display:none;");
@@ -304,35 +320,52 @@ apiready = function(){
 			else {
 				$api.byId('hangup').setAttribute("style", "display:none;");
 				$api.byId('accept').setAttribute("style", "display:none;");
-				$api.byId('statusmessage').removeAttribute("style");
 				if(statusinfo == 2){
 					$api.byId('responseMessage').setAttribute("style", "display:none;");
 					$api.byId('responseList').removeAttribute("style");
 					$api.byId('completeStuff').removeAttribute("style");
+					$api.byId('middle').removeAttribute("style");
+					$api.byId('statusmessage').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "处理中";
 				}
 				else if(statusinfo == 4){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').setAttribute("style", "display:none;");
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').removeAttribute("style");
+					$api.byId('middle').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "挂起中";
 				}
 				else if(statusinfo == 8){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').setAttribute("style", "display:none;");
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
+					$api.byId('middle').removeAttribute("style");
+					$api.byId('statusmessage').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "处理中";
 				}
 				else if(statusinfo == 32){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').removeAttribute("style");
 					$api.byId('completeStuff').removeAttribute("style");
+					$api.byId('statusmessage').removeAttribute("style");
+					$api.byId('middle').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "审核中";
 				}
 				else if(statusinfo == 64){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').setAttribute("style", "display:none;");
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').removeAttribute("style");
+					$api.byId('middle').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').innerHTML = "待审核";
+				}
+				else if(statusinfo == 128){
+					$api.byId('responseMessage').removeAttribute("style");
+					$api.byId('responseList').setAttribute("style", "display:none;");
+					$api.byId('completeStuff').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').removeAttribute("style");
+					$api.byId('middle').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "超时完成";
 				}
 			}
@@ -354,6 +387,7 @@ apiready = function(){
 			connectToService(commonURL + "?action=eventrepair",
 				data
 				,function(ret){
+					alert(JSON.stringify(ret));
 					if(ret.result){
 						api.alert({
 						    title: '提示',
@@ -384,6 +418,7 @@ apiready = function(){
 				$api.byId('showingPhoto').setAttribute("style","display:none;");
 				$api.byId('blackMode').setAttribute("style","display:none;");
 				$api.byId('hangupReason').setAttribute("style","display:none;");
+				$api.byId('hangupReason2').setAttribute("style","display:none;");
 			});
 
 			$api.byId('hangup').addEventListener("click", function(e){
@@ -398,6 +433,7 @@ apiready = function(){
 				e.stopPropagation();
 				//提交相关的反馈数据内容
 				var values = $api.byId('inputReason').value;
+				var delay = $api.byId('inputOne').value;
 				if(!values){
 					alert("请输入任务挂起的原因!");
 					return false;
@@ -406,6 +442,14 @@ apiready = function(){
 				$api.byId('blackMode').setAttribute("style","display:none;");
 				$api.byId('hangupReason').setAttribute("style","display:none;");
 			});
+
+			$api.byId('middle').addEventListener('click', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				$api.byId('hangupReason2').removeAttribute("style");
+				$api.byId('blackMode').removeAttribute("style");
+			});
+
 
 			$api.byId('accept').addEventListener("click", function(e){
 				e.preventDefault();
@@ -434,6 +478,57 @@ apiready = function(){
 				e.preventDefault();
 				e.stopPropagation();
 				animationStart(function(){}, "main", "../html/main.html", info, true);
+			});
+
+			$api.byId('inputOne').addEventListener("input", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				//发送请求内容给后台请求延时
+				var value = this.value;
+				if(!parseInt(value)){
+					this.value = value.slice(0, value.length - 1);
+				}
+				else {
+					if(parseInt(value) > 30){
+						this.value = 30;
+					}
+					else if(parseInt(value) < 0) {
+						this.value = 0;
+					}
+				}
+			});
+
+			$api.byId('inputTwo').addEventListener("input", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				//发送请求内容给后台请求延时
+				var value = this.value;
+				if(!parseInt(value)){
+					this.value = value.slice(0, value.length - 1);
+				}
+				else {
+					if(parseInt(value) > 56){
+						this.value = 56;
+					}
+					else if(parseInt(value) < 0) {
+						this.value = 0;
+					}
+				}
+			});
+
+			$api.byId('hangupCheck2').addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				//发送请求内容给后台请求延时
+				var values = $api.byId('inputReason2').value;
+				var delay = $api.byId('inputTwo').value;
+				if(!values){
+					alert("请输入任务延时的原因!");
+					return false;
+				}
+				delayTime();
+				$api.byId('blackMode').setAttribute("style","display:none;");
+				$api.byId('hangupReason2').setAttribute("style","display:none;");
 			});
 
 			$api.byId('deleteBtn').addEventListener("click", function(e){

@@ -1,40 +1,14 @@
 apiready = function(){
 
-		var info = api.pageParam;
+		var info = api.pageParam.info;
     var history = info.history;
-    info.history = "taskMap";
+    info.history.page = "taskMap";
+		info.history.url = "../html/taskMap.html"
+		var visit = info.visit;
 
     //将当前的页面设置为占用手机就全屏内容。
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
-
-		var amapLocation = api.require('aMapLocation');
-		var myx = 0;
-		var myy = 0;
-		var mytimestamp = 0;
-		var mytotaltamp = 0;
-
-		//打开地图，并设定人物展示位置
-		var startPos = function(){
-			var param = { accuracy: 20, filter: 5, autoStop: false };
-			var resultCallback = function(ret, err) {
-			    if (ret.status) {
-			        //alert("经度：" + ret.longitude + "\n纬度：" + ret.latitude + "\n时间：" + ret.timestamp);
-							myx = ret.latitude;
-							myy = ret.longitude;
-							mytimestamp = ret.timestamp;
-							mytotaltamp += mytimestamp;
-			    } else {
-			        alert(err.code + ',' + err.msg);
-			    }
-			}
-			amapLocation.startLocation(param, resultCallback);
-		}
-
-		//结束相关的定位功能
-		var stopLocation = function(){
-			amapLocation.stopLocation();
-		}
 
 		//初始化高德地图相关内容
   	var map = "";
@@ -89,7 +63,6 @@ apiready = function(){
 			});
 		}
 
-
 		//地图相关的点标记
 		var addMarker = function(x, y, color){
 			var param = {
@@ -133,8 +106,9 @@ apiready = function(){
 		var routingPoint = function(arr){
 			for(var i = 0 ; i < arr.length ; i ++){
 				var newEle = document.createElement("div");
+				var eleColor = arr[i].color == "red" ? "numcolorr" : (arr[i].color == "green" ? "numcolorg" : "numcolorgr");
 				newEle.setAttribute("class", "punchPoint");
-				newEle.innerHTML = "<span class='num numcolorgr'>" + (i+1) + "</span>" +
+				newEle.innerHTML = "<span class='num " + eleColor + "'>" + (i+1) + "</span>" +
 					"<span class='name'>" + arr[i].info + "</span>";
 				if( i == (arr.length -1) ){
 					 newEle.innerHTML = "<span class='num numcolorgr lastpp'>" + (i+1) + "</span>" +
@@ -172,22 +146,84 @@ apiready = function(){
 				}
 			},false);
 
-			$api.byId("repEvent").addEventListener("click", function(){
+			$api.byId("repEvent").addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
 				animationStart(function(){}, "reportEvent", "../html/reportEvent.html", info, true);
 			},false);
 
-			$api.byId('endTask').addEventListener("click", function(){
-				//todo: 验证签到点, 提交相关的请求.
-				stopLocation();
+			$api.byId('endTask').addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				//TODO: 验证签到点, 提交相关的请求.
 				animationStart(function(){}, "main", "../html/main.html", info, true);
+			},false);
+
+			$api.byId('returnBtn').addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				animationStart(function(){}, "inspectionTask", "../html/inspectionTask.html", info, false);
 			},false);
 		}
 
+		//获取当前的数据内容
+		var requestForFata = function(callback){
+			//TODO：获取当前页面的展示内容，并进行初始化当前的数据
+		}
+
+		var countingDistance = function(p1, p2){
+			//TODO: 计算当前的两点之间之间的支线距离
+			var dis = AMap.GeometryUtil.distance(p1, p2);
+			return dis;
+		}
+
+		var checkmark = function(p1, p2){
+			var dis = countingDistance(p1, p2);
+			if(dis <= 20){
+				//TODO：发送请求说明打卡点。
+			}
+		}
+
+		//获取路段的展示点内容
+		var getRouteMark = function(r1){
+			var len = r1.length;
+			var point = Math.floor(len/2);
+			return r1[point - 1];
+		}
+
+		//核对当前的路段是否已经打卡成功
+		var checkRouteMark = function(r1){
+			//TODO：当打卡点打卡80%以上算当前路段打卡成功。
+		}
+
+		//上报打卡成功的点或者路段内容
+		var requestMark = function(){
+			//TODO：当有点打卡成功的话，我们直接上报当前打卡成功的点的信息
+		}
+
+		var initedPage = function(){
+			//TODO: 通过对比visit变量来进行相关内容的参数设置。
+			if(visit){
+				$api.byId('returnBtn').removeAttribute("style");
+				$api.byId('repEvent').setAttribute("style", "display:none;");
+				$api.byId('endTask').setAttribute("style", "display:none;");
+			}
+			else {
+				$api.byId('repEvent').removeAttribute("style");
+				$api.byId('endTask').removeAttribute("style");
+				$api.byId('returnBtn').setAttribute("style", "display:none;");
+			}
+		}
+
+		//存储当前内容的点击内容。
+		var savePoints = function(){
+			//TODO: 通过setStorage来进行点集合的存储来进行相关内容存储。
+		}
+
+		var getPoints = function(){
+			//TODO: 获取存储的点集。
+		}
+
 		var poss = [{x: 118.125 , y:24.71}, {x:118.127, y:24.72}];
-		startPos();
-		routingPoint([{info:"xx路段"}, {info:"YY路段"}]);
 		dynamicWeb();
-		// setTimeout(function(){
-		// 	animationStart(function(){}, "main" , "../html/main.html", info, true);
-		// }, 3000);
 }
