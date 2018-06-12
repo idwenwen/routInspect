@@ -87,7 +87,7 @@ apiready = function(){
         		    function(ret){
                   if(!showingErrMessage){
                     showingErrMessage = true;
-                    alert("程序错误，程序员正在奋斗中！");
+                    // alert("程序错误，程序员正在奋斗中！");
                   }
         		    }
         			);
