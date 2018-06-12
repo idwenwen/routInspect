@@ -316,7 +316,7 @@ apiready = function(){
 			$api.byId('showingPhoto').setAttribute("style", "display:none;");
 			$api.byId('hangupReason').setAttribute("style", "display:none;");
 			if(statusinfo == 1){
-				$api.byId('hangup').removeAttribute("style");
+				$api.byId('hangup').setAttribute("style", "display:none;");
 				$api.byId('accept').removeAttribute("style");
 				$api.byId('middle').setAttribute("style", "display:none;");
 				$api.byId('statusmessage').setAttribute("style", "display:none;");
