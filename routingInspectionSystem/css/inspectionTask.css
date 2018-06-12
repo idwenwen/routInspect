@@ -343,7 +343,7 @@
 	background-color: #fff;
 	border-bottom: 1px solid #003366;
 	position: relative;
-	margin-top: -80px;
+	margin-top: 0px;
 }
 
 .dialog-list-title > img{
@@ -379,10 +379,10 @@
 	border-bottom: 1px solid #003366;
 	background-color: #6699cc;
 	position: relative;
-	opacity: 0;
-	animation: showing 1s 1;
+	opacity: 1;
+	/*animation: showing 1s 1;
 	animation-delay: 1s;
-	animation-fill-mode:forwards;
+	animation-fill-mode:forwards;*/
 }
 
 .list-info:hover{
