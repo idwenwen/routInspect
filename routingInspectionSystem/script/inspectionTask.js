@@ -1,7 +1,8 @@
 apiready = function(){
-    var info = api.pageParam;
+    var info = api.pageParam.info;
     var history = info.history;
-    info.history = "main";
+    info.history.page = "main";
+    info.history.url = "../"
 
     //将当前的页面设置为占用手机就全屏内容。
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
@@ -14,7 +15,7 @@ apiready = function(){
 
 
     //添加用户选择列表项目,并未其添加点击选择事件。
-    var addPersons = function(userId, name, info, classes){
+    var addPersons = function(userId, name, info, classes, choose, unchoose){
     	var str = "<img src='../icon/checkbox.png' class='checkbox'/>"+
             "<img src='../icon/checkbox-check.png' class='checkbox-check' id="+("checkbox"+userId)+" hidden='hidden'/>" +
             "<span class='list-worker-name'>"+ ("" + name) + "</span>" +
@@ -60,7 +61,7 @@ apiready = function(){
     	});
 
     	$api.byId("toChooseConnect").addEventListener("click", function(e){
-			e.preventDefault();
+			  e.preventDefault();
     		e.stopPropagation();
     		$api.byId("blackMode").removeAttribute("style");
     		$api.byId("chooseConn").removeAttribute("style");
@@ -101,25 +102,73 @@ apiready = function(){
     		e.preventDefault();
     		e.stopPropagation();
     		getPic(function(ret){
-    			alert(JSON.stringify(ret));
     			if(ret.data){
     				url = ret.data;
+            var height = $api.offset($api.byId("main")).h -
+      				$api.offset($api.byId("chooseWorker")).h -
+      				$api.offset($api.byId("taskMessage")).h -
+      				$api.offset($api.byId("signInBtn")).h - 65;
+      			$api.byId("pictureUp").setAttribute("src", url);
+      			$api.byId("pictureUp").removeAttribute("hidden");
+      			$api.byId("pictureUp").setAttribute("style", "display:table;");
+      			$api.byId("hintForSelector").setAttribute("hidden", "hidden");
+      			$api.byId("hintPic").setAttribute("hidden", "hidden");
+      			$api.byId("addPic").setAttribute("style", "height:" + height + "px;");
     			}
-    			var height = $api.offset($api.byId("main")).h -
-    				$api.offset($api.byId("chooseWorker")).h -
-    				$api.offset($api.byId("taskMessage")).h -
-    				$api.offset($api.byId("signInBtn")).h - 65;
-    			$api.byId("pictureUp").setAttribute("src", url);
-    			$api.byId("pictureUp").removeAttribute("hidden");
-    			$api.byId("pictureUp").setAttribute("style", "display:table;");
-    			$api.byId("hintForSelector").setAttribute("hidden", "hidden");
-    			$api.byId("hintPic").setAttribute("hidden", "hidden");
-    			$api.byId("addPic").setAttribute("style", "height:" + height + "px;");
     		},
     		function(err){
     			alert(JSON.stringify(err));
     		})
     	});
+    }
+
+    var requestData = function(){
+      //TODO:获取当前的数据内容的通过出阿尼用户ID 和taskID来进行获取。
+      connectToService(commonURL + "?action= ??? ",
+        {
+          values:{"userid": info.user.userid, "taskid": info.taskid}
+        }
+        ,function(ret){
+          //TODO:获取相关的数据之后进行内容展示和编写。
+        },
+        function(ret, err){
+          alert(JSON.stringify(err));
+        }
+      );
+    }
+
+    //展示页面数据内容展示数据有待商定。
+    var showingData = function(startTime, endTime, useTime, routing, taskStatus){
+      $api.byId('startTime').innerHTML =  startTime;
+      $api.byId('endTime').innerHTML =  startTime;
+      $api.byId('usingTime').innerHTML =  startTime;
+      $api.byId('routingName').innerHTML =  startTime;
+      $api.byId('taskStatus').innerHTML =  startTime;
+    }
+
+    //传递人员数组内容。
+    var memberList = function(list){
+      //TODO:调用addPersons来进行列表内容添加。
+    }
+
+    //上传相关的数据内容
+    var uploadData = function(success, fail){
+      var member = [];
+      for(var i = 0 ; i < checkList.length; i++){
+        member.push(checkList[i].id);
+      }
+      connectToService(commonURL + "?action= ???",
+        {
+          values:{"userid": info.user.userId, "members": member, "taskid": info.taskid, "picture":url}
+        }
+        ,function(ret){
+          success && success();
+        },
+        function(ret, err){
+          alert(JSON.stringify(err));
+          fail & fail();
+        }
+      );
     }
 
     addPersons("p1", "../icon/atm.png", "p1", "p1");

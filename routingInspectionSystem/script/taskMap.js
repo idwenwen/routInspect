@@ -4,7 +4,7 @@ apiready = function(){
     var history = info.history;
     info.history.page = "taskMap";
 		info.history.url = "../html/taskMap.html"
-		var visit = info.visit;
+		var visit = info.start;
 
     //将当前的页面设置为占用手机就全屏内容。
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
@@ -120,10 +120,15 @@ apiready = function(){
 		}
 
 		var clickToInit = function(){
+			var poss = [{x: 118.125 , y:24.71}, {x:118.127, y:24.72}, {x:118.126, y:24.70}, {x:118.125, y:24.73}];
 			initMap();
 			addMarker(118.125, 24.71, "red");
 			addMarker(118.127, 24.72, "blue");
+			addMarker(poss[2].x, poss[2].y, "blue");
+			addMarker(poss[3].x, poss[3].y, "blue");
 			walkingLine(poss[0], poss[1]);
+			walkingLine(poss[1], poss[2]);
+			walkingLine(poss[2], poss[3]);
 		}
 
 		//动态页面绑定
@@ -224,6 +229,6 @@ apiready = function(){
 			//TODO: 获取存储的点集。
 		}
 
-		var poss = [{x: 118.125 , y:24.71}, {x:118.127, y:24.72}];
+		routingPoint([{info:"梧桐路", color:"green"}, {info:"二环南路", color:"red"}, {info:"吉安路"}, {info:"同宏路"}]);
 		dynamicWeb();
 }
