@@ -120,7 +120,7 @@ apiready = function(){
 		}
 
 		var clickToInit = function(){
-			var poss = [{x: 118.125 , y:24.71}, {x:118.127, y:24.72}, {x:118.126, y:24.70}, {x:118.125, y:24.73}];
+			var poss = [{x: 118.125 , y:24.71}, {x:118.127, y:24.72}, {x:118.120, y:24.73}, {x:118.119, y:24.69}];
 			initMap();
 			addMarker(118.125, 24.71, "red");
 			addMarker(118.127, 24.72, "blue");
@@ -230,5 +230,10 @@ apiready = function(){
 		}
 
 		routingPoint([{info:"梧桐路", color:"green"}, {info:"二环南路", color:"red"}, {info:"吉安路"}, {info:"同宏路"}]);
+		if(visit){
+			$api.byId('returnBtn').setAttribute("style", "display:none;");
+			$api.byId('returnBtn').removeAttribute("style");
+			$api.byId('endTask').removeAttribute("style");
+		}
 		dynamicWeb();
 }
