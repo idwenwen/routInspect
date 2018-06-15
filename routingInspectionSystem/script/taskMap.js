@@ -33,8 +33,9 @@ apiready = function(){
 				}
 				else {
 					var p = getCenterPoint();
+					alert(JSON.stringify(p));
+					map.setZoom(14);
 					map.setCenter(new AMap.LngLat(parseInt(p[0]), parseInt(p[1])));
-					map.setZoom(16);
 				}
 			});
 		}
@@ -66,13 +67,15 @@ apiready = function(){
 			if(map){
 				markerup.setMap(map);
 				//定位当前的位置信息
-				map.setCenter(new AMap.LngLat(parseInt(lat), parseInt(lat)));
-				map.setZoom(16);
+				setTimeout(function(){
+					map.setCenter(new AMap.LngLat(parseInt(lat), parseInt(lat)));
+					map.setZoom(14);
+				},1000);
 			}
 			else{
 				alert("map has not inited");
 			}
-			userMark = marker;
+			userMark = markerup;
 		}
 
 		//试试绘制路线内容
@@ -268,7 +271,7 @@ apiready = function(){
 							if(!p.markers[j]){
 								p.markers[j] = checkgps(pos, p.point[j]);
 								if(p.markers[j]){
-									requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":j});
+									requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":j, "lat":p.point[j][1], "lon":p.point[j][0]});
 								}
 							}
 						}
@@ -285,7 +288,7 @@ apiready = function(){
 					else {
 						p.marker = checkgps(pos, p.point);
 						if(p.marker){
-							requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0});
+							requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
 							p.ele.setColors("green");
 							p.rele.setColors("green");if(!pointlist[i-1].marker){
 								pointlist[i-1].ele.setColors("red");
@@ -393,8 +396,54 @@ apiready = function(){
 
 		//上报打卡成功的点或者路段内容
 		var requestMark = function(val){
-			//TODO：当有点打卡成功的话，我们直接上报当前打卡成功的点的信息
+			connectToService( commonURL + "?action=taskposition",
+			 {
+					 values: val
+			 },
+			 function(ret){
+				 if(!ret.result){
+					 //提交失败怎么办
+				 }
+			 },
+			 function(ret,err){
+				 alert(JSON.stringify(err));
+			 }
+			);
+		}
 
+		var endTask = function(){
+			var unmark = [];
+			for(var i = 0; i < pointlist.length; i++){
+				if(!pointlist[i].marker){
+					unmark.push(i);
+				}
+			}
+			if(unmark.length > 0){
+				api.confirm({
+				    title: '提示',
+				    msg: '此次任务还有' + unmark.length + "个点打卡未成功，确定结束当前任务吗",
+				    buttons: ['确定', '取消']
+				}, function(ret, err){
+				    if( ret ){
+							connectToService( commonURL + "?action=taskfinish",
+							 {
+									 values: {"taskid": info.taskid}
+							 },
+							 function(ret){
+								 if(ret.result){
+									 animationStart(function(){}, "main", "../html/main.html", info, true);
+								 }
+								 else {
+									 alert("任务完成提交失败！");
+								 }
+							 },
+							 function(ret,err){
+								 alert(JSON.stringify(err));
+							 }
+						 );
+				    }
+				});
+			}
 		}
 
 		var initedPage = function(){

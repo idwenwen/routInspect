@@ -118,7 +118,7 @@ apiready = function(){
             param.history.url = "../html/login.html";
             setTimeout(function(){
   		    	     animationStart(function(){}, 'main', './main.html', param);
-            },1000);
+            })
           }
           else {
             alert("用户名或密码有错误！");

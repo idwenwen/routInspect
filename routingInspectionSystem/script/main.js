@@ -290,7 +290,7 @@ apiready = function(){
         api.addEventListener({
           name: 'keyback'
         }, function(ret, err) {
-          animationStart(function(){}, "login", "../html/login.html", info, true);
+          animationStart(function(){}, "login", "../html/login.html", info, false);
         });
     }
 

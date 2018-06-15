@@ -95,6 +95,10 @@ apiready = function(){
     		e.preventDefault();
     		e.stopPropagation();
     		info.start = true;
+        // uploadData(function(){
+        //  info.start = true;
+        //  animationStart(function(){}, "taskMap" , "../html/taskMap.html", info, true);
+        // })
     		animationStart(function(){}, "taskMap" , "../html/taskMap.html", info, true);
     	});
 
@@ -205,9 +209,9 @@ apiready = function(){
       if(!url){
         alert("请上传签到照片!");
       }
-      connectToService(commonURL + "?action= ???",
+      connectToService(commonURL + "?action=accepttask",
         {
-          values:{"userid": info.user.userId, "members": member, "taskid": info.taskid, "picture":url}
+          values:{"userid": info.user.userId, "member": member, "taskid": info.taskid, "photo":url}
         }
         ,function(ret){
           success && success();
