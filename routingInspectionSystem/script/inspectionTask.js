@@ -2,7 +2,7 @@ apiready = function(){
     var info = api.pageParam.info;
     var history = info.history;
     info.history.page = "main";
-    info.history.url = "../"
+    info.history.url = "../html/main.html";
 
     //将当前的页面设置为占用手机就全屏内容。
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
@@ -15,11 +15,11 @@ apiready = function(){
 
 
     //添加用户选择列表项目,并未其添加点击选择事件。
-    var addPersons = function(userId, name, info, classes, choose, unchoose){
+    var addPersons = function(userId, name, classes, choose, unchoose){
     	var str = "<img src='../icon/checkbox.png' class='checkbox'/>"+
             "<img src='../icon/checkbox-check.png' class='checkbox-check' id="+("checkbox"+userId)+" hidden='hidden'/>" +
-            "<span class='list-worker-name'>"+ ("" + name) + "</span>" +
-            "<span class='list-worker-info'>" + ("" + info) + "</span>";
+            "<span class='list-worker-name'>"+ ("" + name) + "</span>" ;
+            // "<span class='list-worker-info'>" + ("" + info) + "</span>";
     	var ele = document.createElement("div");
     	if(classes){
     		ele.setAttribute("class", "" + classes);
@@ -129,14 +129,48 @@ apiready = function(){
     	});
     }
 
+    var showingDataDetail = function(data){
+      var id = data.id;
+      var name = data.name;
+      var starttime = data.planstartime;
+      var endtime = data.planendtime;
+      var state = data.state;
+      var statename = data.statename;
+      var path = data.path;
+      $api.byId("startTime").innerHTML = starttime;
+      $api.byId("endTime").innerHTML = endtime;
+      $api.byId("routingName").innerHTML = name;
+      $api.byId("taskStatus").innerHTML = statename;
+      $api.byId('tName').innerHTML = name;
+      $api.byId('tRouting').innerHTML = path;
+    }
+
     var requestData = function(){
       //TODO:获取当前的数据内容的通过出阿尼用户ID 和taskID来进行获取。
-      connectToService(commonURL + "?action= ??? ",
+      connectToService(commonURL + "?action=taskdetail",
         {
-          values:{"userid": info.user.userid, "taskid": info.taskid}
+          values:{"id": info.taskid}
         }
         ,function(ret){
           //TODO:获取相关的数据之后进行内容展示和编写。
+          if(ret.result){
+            showingDataDetail(ret.data);
+          }
+        },
+        function(ret, err){
+          alert(JSON.stringify(err));
+        }
+      );
+
+      connectToService(commonURL + "?action=taskuserlist",
+        {
+          values:{"userid": info.user.userid}
+        }
+        ,function(ret){
+          //TODO:获取相关的数据之后进行内容展示和编写。
+          if(ret.result){
+            memberList(ret.data);
+          }
         },
         function(ret, err){
           alert(JSON.stringify(err));
@@ -144,18 +178,22 @@ apiready = function(){
       );
     }
 
-    //展示页面数据内容展示数据有待商定。
-    var showingData = function(startTime, endTime, useTime, routing, taskStatus){
-      $api.byId('startTime').innerHTML =  startTime;
-      $api.byId('endTime').innerHTML =  startTime;
-      $api.byId('usingTime').innerHTML =  startTime;
-      $api.byId('routingName').innerHTML =  startTime;
-      $api.byId('taskStatus').innerHTML =  startTime;
-    }
-
     //传递人员数组内容。
     var memberList = function(list){
       //TODO:调用addPersons来进行列表内容添加。
+      var stylecheck = "list-info";
+      for(var i = 0 ; i < list.length ; i++){
+        if(list[i].id == info.user.userid){
+          continue;
+        }
+        if(!(i%2)){
+          stylecheck = "list-info2";
+        }
+        else {
+          stylecheck = 'list-info';
+        }
+        addPersons(list[i].id, list[i].name, stylecheck);
+      }
     }
 
     //上传相关的数据内容
@@ -163,6 +201,9 @@ apiready = function(){
       var member = [];
       for(var i = 0 ; i < checkList.length; i++){
         member.push(checkList[i].id);
+      }
+      if(!url){
+        alert("请上传签到照片!");
       }
       connectToService(commonURL + "?action= ???",
         {
@@ -172,15 +213,15 @@ apiready = function(){
           success && success();
         },
         function(ret, err){
-          alert(JSON.stringify(err));
           fail & fail();
         }
       );
     }
 
-    addPersons("p1", "吴玉碧", "工程部");
-    addPersons("p2", "李武志", "信息部", "list-info2");
-    addPersons("p3", "王婷婷", "工程部");
-    addPersons("p4", "李翔", "工程部", "list-info2");
+    // addPersons("p1", "吴玉碧");
+    // addPersons("p2", "李武志", "list-info2");
+    // addPersons("p3", "王婷婷");
+    // addPersons("p4", "李翔",  "list-info2");
+    requestData();
     dynamicWeb();
 }

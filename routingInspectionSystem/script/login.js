@@ -33,6 +33,7 @@ apiready = function(){
     	});
     }
 
+
     var aMapLBS = api.require('aMapLBS');
   	var positions = [];
   	var send = false;
@@ -54,7 +55,7 @@ apiready = function(){
   								if(positions.length >= 10){
   									positions.shift();
   								}
-  								positions.push([ret.lat, ret.lon]);
+  								positions.push([ret.lon, ret.lat]);
   								$api.setStorage('position', JSON.stringify(positions));
   								if(!send)
   								{
@@ -87,7 +88,7 @@ apiready = function(){
         		    function(ret){
                   if(!showingErrMessage){
                     showingErrMessage = true;
-                    // alert("程序错误，程序员正在奋斗中！");
+                    alert("程序错误，程序员正在奋斗中！");
                   }
         		    }
         			);
@@ -99,15 +100,8 @@ apiready = function(){
     	});
     }
 
-    window.$api.byId('submitBtn').addEventListener("click", function(){
-
-    	var username = window.$api.byId("inputUsername").value;
-
-	    var password = window.$api.byId('inputPassword').value;
-
-    	checkBoxStuff(username, password);
-
-	    connectToService( commonURL + "?action=login",
+    var loginfunc = function(username, password){
+      connectToService( commonURL + "?action=login",
 	    	{
 		        values: {"username": username , "password": password }
 		    },
@@ -122,7 +116,9 @@ apiready = function(){
             param.user.departmentname = ret.data.departmentname;
             param.history.page = "login";
             param.history.url = "../html/login.html";
-  		    	animationStart(function(){}, 'main', './main.html', param);
+            setTimeout(function(){
+  		    	     animationStart(function(){}, 'main', './main.html', param);
+            },1000);
           }
           else {
             alert("用户名或密码有错误！");
@@ -132,12 +128,44 @@ apiready = function(){
 		    	alert(JSON.stringify(err));
 		    }
 		  );
+    }
+
+    var autoLogin = function(){
+      var data = api.getPrefs({
+          key: 'userInfo'
+      }, function(ret, err){
+        if( ret ){
+          var users = JSON.parse(ret.value);
+            $api.byId("inputUsername").value = users.username;
+            $api.byId('inputPassword').value = users.password;
+            loginfunc(users.username, users.password);
+          }else{
+               alert( JSON.stringify( err ) );
+          }
+      });
+
+    }
+
+    $api.clearStorage("position");
+    $api.clearStorage("taskpoint");
+
+    window.$api.byId('submitBtn').addEventListener("click", function(){
+
+    	var username = window.$api.byId("inputUsername").value;
+
+	    var password = window.$api.byId('inputPassword').value;
+
+    	checkBoxStuff(username, password);
+
+      loginfunc(username, password);
 
     }, false);
 
     api.addEventListener({
       name: 'keyback'
     }, function(ret, err) {
-      return false;
+      api.toLauncher();
     });
+
+    autoLogin();
 }

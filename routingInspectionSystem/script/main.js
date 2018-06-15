@@ -133,6 +133,7 @@ apiready = function(){
         }, false)
     }
 
+    var havetask = false;
     var accordingToDatan = function(data){
       if(data.length){
         var num = data.length;
@@ -142,22 +143,33 @@ apiready = function(){
           //获取服务器护具内容，进行页面信息的展示
           (function(){
           var id = data[i].id;
-          var name = data[i].reportname;
-          var routing = data[i].routing;
-          var information = data[i].explain;
-          var time = data[i].time;
-          var type = data[i].type
+          var name = data[i].name;
+          var routing = data[i].path;
+          var information = data[i].statename;
+          var time = data[i].startime;
+          var etime = data[i].endtime;
+          var type = data[i].state
+          if(type == 2){
+            havetask = true;
+          }
           addNotcie(id, time, name, information, routing,
             function(e, id, time, name, information, routing){
               //依据type来进行页面的跳转。如果是进行之中的任务则直接跳转到地图页面.
               //如果是为开始跳转到inspectionRouting页面，警告跳转到处理界面。
               if(type == 1){
+                if(havetask){
+                  alert("您当前已经有正在进行的任务");
+                }
+                info.taskid = id;
                 animationStart(function(){}, "inspectionTask" , "../html/inspectionTask.html" , info, true);
               }
               else if(type == 2){
-                animationStart(function(){}, "taskMap" , "../html/taskMap.html" , info, true);
+                info.taskid = id;
+                info.start = true;
+                animationStart(function(){}, "taskMap" , "../html/taskMap.html" , info);
               }
               else if(type == 3){
+                info.taskid = id;
                 animationStart(function(){}, "mistakeForTask" , "../html/mistakeForTask.html" , info, true);
               }
             });
@@ -223,6 +235,23 @@ apiready = function(){
           alert(JSON.stringify(ret.desc));
         }
       );
+
+      connectToService(commonURL + "?action=tasklist",
+        {
+          values: { "userid": info.user.userid }
+        },
+        function(ret){
+          if(ret.result){
+            accordingToDatan(ret.data);
+          }
+          else {
+            alert("获取任务信息失败");
+          }
+        },
+        function(ret){
+          alert(JSON.stringify(ret.desc));
+        }
+      );
     }
 
     var dynamicPage = function(){
@@ -267,11 +296,11 @@ apiready = function(){
 
     request();
 
-    addNotcie('n1', "2018-5-29 11:28:40", "路线一", "[xxxx]相关巡检路线详细情况见...", "点1 -> 点2 -> 点3...", function(e){
-      animationStart(function(){}, "inspectionTask", "../html/inspectionTask.html", info, true);
-    });
-    addNotcie('n2', "2018-5-29 11:28:40", "警告通知", "漏检了巡检点", "",function(e){
-      animationStart(function(){}, "mistakeForTask", "../html/mistakeForTask.html", info, true);
-    });
+    // addNotcie('n1', "2018-5-29 11:28:40", "路线一", "[xxxx]相关巡检路线详细情况见...", "点1 -> 点2 -> 点3...", function(e){
+    //   animationStart(function(){}, "inspectionTask", "../html/inspectionTask.html", info, true);
+    // });
+    // addNotcie('n2', "2018-5-29 11:28:40", "警告通知", "漏检了巡检点", "",function(e){
+    //   animationStart(function(){}, "mistakeForTask", "../html/mistakeForTask.html", info, true);
+    // });
     dynamicPage();
 }

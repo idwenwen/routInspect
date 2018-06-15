@@ -364,7 +364,7 @@
 
 .list-info{
 	width: 100%;
-	height: 70px;
+	height: 50px;
 	border-bottom: 1px solid #003366;
 	position: relative;
 	opacity: 1;
@@ -375,7 +375,7 @@
 
 .list-info2{
 	width: 100%;
-	height: 70px;
+	height: 50px;
 	border-bottom: 1px solid #003366;
 	background-color: #6699cc;
 	position: relative;
@@ -427,15 +427,13 @@
 }
 
 .list-worker-name{
-	height: 40px;
-	width: 65%;
+	height: 50px;
 	position: relative;
 	margin-left: 130px;
 	padding-left: 10px;
-	line-height: 40px;
+	line-height: 50px;
 	font-size: 120%;
 	display: block;
-	border-bottom: 1px dotted #666666;
 }
 
 .list-worker-info{

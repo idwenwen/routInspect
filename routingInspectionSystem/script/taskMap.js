@@ -13,9 +13,8 @@ apiready = function(){
 		//初始化高德地图相关内容
   	var map = "";
 		var points = [];
-		var markers = [];
 		var initMap = function(){
-	  var	layer =  new AMap.TileLayer({
+	  	var	layer =  new AMap.TileLayer({
           zooms:[3,20],    //可见级别
           visible:true,    //是否可见
           opacity:1,       //透明度
@@ -25,70 +24,116 @@ apiready = function(){
           layers:[layer] //当只想显示标准图层时layers属性可缺省
     	});
 			map.on("complete", function(){
-				userPos();
-
-			});
-		}
-
-		//用户定位函数内容
-		var geolocation = "";
-		var userPos = function(success, fail){
-			map.plugin('AMap.Geolocation', function() {
-				geolocation = new AMap.Geolocation({
-					// 是否使用高精度定位，默认：true
-					enableHighAccuracy: true,
-					// 设置定位超时时间，默认：无穷大
-					timeout: 10000,
-					panToLocation: true,
-					zoomToAccuracy: true,
-					showCircle: false,
-					//  定位按钮的排放位置,  RB表示右下
-					buttonPosition: 'RB',
-					buttonOffset: new AMap.Pixel(15, 90)
-				});
-				map.addControl(geolocation);
-				geolocation.getCurrentPosition()
-				AMap.event.addListener(geolocation, 'complete', onComplete)
-				AMap.event.addListener(geolocation, 'error', onError)
-				function onComplete (data) {
-					if(typeof success == "function"){
-						success.call(null, data);
-					}
+				drawingPoints();
+				if(visit){
+					var pos = JSON.parse($api.getStorage('position'));
+					usePos(pos[length-1][0], pos[length-1][1]);
+					checksignin(pos[length-1]);
+					refreshMap(5000);
 				}
-				function onError (data) {
-					if(typeof fail == "function"){
-						fail.call(null. data);
-					}
+				else {
+					var p = getCenterPoint();
+					map.setCenter(new AMap.LngLat(parseInt(p[0]), parseInt(p[1])));
+					map.setZoom(16);
 				}
 			});
 		}
 
-		//地图相关的点标记
-		var addMarker = function(x, y, color){
+		var getCenterPoint = function(){
+			if(pointlist.length > 0){
+				if(typeof pointlist[0].point[0] == "object"){
+					return pointlist[0].point[0];
+				}
+				else {
+					return pointlist[0].point;
+				}
+			}
+			else {
+				var pos = JSON.parse($api.getStorage('position'));
+				return pos[pos.length - 1];
+			}
+		}
+
+		//初始化任务定位内容，并实时展示任务的
+		var userMark = null;
+		var usePos = function(lat, lon){
 			var param = {
-				map: map,
-				// icon:  new AMap.Icon({
-        //     size: new AMap.Size(32, 32),  //图标大小
-        //     image: "../icon/b-p.png",
-				// 		imageOffset: new AMap.Pixel(0, -60)
-				// }),
-				icon: (color == "blue" ? '../icon/b-p.png' : "../icon/r-p.png"),
-				position:[x, y],
+				icon: '../icon/position-my.png',
+				position:new AMap.LngLat(parseInt(lat), parseInt(lon)),
 				offset: new AMap.Pixel(-20, -30)
 			}
-			var marker = new AMap.Marker(param);
+			var markerup = new AMap.Marker(param);
 			if(map){
-				marker.setMap(map);
+				markerup.setMap(map);
+				//定位当前的位置信息
+				map.setCenter(new AMap.LngLat(parseInt(lat), parseInt(lat)));
+				map.setZoom(16);
 			}
 			else{
 				alert("map has not inited");
 			}
-			markers.push(marker);
+			userMark = marker;
 		}
 
+		//试试绘制路线内容
+		var drawLine = function(arr){
+			var paths = [];
+			for(var i = 0 ; i < arr.length ; i ++){
+				paths.push(new AMap.LngLat(parseInt(arr[i][0]), parseInt(arr[i][1])));
+			}
+			var polyline = new AMap.Polyline({
+			    path: path,
+			    borderWeight: 2, // 线条宽度，默认为 1
+			    strokeColor: 'red', // 线条颜色
+			    lineJoin: 'round' // 折线拐点连接处样式
+			});
+			if(map){
+				map.add(polyline);
+			}
+			else {
+				alert("map has not inited");
+			}
+		}
 
-		//两点之间的点标记内容
-		var walkingLine = function(posOne, posTwo){
+		//定时刷新定位与路径内容
+		var refreshMap = function(time){
+			var time = time - (time%5);
+			var times = time/5000;
+			setInterval(function(){
+				var arr = [];
+				var pos = JSON.parse($api.getStorage('position'));
+				userMark.setPosition(new AMap.LngLat(parseInt(pos[pos.length - 1][0]), parseInt(pos[pos.length - 1][1])));
+				checksignin(pos[pos.length - 1]);
+				for(var i = pos.length - 1; i >= pos.length-1-times; i--){
+					arr.push(pos[i]);
+				}
+				drawLine(arr);
+			})
+		}
+
+		//地图相关的点标记
+		var addMarker = function(lat, lon, color){
+			var param = {
+				icon: (color == "green" ? '../icon/g-p.png' : (color == "red" ? '../icon/r-p.png': "../icon/b-p.png")),
+				position:new AMap.LngLat(lat, lon),
+				offset: new AMap.Pixel(-20, -30)
+			}
+			var markerp = new AMap.Marker(param);
+			if(map){
+				 markerp.setMap(map);
+			}
+			else{
+				alert("map has not inited");
+			}
+			// markers.push(marker);
+			// marker.setColors = function(color){
+			// 	this.setIcon(color == "green" ? '../icon/g-p.png' : color == "red" ? '../icon/r-p.png': "../icon/b-p.png");
+			// }
+			return markerp;
+		}
+
+		//两点之间行走路线
+		var walkingLine = function(posOne, posTwo, callback){
 			 AMap.plugin('AMap.Walking', function() {
 				 var walking = new AMap.Walking({
 					 map: map,
@@ -96,39 +141,81 @@ apiready = function(){
 				 });
 				 //根据起终点坐标规划步行路线
 				 walking.search([posOne.x, posOne.y], [posTwo.x, posTwo.y], function(status, result){
-
+					 callback && callback(posOne, posTwo);
 				 });
 			 })
 		}
 
-
 		//绘制简易打卡点页面
-		var routingPoint = function(arr){
-			for(var i = 0 ; i < arr.length ; i ++){
+		var routingPoint = function(data, index, check){
 				var newEle = document.createElement("div");
-				var eleColor = arr[i].color == "red" ? "numcolorr" : (arr[i].color == "green" ? "numcolorg" : "numcolorgr");
+				var eleColor = data.color == "red" ? "numcolorr" : (data.color == "green" ? "numcolorg" : "numcolorgr");
 				newEle.setAttribute("class", "punchPoint");
-				newEle.innerHTML = "<span class='num " + eleColor + "'>" + (i+1) + "</span>" +
-					"<span class='name'>" + arr[i].info + "</span>";
-				if( i == (arr.length -1) ){
-					 newEle.innerHTML = "<span class='num numcolorgr lastpp'>" + (i+1) + "</span>" +
-						"<span class='name'>" + arr[i].info + "</span>";
+				newEle.innerHTML = "<span class='num " + eleColor + "'>" + (index+1) + "</span>" +
+					"<span class='name'>" + data.info + "</span>";
+				if( check ){
+					 newEle.innerHTML = "<span class='num lastpp numcolorgr'>" + (index+1) + "</span>" +
+						"<span class='name'>" + data.info + "</span>";
 				}
 				$api.byId("easymap").appendChild(newEle);
+				newEle.setColors = function(color){
+					var eles = this.children[0];
+					var classes = eles.getAttribute("class").split(" ");
+					classes[classes.length-1] = color == "red" ? "numcolorr" : (color == "green" ? "numcolorg" : "numcolorgr");
+					eles.setAttribute("class", classes.join(" "));
+				}
+				return newEle;
+		}
 
+		//获取路段展示点
+		var calculatePointForRoute = function(arr){
+			var len = Math.floor(arr.length / 2);
+			var lat = (arr[0][0] + arr[arr.length-1][0]) / 2;
+			var lon = (arr[0][1] + arr[arr.length-1][1]) / 2;
+			if(arr.lenth % 2){
+				var disOlat = arr[len-1][0] - lat;
+				var disOlon = arr[len-1][1] - lat;
+				var disTlat = arr[len][0] - lat;
+				var disTlon = arr[len][1] - lat;
+			}
+			if( ( disOlat + disOlon ) / 2  <=  ( disTlat + disTlon ) / 2 ){
+				return arr[len - 1];
+			}
+			else{
+				return arr[len];
 			}
 		}
 
+		//核对当前的路段是否打卡成功
+		var checkRouteMarked = function(marr){
+			var mc = 0 ;
+			for(var i = 0 ; i < marr.length ; i ++) {
+				if(marr[i]){
+					mc += 1;
+				}
+			}
+			if(mc/marr.length >= 0.8){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		//核对GPS点是否打卡成功
+		var checkgps = function(p1, p2){
+			var dis = countingDistance(p1, p2);
+			if(dis <= 20){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		//切换地图首次加载实体地图
 		var clickToInit = function(){
-			var poss = [{x: 118.125 , y:24.71}, {x:118.127, y:24.72}, {x:118.120, y:24.73}, {x:118.119, y:24.69}];
 			initMap();
-			addMarker(118.125, 24.71, "red");
-			addMarker(118.127, 24.72, "blue");
-			addMarker(poss[2].x, poss[2].y, "blue");
-			addMarker(poss[3].x, poss[3].y, "blue");
-			walkingLine(poss[0], poss[1]);
-			walkingLine(poss[1], poss[2]);
-			walkingLine(poss[2], poss[3]);
 		}
 
 		//动态页面绑定
@@ -171,69 +258,181 @@ apiready = function(){
 			},false);
 		}
 
-		//获取当前的数据内容
-		var requestForFata = function(callback){
-			//TODO：获取当前页面的展示内容，并进行初始化当前的数据
+		//核对并当前的打卡点的状态内容
+		var checksignin = function(pos){
+			for(var i = 0 ; i < pointlist.length ; i++){
+				var p = pointlist[i]
+				if(!p.marker){
+					if(typeof p.point[0] == "object"){
+						for(var j = 0 ; j < p.point.length ; j ++){
+							if(!p.markers[j]){
+								p.markers[j] = checkgps(pos, p.point[j]);
+								if(p.markers[j]){
+									requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":j});
+								}
+							}
+						}
+						p.marker = checkRouteMarked(p.markers);
+						if(p.marker){
+							p.ele.setColors("green");
+							p.rele.setColors("green");
+							if(!pointlist[i-1].marker){
+								pointlist[i-1].ele.setColors("red");
+								pointlist[i-1].rele.setColors("red");
+							}
+						}
+					}
+					else {
+						p.marker = checkgps(pos, p.point);
+						if(p.marker){
+							requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0});
+							p.ele.setColors("green");
+							p.rele.setColors("green");if(!pointlist[i-1].marker){
+								pointlist[i-1].ele.setColors("red");
+								pointlist[i-1].rele.setColors("red");
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//获取当前的数据内容并且调用绘制简单表。
+		var requestForFata = function(){
+			var p = getPoints("taskpoint");
+			if(p && info.taskid == p.taskid){
+				exchangeForData(p.point, false);
+			}
+			else {
+			connectToService( commonURL + "?action=taskpoint",
+				{
+						values: {"id": info.taskid }
+				},
+				function(ret){
+					if(ret.result){
+							exchangeForData(ret.data, true);
+					}
+					else {
+						alert("请求数据出错，可能是网络不太好！");
+					}
+				},
+				function(ret,err){
+					alert(JSON.stringify(err));
+				});
+			}
+		}
+
+		var pointlist = [];
+		var exchangeForData = function(data, check){
+			if(check){
+				if(data.length == 0){
+					alert("未录入任何打卡点数据")
+				}
+				for(var i = 0 ; i < data.length ; i++){
+					var obj = {};
+					obj.name = data[i].name;
+					obj.id = data[i].id;
+					obj.marker = data[i].marker;
+					obj.color = "blue";
+					if(data[i].point.length == 1){
+						obj.point = [data[i].point[0].lon, data[i].point[0].lat];
+					}
+					else {
+						obj.point = [];
+						obj.markers = [];
+						var list = data[i].point;
+						for(var j = 0 ; j < list.length ; j++){
+							obj.point[list[j].index] = [list[j].lon, list[j].lat];
+							obj.markers[list[j].index] = list[j].marker;
+						}
+					}
+					pointlist[data[i].index] = obj;
+				}
+				for(var i = 0 ; i < pointlist.length - 1 ; i++){
+					if(pointlist[i].marker){
+						pointlist[i].color = "green";
+					}
+					else {
+						if(pointlist[i+1].marker){
+							pointlist[i].color = "red";
+						}
+					}
+				}
+				savePoints("taskpoint", {taskid:info.taskid, point:pointlist});
+			}
+			else{
+				pointlist = data;
+			}
+			pointlist = easyMark(pointlist);
+		}
+
+		//绘制实体地图点内容。
+		var drawingPoints = function(){
+			if(pointlist.length > 0){
+				for(var i = 0 ; i < pointlist.length ; i++){
+					(function(){
+						var p = pointlist[i];
+						var m  = "";
+						var color = "blue";
+						if(typeof p.point[0] == "object"){
+						 	m = calculatePointForRoute(p.point);
+						}
+						else {
+							m = p.point;
+						}
+						p.ele = addMarker(m[0], m[1], p.color);
+					})();
+				}
+			}
 		}
 
 		var countingDistance = function(p1, p2){
-			//TODO: 计算当前的两点之间之间的支线距离
 			var dis = AMap.GeometryUtil.distance(p1, p2);
 			return dis;
 		}
 
-		var checkmark = function(p1, p2){
-			var dis = countingDistance(p1, p2);
-			if(dis <= 20){
-				//TODO：发送请求说明打卡点。
-			}
-		}
-
-		//获取路段的展示点内容
-		var getRouteMark = function(r1){
-			var len = r1.length;
-			var point = Math.floor(len/2);
-			return r1[point - 1];
-		}
-
-		//核对当前的路段是否已经打卡成功
-		var checkRouteMark = function(r1){
-			//TODO：当打卡点打卡80%以上算当前路段打卡成功。
-		}
-
 		//上报打卡成功的点或者路段内容
-		var requestMark = function(){
+		var requestMark = function(val){
 			//TODO：当有点打卡成功的话，我们直接上报当前打卡成功的点的信息
+
 		}
 
 		var initedPage = function(){
-			//TODO: 通过对比visit变量来进行相关内容的参数设置。
-			if(visit){
+			if(!visit){
 				$api.byId('returnBtn').removeAttribute("style");
 				$api.byId('repEvent').setAttribute("style", "display:none;");
 				$api.byId('endTask').setAttribute("style", "display:none;");
+				requestForFata();
+				dynamicWeb();
 			}
 			else {
 				$api.byId('repEvent').removeAttribute("style");
 				$api.byId('endTask').removeAttribute("style");
 				$api.byId('returnBtn').setAttribute("style", "display:none;");
+				requestForFata();
+				dynamicWeb();
 			}
 		}
 
 		//存储当前内容的点击内容。
-		var savePoints = function(){
-			//TODO: 通过setStorage来进行点集合的存储来进行相关内容存储。
+		var savePoints = function(key, value){
+			$api.setStorage(key, value);
 		}
 
-		var getPoints = function(){
-			//TODO: 获取存储的点集。
+		var getPoints = function(key){
+			return $api.getStorage(key);
 		}
 
-		routingPoint([{info:"梧桐路", color:"green"}, {info:"二环南路", color:"red"}, {info:"吉安路"}, {info:"同宏路"}]);
-		if(visit){
-			$api.byId('returnBtn').setAttribute("style", "display:none;");
-			$api.byId('repEvent').removeAttribute("style");
-			$api.byId('endTask').removeAttribute("style");
+		var easyMark = function(datas){
+			for(var i = 0 ; i < datas.length ; i++){
+				if(i == datas.length - 1){
+					datas[i].rele = routingPoint({"info":datas[i].name, "color":datas[i].color || ""}, i , true);
+				}
+				else {
+					datas[i].rele = routingPoint({"info":datas[i].name, "color":datas[i].color || ""}, i);
+				}
+			}
+			return datas;
 		}
-		dynamicWeb();
+		initedPage()
 }
