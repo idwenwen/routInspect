@@ -119,11 +119,12 @@ apiready = function(){
     var addNotcie = function(noticeId, time, name, information, routing, funcdescide){
     	var container = document.createElement("div");
         container.setAttribute("class", "notice-detail");
-        container.innerHTML = "<div class='notice-time'>" + ("" + time) + "</div>" +
+        container.innerHTML =
             "<div class='notice-content'>"+
             "<span class='notice-name'>" + ("" + name) + "</span>" +
             (routing ? ("<span class='notice-routing'>" + ("" + routing) + "</span>") : "") +
-            "<span class='notice-introduction'>" + ("" + information) + "</span>" +
+            "<span class='notice-introduction'>" + ("" + information) +
+            "<span class='notice-time'>" + ("" + time) + "</span></span>" +
             "</div>";
         $api.first($api.byId("bottomPartContent")) .appendChild(container);
         container.addEventListener('click', function(e){
@@ -149,10 +150,22 @@ apiready = function(){
           var time = data[i].startime;
           var etime = data[i].endtime;
           var type = data[i].state
+          var nowTime = new Date();
+          var limitT = new Date(etime);
+          var between = limitT.getTime() - nowTime.getTime();
+          var left = "";
+          if(between > 0){
+            var lhour = Math.floor(between/1000/60/60);
+            var lmin = Math.floor(between/1000/60) - lhour*60;
+            left = "剩余"+lhour+"小时"+lmin+"分钟";
+          }
+          else {
+            left = "已超时"
+          }
           if(type == 2){
             havetask = true;
           }
-          addNotcie(id, time, name, information, routing,
+          addNotcie(id, left, name, information, routing,
             function(e, id, time, name, information, routing){
               //依据type来进行页面的跳转。如果是进行之中的任务则直接跳转到地图页面.
               //如果是为开始跳转到inspectionRouting页面，警告跳转到处理界面。

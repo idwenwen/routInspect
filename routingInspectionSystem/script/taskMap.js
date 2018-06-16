@@ -15,7 +15,7 @@ apiready = function(){
 		var points = [];
 		var initMap = function(){
 	  	var	layer =  new AMap.TileLayer({
-          zooms:[3,20],    //可见级别
+          zooms:[3,16],    //可见级别
           visible:true,    //是否可见
           opacity:1,       //透明度
           zIndex:0         //叠加层级
@@ -27,15 +27,16 @@ apiready = function(){
 				drawingPoints();
 				if(visit){
 					var pos = JSON.parse($api.getStorage('position'));
-					usePos(pos[length-1][0], pos[length-1][1]);
-					checksignin(pos[length-1]);
-					refreshMap(5000);
+					pos = pos[0];
+					usePos(pos[0], pos[1]);
+					checksignin(pos);
+					refreshMap(10000);
 				}
 				else {
 					var p = getCenterPoint();
-					alert(JSON.stringify(p));
-					map.setZoom(14);
-					map.setCenter(new AMap.LngLat(parseInt(p[0]), parseInt(p[1])));
+					setTimeout(function(){
+						map.setZoomAndCenter(15, p);
+					},500);
 				}
 			});
 		}
@@ -60,17 +61,16 @@ apiready = function(){
 		var usePos = function(lat, lon){
 			var param = {
 				icon: '../icon/position-my.png',
-				position:new AMap.LngLat(parseInt(lat), parseInt(lon)),
+				position:new AMap.LngLat(lat, lon),
 				offset: new AMap.Pixel(-20, -30)
 			}
 			var markerup = new AMap.Marker(param);
 			if(map){
 				markerup.setMap(map);
-				//定位当前的位置信息
+				//定位当前的位置信息 //BUG:定位中心有问题
 				setTimeout(function(){
-					map.setCenter(new AMap.LngLat(parseInt(lat), parseInt(lat)));
-					map.setZoom(14);
-				},1000);
+					map.setZoomAndCenter(15, [lat, lon]);
+				},500);
 			}
 			else{
 				alert("map has not inited");
@@ -82,13 +82,14 @@ apiready = function(){
 		var drawLine = function(arr){
 			var paths = [];
 			for(var i = 0 ; i < arr.length ; i ++){
-				paths.push(new AMap.LngLat(parseInt(arr[i][0]), parseInt(arr[i][1])));
+				paths.push(new AMap.LngLat(arr[i][0], arr[i][1]));
 			}
 			var polyline = new AMap.Polyline({
-			    path: path,
+			    path: paths,
 			    borderWeight: 2, // 线条宽度，默认为 1
-			    strokeColor: 'red', // 线条颜色
-			    lineJoin: 'round' // 折线拐点连接处样式
+			    strokeColor: '#4169E1', // 线条颜色
+			    lineJoin: 'round', // 折线拐点连接处样式
+					lineCap:'round'
 			});
 			if(map){
 				map.add(polyline);
@@ -105,14 +106,24 @@ apiready = function(){
 			setInterval(function(){
 				var arr = [];
 				var pos = JSON.parse($api.getStorage('position'));
-				userMark.setPosition(new AMap.LngLat(parseInt(pos[pos.length - 1][0]), parseInt(pos[pos.length - 1][1])));
-				checksignin(pos[pos.length - 1]);
-				for(var i = pos.length - 1; i >= pos.length-1-times; i--){
+				userMark.setPosition(new AMap.LngLat(pos[0][0], pos[0][1]));
+				for(var i = 0; i <= times; i++){
 					arr.push(pos[i]);
+					if(i < times){
+						checksignin(pos[i]);
+					}
 				}
+				arr = filterPoints(arr);
 				drawLine(arr);
 			})
 		}
+
+		var filterPoints = function(arr){
+			if(arr.length == 2){
+				var distance = countingDistance(arr[0], arr[1]);
+			}
+			return arr;
+		};
 
 		//地图相关的点标记
 		var addMarker = function(lat, lon, color){
@@ -251,7 +262,8 @@ apiready = function(){
 				e.preventDefault();
 				e.stopPropagation();
 				//TODO: 验证签到点, 提交相关的请求.
-				animationStart(function(){}, "main", "../html/main.html", info, true);
+				// animationStart(function(){}, "main", "../html/main.html", info, true);
+				endTask();
 			},false);
 
 			$api.byId('returnBtn').addEventListener("click", function(e){
@@ -259,6 +271,12 @@ apiready = function(){
 				e.stopPropagation();
 				animationStart(function(){}, "inspectionTask", "../html/inspectionTask.html", info, false);
 			},false);
+
+			api.addEventListener({
+				name: 'keyback'
+			}, function(ret, err) {
+				animationStart(function(){}, "main", "../html/main.html", info, true);
+			});
 		}
 
 		//核对并当前的打卡点的状态内容
@@ -277,10 +295,10 @@ apiready = function(){
 						}
 						p.marker = checkRouteMarked(p.markers);
 						if(p.marker){
-							p.ele.setColors("green");
+							p.ele.setIcon("../icon/g-p.png");
 							p.rele.setColors("green");
 							if(!pointlist[i-1].marker){
-								pointlist[i-1].ele.setColors("red");
+								pointlist[i-1].ele.setIcon("../icon/r-p.png");
 								pointlist[i-1].rele.setColors("red");
 							}
 						}
@@ -289,9 +307,9 @@ apiready = function(){
 						p.marker = checkgps(pos, p.point);
 						if(p.marker){
 							requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
-							p.ele.setColors("green");
+							p.ele.setIcon("../icon/g-p.png");
 							p.rele.setColors("green");if(!pointlist[i-1].marker){
-								pointlist[i-1].ele.setColors("red");
+								pointlist[i-1].ele.setIcon("../icon/r-p.png");
 								pointlist[i-1].rele.setColors("red");
 							}
 						}
@@ -424,16 +442,17 @@ apiready = function(){
 				    msg: '此次任务还有' + unmark.length + "个点打卡未成功，确定结束当前任务吗",
 				    buttons: ['确定', '取消']
 				}, function(ret, err){
-				    if( ret ){
+				    if( ret.buttonIndex == 1 ){
 							connectToService( commonURL + "?action=taskfinish",
 							 {
-									 values: {"taskid": info.taskid}
+									 values: {"id": info.taskid}
 							 },
 							 function(ret){
 								 if(ret.result){
 									 animationStart(function(){}, "main", "../html/main.html", info, true);
 								 }
 								 else {
+									 alert(JSON.stringify(ret));
 									 alert("任务完成提交失败！");
 								 }
 							 },

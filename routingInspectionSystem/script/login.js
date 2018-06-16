@@ -52,10 +52,10 @@ apiready = function(){
   					}, function(ret, err) {
   							if (ret.status) {
   								//TODO：此处记录一个位置信息信息内容，并发送位置信息。信息
-  								if(positions.length >= 10){
-  									positions.shift();
+  								if(positions.length >= 50){
+  									positions.pop();
   								}
-  								positions.push([ret.lon, ret.lat]);
+  								positions.unshift([ret.lon, ret.lat]);
   								$api.setStorage('position', JSON.stringify(positions));
   								if(!send)
   								{

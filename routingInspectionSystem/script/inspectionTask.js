@@ -94,12 +94,10 @@ apiready = function(){
     	$api.byId("signInBtn").addEventListener("click", function(e){
     		e.preventDefault();
     		e.stopPropagation();
-    		info.start = true;
-        // uploadData(function(){
-        //  info.start = true;
-        //  animationStart(function(){}, "taskMap" , "../html/taskMap.html", info, true);
-        // })
-    		animationStart(function(){}, "taskMap" , "../html/taskMap.html", info, true);
+        uploadData(function(){
+         info.start = true;
+         animationStart(function(){}, "taskMap" , "../html/taskMap.html", info, true);
+        })
     	});
 
     	$api.byId("routingMapBtn").addEventListener("click", function(e){
@@ -108,6 +106,12 @@ apiready = function(){
     		info.start = false;
     		animationStart(function(){}, "taskMap" , "../html/taskMap.html", info, true);
     	});
+
+      api.addEventListener({
+        name: 'keyback'
+      }, function(ret, err) {
+        animationStart(function(){}, "main", "../html/main.html", info, true);
+      });
 
     	$api.byId("addPic").addEventListener("click", function(e){
     		e.preventDefault();
@@ -209,17 +213,27 @@ apiready = function(){
       if(!url){
         alert("请上传签到照片!");
       }
-      connectToService(commonURL + "?action=accepttask",
-        {
-          values:{"userid": info.user.userId, "member": member, "taskid": info.taskid, "photo":url}
-        }
-        ,function(ret){
-          success && success();
-        },
-        function(ret, err){
-          fail & fail();
-        }
-      );
+      else {
+        alert(JSON.stringify({"userid": info.user.userid, "member": member, "taskid": info.taskid, "photo":url}));
+        connectToService(commonURL + "?action=accepttask",
+          {
+            values:{"userid": info.user.userid, "member": member, "taskid": info.taskid},
+            files: {"photo":url}
+          }
+          ,function(ret){
+            if(ret.result){
+              success && success();
+            }
+            else {
+              alert(JSON.stringify(ret));
+              alert("任务接单未成功!");
+            }
+          },
+          function(ret, err){
+            fail & fail();
+          }
+        );
+      }
     }
 
     // addPersons("p1", "吴玉碧");
