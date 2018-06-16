@@ -106,6 +106,9 @@ apiready = function(){
 			setInterval(function(){
 				var arr = [];
 				var pos = JSON.parse($api.getStorage('position'));
+				if(!pos || pos.length < 2){
+					return ;
+				}
 				userMark.setPosition(new AMap.LngLat(pos[0][0], pos[0][1]));
 				for(var i = 0; i <= times; i++){
 					arr.push(pos[i]);
@@ -270,6 +273,12 @@ apiready = function(){
 				e.preventDefault();
 				e.stopPropagation();
 				animationStart(function(){}, "inspectionTask", "../html/inspectionTask.html", info, false);
+			},false);
+
+			$api.byId('returnBtns').addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				animationStart(function(){}, "main", "../html/main.html", info, true);
 			},false);
 
 			api.addEventListener({

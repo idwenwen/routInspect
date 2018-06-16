@@ -8,7 +8,6 @@ apiready = function(){
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
     var initShowing = info.mainShowing || "notice";
-    var inited = false;
 
     //所有的message可查看项目具体跳转到相关的内容表页面detailMessage.html
     //相关通知内容内容通过不同色系内容表述可以点击与否。部分点击内容可跳转到巡检任务页面。并进行内容提交。
@@ -34,17 +33,6 @@ apiready = function(){
             elet.setAttribute("style", "height:" + contentH + "px;");
             $api.byId("bottomPart").setAttribute("style", "margin-top:" + (contentH + 8) + "px;");
             eleb.removeAttribute("style");
-            if(parseInt($api.byId("messageNumber").innerHTML) == 0 && inited){
-                api.alert({
-                    title: '提示',
-                    msg: '当前没有需要处理的事件内容',
-                }, function(ret, err){
-                    if(err){
-                      alert(JSON.stringify(err));
-                    }
-                });
-                return ;
-            }
         }
     };
 
@@ -64,17 +52,6 @@ apiready = function(){
             eleb.setAttribute("style", "height:" + contentH + "px;");
             $api.byId("bottomPart").removeAttribute("style");
             elet.removeAttribute("style");
-            if(parseInt($api.byId("noticeNumber").innerHTML) == 0 && inited){
-                api.alert({
-                    title: '提示',
-                    msg: '当前没有任何通知内容!',
-                }, function(ret, err){
-                    if(err){
-                      alert(JSON.stringify(err));
-                    }
-                });
-                return ;
-            }
         }
     }
 
@@ -191,10 +168,6 @@ apiready = function(){
     }
       else {
         $api.byId('noticeNumber').innerHTML = 0;
-        if(initShowing == "notice"){
-          alert("没有新的通知");
-        }
-        inited = true;
       }
     }
 
@@ -223,10 +196,6 @@ apiready = function(){
       }
       else {
         $api.byId('messageNumber').innerHTML = 0;
-        if(initShowing == "message"){
-          alert("没有需要处理的事件");
-        }
-        inited = true;
       }
     }
 
