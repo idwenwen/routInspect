@@ -328,6 +328,7 @@ apiready = function(){
 		}
 
 		//获取当前的数据内容并且调用绘制简单表。
+		var groupleader = "";
 		var requestForFata = function(){
 			var p = getPoints("taskpoint");
 			if(p && info.taskid == p.taskid){
@@ -440,38 +441,59 @@ apiready = function(){
 
 		var endTask = function(){
 			var unmark = [];
-			for(var i = 0; i < pointlist.length; i++){
-				if(!pointlist[i].marker){
-					unmark.push(i);
-				}
-			}
-			if(unmark.length > 0){
-				api.confirm({
-				    title: '提示',
-				    msg: '此次任务还有' + unmark.length + "个点打卡未成功，确定结束当前任务吗",
-				    buttons: ['确定', '取消']
-				}, function(ret, err){
-				    if( ret.buttonIndex == 1 ){
-							connectToService( commonURL + "?action=taskfinish",
-							 {
-									 values: {"id": info.taskid}
-							 },
-							 function(ret){
-								 if(ret.result){
-									 animationStart(function(){}, "main", "../html/main.html", info, true);
-								 }
-								 else {
-									 alert(JSON.stringify(ret));
-									 alert("任务完成提交失败！");
-								 }
-							 },
-							 function(ret,err){
-								 alert(JSON.stringify(err));
-							 }
-						 );
-				    }
-				});
-			}
+			connectToService( commonURL + "?action=taskpoint",
+			 {
+					 values: {"id": info.taskid}
+			 },
+			 function(ret){
+				 if(ret.result){
+					 var data = ret.data;
+					 for(var i = 0 ; i < data.length ; i++){
+						 if(!data[i].marker){
+							 unmark.push({index:data[i].index, name:data[i].name});
+						 }
+					 }
+					 if(unmark.length > 0){
+						 var msgs = "";
+						 for(var i = 0 ; i < unmark.length ; i ++){
+							 msgs += (unmark[i].index + 1) + "." + unmark[i].name + ",";
+						 }
+		 				api.confirm({
+		 				    title: '提示',
+		 				    msg: '此次任务还有 ' + msgs + "打卡未成功，确定结束当前任务吗",
+		 				    buttons: ['确定', '取消']
+		 				}, function(ret, err){
+		 				    if( ret.buttonIndex == 1 ){
+		 							connectToService( commonURL + "?action=taskfinish",
+		 							 {
+		 									 values: {"id": info.taskid}
+		 							 },
+		 							 function(ret){
+		 								 if(ret.result){
+		 									 animationStart(function(){}, "main", "../html/main.html", info, true);
+		 								 }
+		 								 else {
+		 									 alert(JSON.stringify(ret));
+		 									 alert("任务完成提交失败！");
+		 								 }
+		 							 },
+		 							 function(ret,err){
+		 								 alert(JSON.stringify(err));
+		 							 }
+		 						 );
+		 				    }
+		 				});
+		 			}
+				 }
+				 else {
+					 alert(JSON.stringify(ret));
+					 alert("任务完成提交失败！");
+				 }
+			 },
+			 function(ret,err){
+				 alert(JSON.stringify(err));
+			 }
+		 );
 		}
 
 		var initedPage = function(){

@@ -217,6 +217,9 @@
 	margin: auto;
 	border-bottom: 1px solid #777;
 	word-break: break-all;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space:nowrap;
 }
 
 .notice-routing{
