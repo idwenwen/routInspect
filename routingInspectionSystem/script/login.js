@@ -138,7 +138,7 @@ apiready = function(){
           var users = JSON.parse(ret.value);
             $api.byId("inputUsername").value = users.username;
             $api.byId('inputPassword').value = users.password;
-            loginfunc(users.username, users.password);
+            // loginfunc(users.username, users.password);
           }else{
                alert( JSON.stringify( err ) );
           }
