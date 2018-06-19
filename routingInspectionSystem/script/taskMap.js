@@ -34,7 +34,7 @@ apiready = function(){
 								pos = pos[0];
 								usePos(pos[0], pos[1]);
 								checksignin(pos);
-								refreshMap(10000);
+								refreshMap(5000);
 								api.removeEventListener({
 								    name: 'postionChange'
 								});
@@ -126,18 +126,17 @@ apiready = function(){
 			setInterval(function(){
 				var arr = [];
 				var pos = JSON.parse($api.getStorage('position'));
-				if(!pos || pos.length < 2){
-					return ;
+				if(pos && pos.length >= 2){
+					userMark.setPosition(new AMap.LngLat(pos[0][0], pos[0][1]));
+						for(var i = 0; i <= times; i++){
+							arr.push(pos[i]);
+							if(i < times){
+								checksignin(pos[i]);
+							}
+						}
+						arr = filterPoints(arr);
+						drawLine(arr);
 				}
-				userMark.setPosition(new AMap.LngLat(pos[0][0], pos[0][1]));
-				for(var i = 0; i <= times; i++){
-					arr.push(pos[i]);
-					if(i < times){
-						checksignin(pos[i]);
-					}
-				}
-				arr = filterPoints(arr);
-				drawLine(arr);
 			})
 		}
 
@@ -149,13 +148,17 @@ apiready = function(){
 		};
 
 		//地图相关的点标记
-		var addMarker = function(lat, lon, color){
+		var addMarker = function(lat, lon, color, index){
 			var param = {
 				icon: (color == "green" ? '../icon/g-p.png' : (color == "red" ? '../icon/r-p.png': "../icon/b-p.png")),
 				position:new AMap.LngLat(lat, lon),
 				offset: new AMap.Pixel(-20, -30)
 			}
 			var markerp = new AMap.Marker(param);
+			// marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+      //   offset: new AMap.Pixel(20, 20),//修改label相对于maker的位置
+      //   content: "我是marker的label标签"
+    	// });
 			if(map){
 				 markerp.setMap(map);
 			}
@@ -399,7 +402,6 @@ apiready = function(){
 					}
 					pointlist[data[i].index] = obj;
 				}
-				alert(JSON.stringify(pointlist));
 				for(var i = 0 ; i < pointlist.length - 1 ; i++){
 					if(pointlist[i]){
 						if(pointlist[i].marker){
@@ -434,7 +436,7 @@ apiready = function(){
 						else {
 							m = p.point;
 						}
-						p.ele = addMarker(m[0], m[1], p.color);
+						p.ele = addMarker(m[0], m[1], p.color, i);
 					})();
 				}
 			}
