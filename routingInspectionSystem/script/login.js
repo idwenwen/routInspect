@@ -56,7 +56,8 @@ apiready = function(){
     									positions.pop();
     								}
     								positions.unshift([ret.lon, ret.lat]);
-    								$api.setStorage('position', JSON.stringify(positions));
+                    alert(JSON.stringify(positions));
+    								$api.setStorage('position', positions);
     								if(!send)
     								{
     									sned = true;
