@@ -33,6 +33,7 @@ apiready = function(){
 								var pos = JSON.parse($api.getStorage('position'));
 								pos = pos[0];
 								usePos(pos[0], pos[1]);
+								$api.byId('blackmode').setAttribute("style", "display:none;");
 								checksignin(pos);
 								refreshMap(5000);
 								api.removeEventListener({
@@ -50,6 +51,7 @@ apiready = function(){
 								var p = getCenterPoint();
 								setTimeout(function(){
 									map.setZoomAndCenter(15, p);
+									$api.byId('blackMode').setAttribute("style", "display:none;");
 								},500);
 								api.removeEventListener({
 								    name: 'postionChange'
