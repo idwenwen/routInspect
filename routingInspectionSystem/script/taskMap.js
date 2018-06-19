@@ -399,13 +399,16 @@ apiready = function(){
 					}
 					pointlist[data[i].index] = obj;
 				}
+				alert(JSON.stringify(pointlist));
 				for(var i = 0 ; i < pointlist.length - 1 ; i++){
-					if(pointlist[i].marker){
-						pointlist[i].color = "green";
-					}
-					else {
-						if(pointlist[i+1].marker){
-							pointlist[i].color = "red";
+					if(pointlist[i]){
+						if(pointlist[i].marker){
+							pointlist[i].color = "green";
+						}
+						else {
+							if(pointlist[i+1].marker){
+								pointlist[i].color = "red";
+							}
 						}
 					}
 				}
