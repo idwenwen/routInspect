@@ -41,63 +41,73 @@ apiready = function(){
     var showingFailMessage = false;
 
   	var startlbsPO = function(ms, ms2, userid){
-  	aMapLBS.configManager({
-  			accuracy: 'best',
-  			filter: 1
-  	}, function(ret, err) {
-  			if (ret.status) {
-  				setInterval(function(){
-  					aMapLBS.singleLocation({
-  							timeout: 5
-  					}, function(ret, err) {
-  							if (ret.status) {
-  								//TODO：此处记录一个位置信息信息内容，并发送位置信息。信息
-  								if(positions.length >= 50){
-  									positions.pop();
-  								}
-  								positions.unshift([ret.lon, ret.lat]);
-  								$api.setStorage('position', JSON.stringify(positions));
-  								if(!send)
-  								{
-  									sned = true;
-  								}
-  								else {
-  									//发送请求。
-  								}
-  							}
-    					});
-    				},ms);
+    	aMapLBS.configManager({
+    			accuracy: 'best',
+    			filter: 1
+    	}, function(ret, err) {
+    		if (ret.status) {
+    			setInterval(function(){
+    					aMapLBS.singleLocation({
+    							timeout: 5
+    					}, function(ret, err) {
+    							if (ret.status) {
+    								//TODO：此处记录一个位置信息信息内容，并发送位置信息。信息
+    								if(positions.length >= 50){
+    									positions.pop();
+    								}
+    								positions.unshift([ret.lon, ret.lat]);
+    								$api.setStorage('position', JSON.stringify(positions));
+    								if(!send)
+    								{
+    									sned = true;
+    								}
+    								else {
+    									//发送请求。
+    								}
+    							}
+      					});
+      				},ms);
+          //通过LBS进行连续定位
+          // aMapLBS.startLocation(function(ret, err) {
+          //       if (ret.status) {
+          //         if(positions.length >= 50){
+          //           positions.pop();
+          //         }
+          //         positions.unshift([ret.lon, ret.lat]);
+          //         $api.setStorage('position', JSON.stringify(positions));
+          //       }
+          // 			else {
+          // 				alert("当前无法进行定位。")
+          // 			}
+          //     });
+          setInterval(function(){
+                if(positions.length > 0){
+                  var pos = positions[positions.length - 1];
+                  connectToService(commonURL + "?action=position",
+            	    	{
+                      values:{"userid": userid, "lat":pos[0], "lon":pos[1]}
+                    },
+                    function(ret){
+                    	if(ret.result == true){
 
-            setInterval(function(){
-              var pos = positions[positions.length - 1];
-              connectToService(commonURL + "?action=position",
-        	    	{
-                  values:{"userid": userid, "lat":pos[0], "lon":pos[1]}
-                },
-                function(ret){
-                	if(ret.result == true){
-
-        					}
-                  else{
-                    if(!showingFailMessage){
-                      showingErrMessage = true;
-                      alert("当前网络信号不佳， 无法进行实时定位！");
-                    }
+            					}
+                      else{
+                        if(!showingFailMessage){
+                          showingErrMessage = true;
+                          alert("当前网络信号不佳， 无法进行实时定位！");
+                        }
+                      }
+            		    },
+            		    function(ret){
+                      if(!showingErrMessage){
+                        showingErrMessage = true;
+                        // alert("程序错误，程序员正在奋斗中！");
+                      }
+            		    });
                   }
-        		    },
-        		    function(ret){
-                  if(!showingErrMessage){
-                    showingErrMessage = true;
-                    // alert("程序错误，程序员正在奋斗中！");
-                  }
-        		    }
-        			);
-            }, ms2)
-    			}
-    			else {
-    				alert("当前无法进行定位。")
-    			}
-    	});
+              }, ms2);
+        }
+      });
     }
 
     var loginfunc = function(username, password){

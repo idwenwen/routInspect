@@ -41,6 +41,23 @@ apiready = function(){
 
 	// startPos();
 	// if(!userInfo){
+
+	// var aMapLBS = api.require('aMapLBS');
+	// aMapLBS.configManager({
+	// 		accuracy: 'best',
+	// 		filter: 5
+	// }, function(ret, err) {
+	// 	if (ret.status) {
+	// 		aMapLBS.startLocation(function(ret, err) {
+	// 		    if (ret.status) {
+	// 		        var s = document.createElement("span");
+	// 						s.innerHTML = "lon:" + ret.lon + " lat:" + ret.lat;
+	// 						$api.byId("info").appendChild(s);
+	// 		    }
+	// 		});
+	// 	}
+	// });
+
 	transferToPage('login', 'html/login.html', info);
 	// }
 	// else {
