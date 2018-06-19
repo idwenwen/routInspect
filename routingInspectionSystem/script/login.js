@@ -1,7 +1,7 @@
 apiready = function(){
 
     var intervalTime = 5000;
-    var requestTime = 1*60*1000;
+    var requestTime = 5*1000;
 
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
