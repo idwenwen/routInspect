@@ -473,7 +473,7 @@ apiready = function(){
 		 									 animationStart(function(){}, "main", "../html/main.html", info, true);
 		 								 }
 		 								 else {
-		 									 alert(JSON.stringify(ret));
+											 //  alert(JSON.stringify(ret));
 		 									 alert("任务完成提交失败！");
 		 								 }
 		 							 },
@@ -486,7 +486,7 @@ apiready = function(){
 		 			}
 				 }
 				 else {
-					 alert(JSON.stringify(ret));
+					//  alert(JSON.stringify(ret));
 					 alert("任务完成提交失败！");
 				 }
 			 },

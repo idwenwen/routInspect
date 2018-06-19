@@ -225,7 +225,7 @@ apiready = function(){
               success && success();
             }
             else {
-              alert(JSON.stringify(ret));
+              // alert(JSON.stringify(ret));
               alert("任务接单未成功!");
             }
           },
