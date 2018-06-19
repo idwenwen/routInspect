@@ -85,7 +85,7 @@ apiready = function(){
                   var pos = positions[positions.length - 1];
                   connectToService(commonURL + "?action=position",
             	    	{
-                      values:{"userid": userid, "lat":pos[0], "lon":pos[1]}
+                      values:{"userid": userid, "lat":pos[1], "lon":pos[0]}
                     },
                     function(ret){
                     	if(ret.result == true){
