@@ -24,14 +24,13 @@ apiready = function(){
           layers:[layer] //当只想显示标准图层时layers属性可缺省
     	});
 			map.on("complete", function(){
-				// alert("step1");
+				alert("step1");
 				drawingPoints();
-				// alert("step2");
+				alert("step2");
 				if(visit){
-					// alert("step3");
+					alert("step3");
 					var pos = JSON.parse($api.getStorage('position'));
 					alert(pos);
-					// pos = JSON.parse(pos);
 					pos = pos[0];
 					usePos(pos[0], pos[1]);
 					checksignin(pos);
