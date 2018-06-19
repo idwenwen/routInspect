@@ -28,6 +28,7 @@ apiready = function(){
 				if(visit){
 					var pos = JSON.parse($api.getStorage('position'));
 					pos = pos[0];
+					alert(JSON.stringify(pos));
 					usePos(pos[0], pos[1]);
 					checksignin(pos);
 					refreshMap(10000);

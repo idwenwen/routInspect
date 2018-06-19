@@ -149,6 +149,7 @@ apiready = function(){
               if(type == 1){
                 if(havetask){
                   alert("您当前已经有正在进行的任务");
+                  return false;
                 }
                 info.taskid = id;
                 animationStart(function(){}, "inspectionTask" , "../html/inspectionTask.html" , info, true);
@@ -272,7 +273,7 @@ apiready = function(){
         api.addEventListener({
           name: 'keyback'
         }, function(ret, err) {
-          animationStart(function(){}, "login", "../html/login.html", info, false);
+          api.toLauncher();
         });
     }
 

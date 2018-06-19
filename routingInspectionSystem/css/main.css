@@ -10,8 +10,27 @@
 	background-repeat: no-repeat;
 }
 
-.return-btn{
+.return-btn-2{
+	height: 50px;
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	font-family: "微软雅黑";
+	font-size: 90%;
+	padding: 8px;
+	text-align: center;
+	line-height: 35px;
 	font-size: 80%;
+}
+
+.return-btn-2:before{
+	content:"";
+	position: absolute;
+	bottom: 5px;
+	right: 0px;
+	width: 1px;
+	height: 40px;
+	background-color:#003366;
 }
 
 .header-right-btn{
