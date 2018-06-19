@@ -56,7 +56,7 @@ apiready = function(){
     									positions.pop();
     								}
     								positions.unshift([ret.lon, ret.lat]);
-                    alert(JSON.stringify(positions));
+                    // alert(JSON.stringify(positions));
     								$api.setStorage('position', positions);
     								if(!send)
     								{
