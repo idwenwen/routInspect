@@ -29,8 +29,8 @@ apiready = function(){
 				// alert("step2");
 				if(visit){
 					// alert("step3");
-					var pos = $api.getStorage('position');
-					// alert(pos);
+					var pos = JSON.parse($api.getStorage('position'));
+					alert(pos);
 					// pos = JSON.parse(pos);
 					pos = pos[0];
 					usePos(pos[0], pos[1]);
