@@ -77,6 +77,10 @@ apiready = function(){
                   }
                   positions.unshift([ret.lon, ret.lat]);
                   $api.setStorage('position', JSON.stringify(positions));
+                  api.sendEvent({
+                      name: 'postionChange'
+                  });
+
                   // alert($api.getStorage("position"));
                 }
           			else {

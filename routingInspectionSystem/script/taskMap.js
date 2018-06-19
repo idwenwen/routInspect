@@ -24,23 +24,39 @@ apiready = function(){
           layers:[layer] //当只想显示标准图层时layers属性可缺省
     	});
 			map.on("complete", function(){
-				alert("step1");
 				drawingPoints();
-				alert("step2");
 				if(visit){
-					alert("step3");
-					var pos = JSON.parse($api.getStorage('position'));
-					alert(pos);
-					pos = pos[0];
-					usePos(pos[0], pos[1]);
-					checksignin(pos);
-					refreshMap(10000);
+					api.addEventListener({
+					    name: 'postionChange'
+					}, function(ret, err){
+					    if( ret ){
+								var pos = JSON.parse($api.getStorage('position'));
+								pos = pos[0];
+								usePos(pos[0], pos[1]);
+								checksignin(pos);
+								refreshMap(10000);
+								api.removeEventListener({
+								    name: 'postionChange'
+								});
+					    }else{
+					    }
+					});
 				}
 				else {
-					var p = getCenterPoint();
-					setTimeout(function(){
-						map.setZoomAndCenter(15, p);
-					},500);
+					api.addEventListener({
+					    name: 'postionChange'
+					}, function(ret, err){
+					    if( ret ){
+								var p = getCenterPoint();
+								setTimeout(function(){
+									map.setZoomAndCenter(15, p);
+								},500);
+								api.removeEventListener({
+								    name: 'postionChange'
+								});
+					    }else{
+					    }
+					});
 				}
 			});
 		}
