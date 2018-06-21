@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>routingInspectionSystem</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/getgps.css">
+    <script type="text/javascript" src="../script/api.js"></script>
+</head>
+<body>
+   <div id="wrap">
+        <div id="header">
+            <div>模块菜单</div>
+        </div>
+        <div id="main">
+          <div class="blackmode" id="blackmode">
+            <span class="blackTip" id="checkthisout">正在寻找您的当前位置...</span>
+          </div>
+          <div class='getmap' id="mapContainer">
+
+          </div>
+          <button class="updatagps" id="upgps">上传打卡点</button>
+          <div class="gpsinfo" id="gpsinfo">
+            <p class="name-info"  id="nameinfo"><label for="gpsname">名称</label><input type="text" name="gpsname" class="forname"/></p>
+            <p class="type-info" id="typeinfo">
+              <span id="check1"><input name="type" type="radio" checked="checked" id="typechoose1"/>GPS</span>
+              <span id="check2"><input name="type" type="radio" id="typechoose2" />设备</span>
+            </p>
+            <button class="checkinbutn">确定</button>
+          </div>
+        </div>
+        <div id="footer">
+            <h5>Copyright &copy;<span id="year"></span> </h5>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/getgps.js"></script>
+</html>

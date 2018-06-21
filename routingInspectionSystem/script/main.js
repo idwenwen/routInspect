@@ -264,12 +264,24 @@ apiready = function(){
           animationStart(function(){}, "reportEvent", "../html/reportEvent.html", info, true);
         });
 
+        //TODO：可能需要调回功能模块选择页面内容。
         $api.byId('returnBtn').addEventListener("click", function(e){
   				e.preventDefault();
   				e.stopPropagation();
-  				animationStart(function(){}, "login", "../html/login.html", info, true);
+          connectToService(commonURL + "?action=logout",
+            {
+              values: { "userid": info.user.userid }
+            },
+            function(ret){
+              animationStart(function(){}, "login", "../html/login.html", info, true);
+            },
+            function(ret){
+              alert(JSON.stringify(ret.desc));
+            }
+          );
   			});
 
+        //TODO：可能需要调回功能模块选择页面内容。
         api.addEventListener({
           name: 'keyback'
         }, function(ret, err) {

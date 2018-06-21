@@ -1,7 +1,7 @@
 apiready = function(){
 
     var intervalTime = 5000;
-    var requestTime = 5*1000;
+    var requestTime = 5000;
 
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
@@ -39,6 +39,7 @@ apiready = function(){
   	var send = false;
     var showingErrMessage = false;
     var showingFailMessage = false;
+    var alerts  = true;
 
   	var startlbsPO = function(ms, ms2, userid){
     	aMapLBS.configManager({
@@ -70,18 +71,34 @@ apiready = function(){
       		// 			});
       		// 		},ms);
           //通过LBS进行连续定位
+          api.addEventListener({
+              name: 'changePositionList'
+          }, function(ret, err){
+              if( ret ){
+                var v = ret.value;
+                positions = [];
+                positions.unshift([v.lon, v.lat]);
+              }else{
+                alert( JSON.stringify( err ) );
+              }
+          });
           aMapLBS.startLocation(function(ret, err) {
                 if (ret.status) {
-                  if(positions.length >= 50){
+                  if(positions.length >= 100){
                     positions.pop();
                   }
                   positions.unshift([ret.lon, ret.lat]);
                   $api.setStorage('position', JSON.stringify(positions));
+                  if(positions.length >= 4){
+                    api.sendEvent({
+                      name: 'refreshmap'
+                    });
+                  }
                   api.sendEvent({
                       name: 'postionChange'
                   });
-
                   // alert($api.getStorage("position"));
+
                 }
           			else {
           				// alert("当前无法进行定位。");
@@ -92,7 +109,7 @@ apiready = function(){
                   var pos = positions[positions.length - 1];
                   connectToService(commonURL + "?action=position",
             	    	{
-                      values:{"userid": userid, "lat":pos[1], "lon":pos[0]}
+                      values:{"userid": userid, "lat":pos[1] || 0, "lon":pos[0] || 0}
                     },
                     function(ret){
                     	if(ret.result == true){
@@ -101,7 +118,7 @@ apiready = function(){
                       else{
                         if(!showingFailMessage){
                           showingErrMessage = true;
-                          alert("当前网络信号不佳， 无法进行实时定位！");
+                          // alert("当前网络信号不佳， 无法进行实时定位！");
                         }
                       }
             		    },
@@ -134,11 +151,11 @@ apiready = function(){
             param.history.page = "login";
             param.history.url = "../html/login.html";
             setTimeout(function(){
-  		    	     animationStart(function(){}, 'main', './main.html', param);
-            })
+  		    	     animationStart(function(){}, 'main', './main.html', param, true);
+            },10);
           }
           else {
-            alert("用户名或密码有错误！");
+            alert(ret.des);
           }
 		    },
 		    function(ret,err){

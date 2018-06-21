@@ -13,9 +13,11 @@ apiready = function(){
 		var aMapLBS = api.require('aMapLBS');
 		var position = {};
 		var getLocalPosition = function(func){
-			var positions = JSON.parse($api.getStorage('position'));
+			var positions = $api.getStorage('position');
+			alert(positions);
+			positions = JSON.parse(positions);
 			if(positions && positions.length > 0){
-				var pos = {lat : positions[positions.length - 1][0], lon : positions[positions.length -1][1]};
+				var pos = {lat : positions[0][1], lon : positions[0][0]};
 				func && func(pos);
 			}
 			else {
@@ -57,20 +59,25 @@ apiready = function(){
 		}
 
 		//添加问题展示选择内容的情况
+		var contentlist = [];
 		var setContentList = function(obj, callback){
 			for(var i = 0; i < obj.items.length ; i++){
-				var spde = document.createElement("span");
-				spde.setAttribute("class", "ty-de-content-list");
-				spde.setAttribute("id", obj.items[i].id);
-				spde.innerHTML = obj.items[i].name;
-				spde.addEventListener("click", function(e){
-					e.preventDefault();
-					e.stopPropagation();
-					chooseid = e.target.getAttribute("id");
-					choosename = e.target.innerHTML;
-					callback && callback(chooseid, choosename);
-				});
-				$api.byId('typeListDetails').appendChild(spde);
+				(function(){
+					var a = i;
+					var spde = document.createElement("span");
+					spde.setAttribute("class", "ty-de-content-list");
+					spde.setAttribute("id", obj.items[a].id);
+					spde.innerHTML = obj.items[a].name;
+					spde.addEventListener("click", function(e){
+						e.preventDefault();
+						e.stopPropagation();
+						chooseid = obj.items[a].id;
+						choosename = obj.items[a].name;
+						alert("chooseid:" + chooseid + " choosename:"+choosename);
+						callback && callback(chooseid, choosename);
+					});
+					$api.byId('typeListDetails').appendChild(spde);
+				})();
 			}
 		}
 
@@ -99,19 +106,42 @@ apiready = function(){
 		var sectionname = "";
 		var addPosition = function(arr, callback){
 			for(var i = 0 ; i < arr.length ; i++){
-				var sp = document.createElement("span");
-				sp.setAttribute("class", "position-list-content");
-				sp.setAttribute("id", arr[i].id);
-				sp.innerHTML = arr[i].name;
-				sp.addEventListener("click", function(e){
-					e.preventDefault();
-					e.stopPropagation();
-					sectionid = e.target.getAttribute("id");
-					sectionname = e.target.innerHTML;
-					callback && callback(sectionid, sectionname);
-				});
-				$api.byId('positionLists').appendChild(sp);
+				(function(){
+					var a = i;
+					var sp = document.createElement("span");
+					sp.setAttribute("class", "position-list-content");
+					sp.setAttribute("id", arr[a].id);
+					sp.innerHTML = arr[a].name;
+					sp.addEventListener("click", function(e){
+						e.preventDefault();
+						e.stopPropagation();
+						sectionid = arr[a].id;
+						sectionname = arr[a].name;
+						alert("sid:" + sectionid + " sname:" + sectionname);
+						callback && callback(sectionid, sectionname);
+					});
+					$api.byId('positionLists').appendChild(sp);
+				})();
 			}
+		}
+
+		var getAddress = function(callback){
+			var pos = JSON.parse($api.getStorage("position"));
+			pos = pos[0];
+			var lnglat = pos;
+			AMap.plugin('AMap.Geocoder', function() {
+			  var geocoder = new AMap.Geocoder({
+			    // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+			    radius: 100
+			  })
+			  geocoder.getAddress(lnglat, function(status, result) {
+			    if (status === 'complete' && result.info === 'OK') {
+			        // result为对应的地理位置详细信息
+							alert(JSON.stringify(result));
+							callback && callback(result.regeocode.formattedAddress);
+			    }
+			  })
+			})
 		}
 
 		//测试数据内
@@ -207,6 +237,14 @@ apiready = function(){
 		//发送相关数据内容
 		var sendData = function(position){
 				//选取的问题类别， 路段内容，相关的数据的file内容。
+				if(!sectionid){
+					alert("请选择问题路段");
+					return false;
+				}
+				if(!chooseid){
+					alert("请选择问题类型");
+					return false;
+				}
 				if(addMessageP.length == 0){
 					alert("请上传相关信息图片");
 					return false;
@@ -219,7 +257,7 @@ apiready = function(){
 				var address = $api.byId("positionMessage").value || "";
 			  connectToService( commonURL + "?action=event",
 					{
-						values: {"road": chooseid, "type": sectionid, "explain": explain, "address": address,
+						values: {"road": sectionid, "type": chooseid, "explain": explain, "address": address,
 						 	"lat": position.lat, "lon": position.lon, "userid": userid},
 						files: {"accident": addMessageP, "position": addPositionP}
 					},
@@ -229,7 +267,7 @@ apiready = function(){
 								animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
 							}
 							else {
-								alert("事件未上报成功:" + ret.desc);
+								alert("事件未上报成功: " + ret.desc);
 							}
 			    },
 			    function(ret, err){
@@ -286,6 +324,22 @@ apiready = function(){
 				$api.byId('blackMode').setAttribute("style", "display:none;");
 				$api.byId('showingPhoto').setAttribute("style", "display:none;");
 			});
+
+			$api.byId('searchroad').addEventListener("input", function(e){
+				var val = $api.byId('searchroad').value;
+				var child = $api.byId('positionLists').children;
+				var i = 0 ;
+				while( child[""+i] ){
+					if(child[i].innerHTML.indexOf(val) == -1){
+						child[i].setAttribute("style", "display:none;");
+					}
+					else {
+						child[i].removeAttribute("style");
+					}
+					i++;
+				}
+			});
+
 
 			var p1 = 1;
 			$api.byId('photoing').addEventListener("click", function(e){
@@ -370,4 +424,7 @@ apiready = function(){
 		el = $api.byId('photoing2');
 		el.setAttribute("style", "height:"+el.offsetWidth + 'px;');
 		dynamicWeb();
+		getAddress(function(data){
+			$api.byId('positionMessage').value = data; 
+		});
 }

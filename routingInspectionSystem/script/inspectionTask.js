@@ -187,14 +187,15 @@ apiready = function(){
     }
 
     //传递人员数组内容。
+    var adding = 0;
     var memberList = function(list){
-      //TODO:调用addPersons来进行列表内容添加。
       var stylecheck = "list-info";
       for(var i = 0 ; i < list.length ; i++){
         if(list[i].id == info.user.userid){
+          adding = -1;
           continue;
         }
-        if(!(i%2)){
+        if(!((i+adding)%2)){
           stylecheck = "list-info2";
         }
         else {
@@ -214,7 +215,6 @@ apiready = function(){
         alert("请上传签到照片!");
       }
       else {
-        alert(JSON.stringify({"userid": info.user.userid, "member": member, "taskid": info.taskid, "photo":url}));
         connectToService(commonURL + "?action=accepttask",
           {
             values:{"userid": info.user.userid, "member": member, "taskid": info.taskid},

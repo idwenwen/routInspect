@@ -33,9 +33,8 @@ apiready = function(){
 								var pos = JSON.parse($api.getStorage('position'));
 								pos = pos[0];
 								usePos(pos[0], pos[1]);
-								$api.byId('blackmode').setAttribute("style", "display:none;");
 								checksignin(pos);
-								refreshMap(5000);
+								$api.byId('blackmode').setAttribute("style", "display:none;");
 								api.removeEventListener({
 								    name: 'postionChange'
 								});
@@ -51,7 +50,7 @@ apiready = function(){
 								var p = getCenterPoint();
 								setTimeout(function(){
 									map.setZoomAndCenter(15, p);
-									$api.byId('blackMode').setAttribute("style", "display:none;");
+									$api.byId('blackmode').setAttribute("style", "display:none;");
 								},500);
 								api.removeEventListener({
 								    name: 'postionChange'
@@ -122,24 +121,29 @@ apiready = function(){
 		}
 
 		//定时刷新定位与路径内容
-		var refreshMap = function(time){
-			var time = time - (time%5);
-			var times = time/5000;
-			setInterval(function(){
+		var refreshMap = function(){
+			// alert("refreshMap");
 				var arr = [];
 				var pos = JSON.parse($api.getStorage('position'));
 				if(pos && pos.length >= 2){
-					userMark.setPosition(new AMap.LngLat(pos[0][0], pos[0][1]));
-						for(var i = 0; i <= times; i++){
-							arr.push(pos[i]);
-							if(i < times){
-								checksignin(pos[i]);
-							}
-						}
-						arr = filterPoints(arr);
+
+					for(var i = pos.length - 1; i >= 0 ; i--){
+						arr.push(pos[i]);
+						checksignin(pos[i]);
+					}
+					// alert(JSON.stringify(arr));
+					if(userMark){
+						userMark.setPosition(new AMap.LngLat(pos[0][0], pos[0][1]));
 						drawLine(arr);
+					}
+					api.sendEvent({
+						name: 'changePositionList',
+						extra: {
+						  lat: pos[0][1],
+							lon: pos[0][0]
+						}
+					});
 				}
-			})
 		}
 
 		var filterPoints = function(arr){
@@ -316,7 +320,7 @@ apiready = function(){
 		//核对并当前的打卡点的状态内容
 		var checksignin = function(pos){
 			for(var i = 0 ; i < pointlist.length ; i++){
-				var p = pointlist[i]
+				var p = pointlist[i];
 				if(!p.marker){
 					if(typeof p.point[0] == "object"){
 						for(var j = 0 ; j < p.point.length ; j ++){
@@ -329,11 +333,15 @@ apiready = function(){
 						}
 						p.marker = checkRouteMarked(p.markers);
 						if(p.marker){
-							p.ele.setIcon("../icon/g-p.png");
-							p.rele.setColors("green");
-							if(!pointlist[i-1].marker){
-								pointlist[i-1].ele.setIcon("../icon/r-p.png");
-								pointlist[i-1].rele.setColors("red");
+							if(p.ele){
+								p.ele.setIcon("../icon/g-p.png");
+							}
+							p.rele && p.rele.setColors("green");
+						}
+						else{
+							if(checkMiss(i)){
+								p.ele && p.ele.setIcon("../icon/r-p.png");
+								p.rele && p.rele.setColors("red");
 							}
 						}
 					}
@@ -341,15 +349,29 @@ apiready = function(){
 						p.marker = checkgps(pos, p.point);
 						if(p.marker){
 							requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
-							p.ele.setIcon("../icon/g-p.png");
-							p.rele.setColors("green");if(!pointlist[i-1].marker){
-								pointlist[i-1].ele.setIcon("../icon/r-p.png");
-								pointlist[i-1].rele.setColors("red");
+							if(p.ele){
+								p.ele.setIcon("../icon/g-p.png");
+							}
+							p.rele && p.rele.setColors("green");
+						}
+						else{
+							if(checkMiss(i)){
+								p.ele && p.ele.setIcon("../icon/r-p.png");
+								p.rele && p.rele.setColors("red");
 							}
 						}
 					}
 				}
 			}
+		}
+
+		var checkMiss = function(index){
+			for(var i = index+1; i < pointlist.length; i++){
+				 if(pointlist[i].marker){
+					 return true;
+				 }
+			}
+			return false;
 		}
 
 		//获取当前的数据内容并且调用绘制简单表。
@@ -483,34 +505,54 @@ apiready = function(){
 					 if(unmark.length > 0){
 						 var msgs = "";
 						 for(var i = 0 ; i < unmark.length ; i ++){
-							 msgs += (unmark[i].index + 1) + "." + unmark[i].name + ",";
+							 msgs += (unmark[i].index + 1) + "." + unmark[i].name + ", ";
 						 }
-		 				api.confirm({
-		 				    title: '提示',
-		 				    msg: '此次任务还有 ' + msgs + "打卡未成功，确定结束当前任务吗",
-		 				    buttons: ['确定', '取消']
-		 				}, function(ret, err){
-		 				    if( ret.buttonIndex == 1 ){
-		 							connectToService( commonURL + "?action=taskfinish",
-		 							 {
-		 									 values: {"id": info.taskid}
-		 							 },
-		 							 function(ret){
-		 								 if(ret.result){
-		 									 animationStart(function(){}, "main", "../html/main.html", info, true);
-		 								 }
-		 								 else {
-											 //  alert(JSON.stringify(ret));
-		 									 alert("任务完成提交失败！");
-		 								 }
-		 							 },
-		 							 function(ret,err){
-		 								 alert(JSON.stringify(err));
-		 							 }
-		 						 );
-		 				    }
-		 				});
-		 			}
+			 				api.confirm({
+			 				    title: '提示',
+			 				    msg: '此次任务还有 ' + msgs + "打卡未成功，确定结束当前任务吗",
+			 				    buttons: ['确定', '取消']
+			 				}, function(ret, err){
+			 				    if( ret.buttonIndex == 1 ){
+			 							connectToService( commonURL + "?action=taskfinish",
+			 							 {
+			 									 values: {"id": info.taskid}
+			 							 },
+			 							 function(ret){
+			 								 if(ret.result){
+			 									 animationStart(function(){}, "main", "../html/main.html", info, true);
+			 								 }
+			 								 else {
+												 //  alert(JSON.stringify(ret));
+			 									 alert("任务完成提交失败！");
+			 								 }
+			 							 },
+			 							 function(ret,err){
+			 								 alert(JSON.stringify(err));
+			 							 }
+			 						 );
+			 				    }
+			 				});
+		 				}
+						else{
+							connectToService( commonURL + "?action=taskfinish",
+							 {
+									 values: {"id": info.taskid}
+							 },
+							 function(ret){
+								 if(ret.result){
+									 alert("任务完成!");
+									 animationStart(function(){}, "main", "../html/main.html", info, true);
+								 }
+								 else {
+									 //  alert(JSON.stringify(ret));
+									 alert("任务完成提交失败！");
+								 }
+							 },
+							 function(ret,err){
+								 alert(JSON.stringify(err));
+							 }
+						 );
+						}
 				 }
 				 else {
 					//  alert(JSON.stringify(ret));
@@ -537,6 +579,15 @@ apiready = function(){
 				$api.byId('returnBtn').setAttribute("style", "display:none;");
 				requestForFata();
 				dynamicWeb();
+				api.addEventListener({
+				    name: 'refreshmap'
+				}, function(ret, err){
+				    if( ret ){
+							 refreshMap();
+				    }else{
+				      alert( JSON.stringify( err ) );
+				    }
+				});
 			}
 		}
 

@@ -123,11 +123,19 @@ apiready = function(){
 			$api.byId('explain').innerHTML = data.explain;
 			$api.byId('time').innerHTML = data.limittime;
 			$api.byId("express").innerHTML = data.address;
+			var reportuser = data.reportuserid;
 			if(data.handluserid != info.user.userid){
 				$api.byId('responseList').setAttribute("style", "display:none;");
 				$api.byId('completeStuff').setAttribute("style", "display:none;");
+				$api.byId('accept').setAttribute("style", "display:none;");
+				$api.byId('middle').setAttribute("style", "display:none;");
+				$api.byId('hangup').setAttribute("style", "display:none;");
+				$api.byId('statusmessage').removeAttribute("style");
 			}
-			$api.byId('id');
+			if(reportuser == info.user.userid && eventStatus == 1){
+				$api.byId('accept').setAttribute("style", "display:none;");
+				$api.byId('statusmessage').removeAttribute("style");
+			}
 			for(var i = 0 ; i < data.accident.length ; i++){
 				addExhibitionPic(data.accident[i], "eventPhoto");
 			}

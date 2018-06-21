@@ -58,6 +58,12 @@ apiready = function(){
 	// 	}
 	// });
 
+	// setInterval(function(){
+	// 	var sp = document.createElement("span");
+	// 	sp.innerHTML = "steps";
+	// 	$api.byId('info').appendChild(sp);
+	// }, 5000);
+
 	transferToPage('login', 'html/login.html', info);
 	// }
 	// else {

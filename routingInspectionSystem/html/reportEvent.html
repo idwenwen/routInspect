@@ -23,7 +23,7 @@
           <div class="main-detail">
             <div class="street" id="street">
               <img src="../icon/position.png" alt="" class="street-img">
-              <span class="street-title">位置</span>
+              <span class="street-title">路段</span>
               <span class="street-part" id="streetPart">请选择路段</span>
               <img src="../icon/arrow-right.png" alt="" class="right-pic">
             </div>
@@ -36,8 +36,8 @@
             <div class="event-detail">
               <img src="../icon/explain.png" alt="" class="left-part">
               <span class="question-intro">问题描述</span>
-              <img src="../icon/common-ques.png" alt="" class="right-part">
-              <span class="check-ques">常见问题</span>
+              <!-- <img src="../icon/common-ques.png" alt="" class="right-part">
+              <span class="check-ques">常见问题</span> -->
               <input type="text" id="questionMessage" placeholder="请输入事件说明">
             </div>
             <div class="photo-event">
@@ -68,12 +68,13 @@
           <div class="type-list-detail-head">
             选择问题类型
           </div>
-          <div class="detail-info" id="typeListDetails"></div>
+          <div class="detail-info2" id="typeListDetails"></div>
         </div>
         <div class="position-list" id="positionList" style="display:none;">
           <div class="type-list-detail-head">
             选择路段信息
           </div>
+          <input type="text" id="searchroad" class="searchroad" placeholder="搜索路段"/>
           <div class="detail-info" id="positionLists"></div>
         </div>
         <div class="showingPhoto" id="showingPhoto" style="display:none;">
@@ -87,6 +88,7 @@
         </div>
     </div>
 </body>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.6&key=c4f2a5badc50ec4704a2c0f4b6cf62b6"></script>
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript" src="../script/reportEvent.js"></script>
 </html>
