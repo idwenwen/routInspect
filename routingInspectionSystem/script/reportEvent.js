@@ -14,7 +14,6 @@ apiready = function(){
 		var position = {};
 		var getLocalPosition = function(func){
 			var positions = $api.getStorage('position');
-			alert(positions);
 			positions = JSON.parse(positions);
 			if(positions && positions.length > 0){
 				var pos = {lat : positions[0][1], lon : positions[0][0]};
@@ -73,7 +72,6 @@ apiready = function(){
 						e.stopPropagation();
 						chooseid = obj.items[a].id;
 						choosename = obj.items[a].name;
-						alert("chooseid:" + chooseid + " choosename:"+choosename);
 						callback && callback(chooseid, choosename);
 					});
 					$api.byId('typeListDetails').appendChild(spde);
@@ -117,7 +115,6 @@ apiready = function(){
 						e.stopPropagation();
 						sectionid = arr[a].id;
 						sectionname = arr[a].name;
-						alert("sid:" + sectionid + " sname:" + sectionname);
 						callback && callback(sectionid, sectionname);
 					});
 					$api.byId('positionLists').appendChild(sp);
@@ -137,7 +134,6 @@ apiready = function(){
 			  geocoder.getAddress(lnglat, function(status, result) {
 			    if (status === 'complete' && result.info === 'OK') {
 			        // result为对应的地理位置详细信息
-							alert(JSON.stringify(result));
 							callback && callback(result.regeocode.formattedAddress);
 			    }
 			  })
@@ -425,6 +421,6 @@ apiready = function(){
 		el.setAttribute("style", "height:"+el.offsetWidth + 'px;');
 		dynamicWeb();
 		getAddress(function(data){
-			$api.byId('positionMessage').value = data; 
+			$api.byId('positionMessage').value = data;
 		});
 }
