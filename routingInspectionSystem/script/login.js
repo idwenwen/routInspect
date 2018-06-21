@@ -155,7 +155,7 @@ apiready = function(){
             },10);
           }
           else {
-            alert(ret.des);
+            alert(ret.desc);
           }
 		    },
 		    function(ret,err){
