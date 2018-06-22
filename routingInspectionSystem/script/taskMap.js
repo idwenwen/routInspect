@@ -27,7 +27,6 @@ apiready = function(){
           layers:[layer] //当只想显示标准图层时layers属性可缺省
     	});
 			map.on("complete", function(){
-				alert("ready");
 				drawingPoints();
 				if(visit){
 					api.addEventListener({

@@ -124,7 +124,6 @@ apiready = function(){
 			$api.byId('time').innerHTML = data.limittime;
 			$api.byId("express").innerHTML = data.address;
 			var reportuser = data.reportuserid;
-			alert("checkThis:" + data.handluserid);
 			if(data.handluserid && ata.handluserid != info.user.userid){
 				$api.byId('responseList').setAttribute("style", "display:none;");
 				$api.byId('completeStuff').setAttribute("style", "display:none;");
@@ -320,7 +319,6 @@ apiready = function(){
 		//依据页面状态修改该页面展示
 		var pageStatus = eventStatus;
 		var displayPic = function(statusinfo){
-			alert("测试");
 			$api.byId('blackMode').setAttribute("style", "display:none;");
 			$api.byId('showingPhoto').setAttribute("style", "display:none;");
 			$api.byId('hangupReason').setAttribute("style", "display:none;");
@@ -577,7 +575,6 @@ apiready = function(){
 		var el = $api.byId('addResponsePic');
 		el.setAttribute("style", "height:"+el.offsetWidth +'px;');
 		displayPic(eventStatus);
-		alert("测试");
 		requestForData(eventId);
 		dynamicWeb();
 }
