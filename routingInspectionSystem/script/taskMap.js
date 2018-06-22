@@ -605,20 +605,6 @@ apiready = function(){
 				}
 				requestForFata();
 				dynamicWeb();
-				api.addEventListener({
-				    name: 'refreshmap'
-				}, function(ret, err){
-				    if( ret ){
-							if(!initPlace && map){
-								var pos = JSON.parse($api.getStorage('position'));
-								pos = pos[0];
-								usePos(pos[0], pos[1]);
-							}
-							refreshMap();
-				    }else{
-				      alert( JSON.stringify( err ) );
-				    }
-				});
 			}
 		}
 
