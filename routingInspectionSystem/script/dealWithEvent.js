@@ -124,7 +124,7 @@ apiready = function(){
 			$api.byId('time').innerHTML = data.limittime;
 			$api.byId("express").innerHTML = data.address;
 			var reportuser = data.reportuserid;
-			if(data.handluserid && ata.handluserid != info.user.userid){
+			if(data.handluserid && data.handluserid != info.user.userid){
 				$api.byId('responseList').setAttribute("style", "display:none;");
 				$api.byId('completeStuff').setAttribute("style", "display:none;");
 				$api.byId('accept').setAttribute("style", "display:none;");
