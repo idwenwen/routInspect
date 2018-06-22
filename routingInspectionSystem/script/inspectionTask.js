@@ -213,7 +213,6 @@ apiready = function(){
       for(var i = 0 ; i < checkList.length; i++){
         member.push(checkList[i].id);
       }
-      alert(JSON.stringify(member));
       if(!url){
         alert("请上传签到照片!");
       }
