@@ -14,7 +14,7 @@ apiready = function(){
 		var position = {};
 		var getLocalPosition = function(func){
 			var positions = $api.getStorage('position');
-			positions = JSON.parse(positions);
+			positions = positions ? JSON.parse(positions) : "";
 			if(positions && positions.length > 0){
 				var pos = {lat : positions[0][1], lon : positions[0][0]};
 				func && func(pos);
@@ -123,8 +123,9 @@ apiready = function(){
 		}
 
 		var getAddress = function(callback){
-			var pos = JSON.parse($api.getStorage("position"));
-			pos = pos[0];
+			var pos  = [];
+			pos.push(position.lon);
+			pos.push(position.lat);
 			var lnglat = pos;
 			AMap.plugin('AMap.Geocoder', function() {
 			  var geocoder = new AMap.Geocoder({
@@ -136,6 +137,9 @@ apiready = function(){
 			        // result为对应的地理位置详细信息
 							callback && callback(result.regeocode.formattedAddress);
 			    }
+					else{
+							alert("当前无法定位到准确位置");
+					}
 			  })
 			})
 		}

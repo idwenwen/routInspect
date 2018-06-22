@@ -14,6 +14,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+	z-index: 5;
 }
 
 .mapInfo{
@@ -25,7 +26,16 @@
 .easymap{
 	width: 100%;
 	height: 100%;
-	position: relative;
+	position: absolute;
+	z-index: 6;
+	top:0;
+	left: 0;
+	background-image: url(../image/background.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	overflow-y: scroll;
+	padding-bottom:50px;
+	padding-top: 20px;
 }
 
 .punchPoint{
@@ -91,6 +101,7 @@
 	background-color: #fff;
 	box-shadow: 0px 0px 4px #444;
 	padding: 10px;
+	z-index: 15;
 }
 
 ui li {
@@ -116,6 +127,7 @@ ui li {
 	position: fixed;
 	top: 190px;
 	right: 10px;
+	z-index: 15;
 }
 
 .exchange-map > img {
@@ -140,6 +152,7 @@ ui li {
 	color: #fff;
 	bottom: 25px;
 	left: 4%;
+	z-index: 15;
 }
 
 .end-task{
@@ -153,6 +166,7 @@ ui li {
 	color: #fff;
 	bottom: 25px;
 	right: 4%;
+	z-index: 15;
 }
 
 .return-to-last-page{
@@ -168,6 +182,7 @@ ui li {
 	left: 0;
 	right: 0;
 	margin: auto;
+	z-index: 15;
 }
 
 .blackmode{

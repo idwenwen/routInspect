@@ -43,7 +43,7 @@ apiready = function(){
 
   	var startlbsPO = function(ms, ms2, userid){
     	aMapLBS.configManager({
-    			accuracy: 'best',
+    			accuracy: 'hundredMeters',
     			filter: 1
     	}, function(ret, err) {
     		if (ret.status) {
@@ -105,11 +105,16 @@ apiready = function(){
           			}
               });
           setInterval(function(){
-                if(positions.length > 0){
-                  var pos = positions[positions.length - 1];
+                  var pos = positions[0];
+                  var lat = 0;
+                  var lon = 0;
+                  if(pos){
+                    lat = pos[1];
+                    lon = pos[0];
+                  }
                   connectToService(commonURL + "?action=position",
             	    	{
-                      values:{"userid": userid, "lat":pos[1] || 0, "lon":pos[0] || 0}
+                      values:{"userid": userid, "lat":lat, "lon":lon }
                     },
                     function(ret){
                     	if(ret.result == true){
@@ -128,7 +133,6 @@ apiready = function(){
                         // alert("程序错误，程序员正在奋斗中！");
                       }
             		    });
-                  }
               }, ms2);
         }
       });

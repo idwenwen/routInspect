@@ -155,20 +155,22 @@ apiready = function(){
 
     var requestData = function(){
       //TODO:获取当前的数据内容的通过出阿尼用户ID 和taskID来进行获取。
-      connectToService(commonURL + "?action=taskdetail",
-        {
-          values:{"id": info.taskid}
-        }
-        ,function(ret){
-          //TODO:获取相关的数据之后进行内容展示和编写。
-          if(ret.result){
-            showingDataDetail(ret.data);
-          }
-        },
-        function(ret, err){
-          alert(JSON.stringify(err));
-        }
-      );
+      // connectToService(commonURL + "?action=taskdetail",
+      //   {
+      //     values:{"id": info.taskid}
+      //   }
+      //   ,function(ret){
+      //     //TODO:获取相关的数据之后进行内容展示和编写。
+      //     if(ret.result){
+      //       showingDataDetail(ret.data);
+      //     }
+      //   },
+      //   function(ret, err){
+      //     alert(JSON.stringify(err));
+      //   }
+      // );
+      var taskdata = info.taskdata;
+      showingDataDetail(taskdata);
 
       connectToService(commonURL + "?action=taskuserlist",
         {
@@ -211,6 +213,7 @@ apiready = function(){
       for(var i = 0 ; i < checkList.length; i++){
         member.push(checkList[i].id);
       }
+      alert(JSON.stringify(member));
       if(!url){
         alert("请上传签到照片!");
       }

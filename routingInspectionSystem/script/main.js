@@ -60,7 +60,7 @@ apiready = function(){
 
     var noticeType = ["inspectionTask",  "taskMistaken"];
 
-    var addMessage = function(messageId, name, status, information, leftTime, funcdescide){
+    var addMessage = function(messageId, name, status, information, leftTime, repTime, funcdescide){
       var showStatus  = "";
       if(status == 1){
         showStatus = "待接单";
@@ -81,9 +81,9 @@ apiready = function(){
      	var container = document.createElement("div");
         container.setAttribute("class", "eves-detail");
         container.innerHTML =
-                "<span class='name-info'>" + ("" + name) + "</span>" +
+                "<span class='name-info'>" + ("" + information) + "</span>" +
                 "<span class='task-status'>" + ("状态[" + showStatus + "]") + "</span>" +
-                "<span class='task-info'>" + ( "说明:" + information ) + "</span>" +
+                "<span class='task-info'>" + ( "上报时间:" + repTime ) + "</span>" +
                 "<span class='task-time'>" + ( "" + time ) + "</span>";
         $api.first($api.byId("topPartContent")).appendChild(container);
         container.addEventListener('click', function(e){
@@ -113,6 +113,7 @@ apiready = function(){
 
     var havetask = false;
     var accordingToDatan = function(data){
+      $api.first($api.byId("bottomPartContent")).innerHTML = "";
       if(data.length){
         var num = data.length;
         $api.byId('noticeNumber').innerHTML = num;
@@ -146,23 +147,41 @@ apiready = function(){
             function(e, id, time, name, information, routing){
               //依据type来进行页面的跳转。如果是进行之中的任务则直接跳转到地图页面.
               //如果是为开始跳转到inspectionRouting页面，警告跳转到处理界面。
-              if(type == 1){
-                if(havetask){
-                  alert("您当前已经有正在进行的任务");
-                  return false;
+              connectToService(commonURL + "?action=taskdetail",
+                {
+                  values:{"id": id}
                 }
-                info.taskid = id;
-                animationStart(function(){}, "inspectionTask" , "../html/inspectionTask.html" , info, true);
-              }
-              else if(type == 2){
-                info.taskid = id;
-                info.start = true;
-                animationStart(function(){}, "taskMap" , "../html/taskMap.html" , info);
-              }
-              else if(type == 3){
-                info.taskid = id;
-                animationStart(function(){}, "mistakeForTask" , "../html/mistakeForTask.html" , info, true);
-              }
+                ,function(ret){
+                  //TODO:获取相关的数据之后进行内容展示和编写。
+                  if(ret.result){
+                    // alert(JSON.stringify(ret));
+                    var rtype =ret.data.state;
+                    if(rtype == 1){
+                      if(havetask){
+                        alert("您当前已经有正在进行的任务");
+                        return false;
+                      }
+                      info.taskid = id;
+                      info.taskdata = ret.data;
+                      animationStart(function(){}, "inspectionTask" , "../html/inspectionTask.html" , info, true);
+                    }
+                    else if(rtype == 2){
+                      info.taskid = id;
+                      info.taskdata = ret.data;
+                      info.start = true;
+                      animationStart(function(){}, "taskMap" , "../html/taskMap.html" , info);
+                    }
+                    else if(rtype == 3){
+                      info.taskid = id;
+                      info.taskdata = ret.data;
+                      animationStart(function(){}, "mistakeForTask" , "../html/mistakeForTask.html" , info, true);
+                    }
+                  }
+                },
+                function(ret, err){
+                  alert(JSON.stringify(err));
+                }
+              );
             });
         })();
       }
@@ -174,6 +193,7 @@ apiready = function(){
 
     //待办列表内容相关
     var accordingToData = function(data){
+      $api.first($api.byId("topPartContent")).innerHTML = "";
       if(data.length){
         var num = data.length;
         $api.byId('messageNumber').innerHTML = num;
@@ -185,8 +205,9 @@ apiready = function(){
           var status = data[i].state;
           var information = data[i].explain;
           var leftTime = data[i].limittime;
+          var repTime = data[i].reporttime;
 
-          addMessage(id, name, status, information, leftTime,
+          addMessage(id, name, status, information, leftTime, repTime,
             function(e, mid, mname, mstatus, minfo, mtime){
               //操作相关的info对象内容，并进行页面的内容的跳转。
               info.eventid = mid;
@@ -290,6 +311,10 @@ apiready = function(){
     }
 
     request();
+    setInterval(function(){
+      // alert("requesting");
+      request();
+    }, 10000);
 
     // addNotcie('n1', "2018-5-29 11:28:40", "路线一", "[xxxx]相关巡检路线详细情况见...", "点1 -> 点2 -> 点3...", function(e){
     //   animationStart(function(){}, "inspectionTask", "../html/inspectionTask.html", info, true);

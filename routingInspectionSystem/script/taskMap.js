@@ -3,8 +3,10 @@ apiready = function(){
 		var info = api.pageParam.info;
     var history = info.history;
     info.history.page = "taskMap";
-		info.history.url = "../html/taskMap.html"
+		info.history.url = "../html/taskMap.html";
 		var visit = info.start;
+		var taskData = info.taskdata;
+		var leader = taskData.userid;
 
     //将当前的页面设置为占用手机就全屏内容。
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
@@ -13,9 +15,10 @@ apiready = function(){
 		//初始化高德地图相关内容
   	var map = "";
 		var points = [];
+		var initPlace = false;
 		var initMap = function(){
 	  	var	layer =  new AMap.TileLayer({
-          zooms:[3,16],    //可见级别
+          zooms:[3,18],    //可见级别
           visible:true,    //是否可见
           opacity:1,       //透明度
           zIndex:0         //叠加层级
@@ -24,6 +27,7 @@ apiready = function(){
           layers:[layer] //当只想显示标准图层时layers属性可缺省
     	});
 			map.on("complete", function(){
+				alert("ready");
 				drawingPoints();
 				if(visit){
 					api.addEventListener({
@@ -41,23 +45,37 @@ apiready = function(){
 					    }else{
 					    }
 					});
+					setTimeout(function(){
+						if(initPlace){
+							return false;
+						}
+						$api.byId('blackmode').setAttribute("style", "display:none;");
+						api.removeEventListener({
+								name: 'postionChange'
+						});
+						var p = getCenterPoint();
+						setTimeout(function(){
+							map.setZoomAndCenter(15, p);
+							$api.byId('blackmode').setAttribute("style", "display:none;");
+						},500);
+					}, 10000);
 				}
 				else {
-					api.addEventListener({
-					    name: 'postionChange'
-					}, function(ret, err){
-					    if( ret ){
+					// api.addEventListener({
+					//     name: 'postionChange'
+					// }, function(ret, err){
+					//     if( ret ){
 								var p = getCenterPoint();
 								setTimeout(function(){
 									map.setZoomAndCenter(15, p);
 									$api.byId('blackmode').setAttribute("style", "display:none;");
 								},500);
-								api.removeEventListener({
-								    name: 'postionChange'
-								});
-					    }else{
-					    }
-					});
+					// 			api.removeEventListener({
+					// 			    name: 'postionChange'
+					// 			});
+					//     }else{
+					//     }
+					// });
 				}
 			});
 		}
@@ -97,6 +115,7 @@ apiready = function(){
 				alert("map has not inited");
 			}
 			userMark = markerup;
+			initPlace = true;
 		}
 
 		//试试绘制路线内容
@@ -277,10 +296,6 @@ apiready = function(){
 				else {
 					sm.removeAttribute("style");
 					em.setAttribute("style", "display:none;");
-					if(!inited){
-						inited = true;
-						clickToInit();
-					}
 				}
 			},false);
 
@@ -479,7 +494,7 @@ apiready = function(){
 			 },
 			 function(ret){
 				 if(!ret.result){
-					 //提交失败怎么办
+					 requestMark(val);
 				 }
 			 },
 			 function(ret,err){
@@ -570,6 +585,10 @@ apiready = function(){
 				$api.byId('returnBtn').removeAttribute("style");
 				$api.byId('repEvent').setAttribute("style", "display:none;");
 				$api.byId('endTask').setAttribute("style", "display:none;");
+				if(!inited){
+					inited = true;
+					clickToInit();
+				}
 				requestForFata();
 				dynamicWeb();
 			}
@@ -577,13 +596,26 @@ apiready = function(){
 				$api.byId('repEvent').removeAttribute("style");
 				$api.byId('endTask').removeAttribute("style");
 				$api.byId('returnBtn').setAttribute("style", "display:none;");
+				if(leader != info.user.userid){
+					$api.byId('repEvent').setAttribute("class", "return-to-last-page");
+					$api.byId('endTask').setAttribute("style", "display:none;");
+				}
+				if(!inited){
+					inited = true;
+					clickToInit();
+				}
 				requestForFata();
 				dynamicWeb();
 				api.addEventListener({
 				    name: 'refreshmap'
 				}, function(ret, err){
 				    if( ret ){
-							 refreshMap();
+							if(!initPlace && map){
+								var pos = JSON.parse($api.getStorage('position'));
+								pos = pos[0];
+								usePos(pos[0], pos[1]);
+							}
+							refreshMap();
 				    }else{
 				      alert( JSON.stringify( err ) );
 				    }
@@ -600,13 +632,18 @@ apiready = function(){
 			return $api.getStorage(key);
 		}
 
+		var reduce = 0;
 		var easyMark = function(datas){
+			reduce = 0;
 			for(var i = 0 ; i < datas.length ; i++){
+				if(!datas[i]){
+					reduce += 1;
+				}
 				if(i == datas.length - 1){
-					datas[i].rele = routingPoint({"info":datas[i].name, "color":datas[i].color || ""}, i , true);
+					datas[i].rele = routingPoint({"info":datas[i].name, "color":datas[i].color || ""}, i-reduce , true);
 				}
 				else {
-					datas[i].rele = routingPoint({"info":datas[i].name, "color":datas[i].color || ""}, i);
+					datas[i].rele = routingPoint({"info":datas[i].name, "color":datas[i].color || ""}, i-reduce);
 				}
 			}
 			return datas;

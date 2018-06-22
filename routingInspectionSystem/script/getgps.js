@@ -82,4 +82,6 @@ apiready = function(){
     initMap();
     dynamicWeb();
   }
+
+  initPage();
 }
