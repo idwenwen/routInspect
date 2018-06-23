@@ -142,8 +142,11 @@ apiready = function(){
 			for(var i = 0 ; i < data.position.length ; i++){
 				addExhibitionPic(data.position[i], "positionPhoto");
 			}
-			if(data.repaired){
+			if(data.repaired && data.repaired.length > 0){
 				addResponseRepair(data.repaired);
+			}
+			else {
+				$api.byId('responseMessage').setAttribute("style", "display:none;");
 			}
 		}
 
@@ -349,7 +352,7 @@ apiready = function(){
 					$api.byId('statusmessage').removeAttribute("style");
 					$api.byId('middle').setAttribute("style", "display:none;");
 					$api.byId('hangup').setAttribute("style", "display:none;");
-					$api.byId('statusmessage').innerHTML = "挂起中";
+					$api.byId('statusmessage').innerHTML = "挂起-待审核";
 				}
 				else if(statusinfo == 8){
 					$api.byId('responseMessage').removeAttribute("style");
@@ -358,7 +361,7 @@ apiready = function(){
 					$api.byId('middle').removeAttribute("style");
 					$api.byId('hangup').removeAttribute("style");
 					$api.byId('statusmessage').setAttribute("style", "display:none;");
-					$api.byId('statusmessage').innerHTML = "处理中";
+					$api.byId('statusmessage').innerHTML = "待处理";
 				}
 				else if(statusinfo == 32){
 					$api.byId('responseMessage').removeAttribute("style");
@@ -367,7 +370,7 @@ apiready = function(){
 					$api.byId('statusmessage').removeAttribute("style");
 					$api.byId('middle').setAttribute("style", "display:none;");
 					$api.byId('hangup').setAttribute("style", "display:none;");
-					$api.byId('statusmessage').innerHTML = "审核中";
+					$api.byId('statusmessage').innerHTML = "处理中";
 				}
 				else if(statusinfo == 64){
 					$api.byId('responseMessage').removeAttribute("style");

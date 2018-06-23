@@ -100,7 +100,7 @@ apiready = function(){
 			var param = {
 				icon: '../icon/position-my.png',
 				position:new AMap.LngLat(lat, lon),
-				offset: new AMap.Pixel(-20, -30)
+				offset: new AMap.Pixel(-16, -30)
 			}
 			var markerup = new AMap.Marker(param);
 			if(map){
@@ -128,6 +128,26 @@ apiready = function(){
 			    borderWeight: 2, // 线条宽度，默认为 1
 			    strokeColor: '#4169E1', // 线条颜色
 			    lineJoin: 'round', // 折线拐点连接处样式
+					lineCap:'round'
+			});
+			if(map){
+				map.add(polyline);
+			}
+			else {
+				alert("map has not inited");
+			}
+		}
+
+		var drawRoad = function(arr){
+			var paths = [];
+			for(var i = 0 ; i < arr.length ; i ++){
+				paths.push(new AMap.LngLat(arr[i][0], arr[i][1]));
+			}
+			var polyline = new AMap.Polyline({
+					path: paths,
+					borderWeight: 2, // 线条宽度，默认为 1
+					strokeColor: '#FFA500', // 线条颜色
+					lineJoin: 'round', // 折线拐点连接处样式
 					lineCap:'round'
 			});
 			if(map){
@@ -176,7 +196,7 @@ apiready = function(){
 			var param = {
 				icon: (color == "green" ? '../icon/g-p.png' : (color == "red" ? '../icon/r-p.png': "../icon/b-p.png")),
 				position:new AMap.LngLat(lat, lon),
-				offset: new AMap.Pixel(-20, -30)
+				offset: new AMap.Pixel(-16, -30)
 			}
 			var markerp = new AMap.Marker(param);
 			// marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
@@ -470,6 +490,7 @@ apiready = function(){
 						var color = "blue";
 						if(typeof p.point[0] == "object"){
 						 	m = calculatePointForRoute(p.point);
+							drawRoad(p.point);
 						}
 						else {
 							m = p.point;
@@ -605,6 +626,20 @@ apiready = function(){
 				}
 				requestForFata();
 				dynamicWeb();
+				api.addEventListener({
+				    name: 'refreshmap'
+				}, function(ret, err){
+				    if( ret ){
+							if(!initPlace){
+								var pos = JSON.parse($api.getStorage('position'));
+								pos = pos[0];
+								usePos(pos[0], pos[1]);
+							}
+							refreshMap();
+				    }else{
+				      // alert( JSON.stringify( err ) );
+				    }
+				});
 			}
 		}
 

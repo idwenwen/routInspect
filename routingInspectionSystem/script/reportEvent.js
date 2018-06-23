@@ -13,30 +13,26 @@ apiready = function(){
 		var aMapLBS = api.require('aMapLBS');
 		var position = {};
 		var getLocalPosition = function(func){
-			var positions = $api.getStorage('position');
-			positions = positions ? JSON.parse(positions) : "";
-			if(positions && positions.length > 0){
-				var pos = {lat : positions[0][1], lon : positions[0][0]};
-				func && func(pos);
-			}
-			else {
-				aMapLBS.configManager({
-	  			accuracy: 'best',
-	  			filter: 1
-		  	}, function(ret, err) {
+			api.addEventListener({
+			    name: 'postionChange'
+			}, function(ret, err){
 					if(err){
 						alert(JSON.stringify(err));
+						return false;
 					}
-					if (ret.status) {
-						position.lat = ret.lat;
-						position.lon = ret.lon;
+					var positions = $api.getStorage('position');
+					positions = positions ? JSON.parse(positions) : "";
+					if(positions && positions.length > 0){
+						position.lat = positions[0][1];
+						position.lon = positions[0][0];
 						func && func(position);
+						api.sendEvent({
+							name: 'hasGetPosition',
+						});
 					}
-					else {
-						alert("定位出现错误!");
-					}
-				});
-			}
+			});
+
+
 		}
 
 		//绘制问题类型选择
@@ -122,7 +118,7 @@ apiready = function(){
 			}
 		}
 
-		var getAddress = function(callback){
+		var getAddress = function(position, callback){
 			var pos  = [];
 			pos.push(position.lon);
 			pos.push(position.lat);
@@ -255,25 +251,58 @@ apiready = function(){
 				}
 				var explain = $api.byId('questionMessage').value || "";
 				var address = $api.byId("positionMessage").value || "";
-			  connectToService( commonURL + "?action=event",
-					{
-						values: {"road": sectionid, "type": chooseid, "explain": explain, "address": address,
-						 	"lat": position.lat, "lon": position.lon, "userid": userid},
-						files: {"accident": addMessageP, "position": addPositionP}
-					},
-					function(ret){
-							if(ret.result){
-								alert("事件上报成功!");
-								animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
-							}
-							else {
-								alert("事件未上报成功: " + ret.desc);
-							}
-			    },
-			    function(ret, err){
-						alert(JSON.stringify(err));
-			    }
-				);
+				if(!position.lat){
+					api.addEventListener({
+					    name: 'hasGetPosition'
+					}, function(ret, err){
+					    if( ret ){
+					         alert( JSON.stringify( err ) );
+					    }
+							connectToService( commonURL + "?action=event",
+								{
+									values: {"road": sectionid, "type": chooseid, "explain": explain, "address": address,
+										"lat": position.lat, "lon": position.lon, "userid": userid},
+										files: {"accident": addMessageP, "position": addPositionP}
+								},
+								function(ret){
+										if(ret.result){
+											//上报成功。
+										}
+										else {
+											alert("事件未上报成功: " + ret.desc);
+										}
+						    },
+						    function(ret, err){
+									alert(JSON.stringify(err));
+						    }
+							);
+							api.removeEventListener({
+							    name: 'hasGetPosition'
+							});
+					});
+					animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
+				}
+				else {
+				  connectToService( commonURL + "?action=event",
+						{
+							values: {"road": sectionid, "type": chooseid, "explain": explain, "address": address,
+								"lat": position.lat, "lon": position.lon, "userid": userid},
+								files: {"accident": addMessageP, "position": addPositionP}
+						},
+						function(ret){
+								if(ret.result){
+									alert("事件上报成功!");
+									animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
+								}
+								else {
+									alert("事件未上报成功: " + ret.desc);
+								}
+				    },
+				    function(ret, err){
+							alert(JSON.stringify(err));
+				    }
+					);
+				}
 		}
 
 		var dynamicWeb = function(){
@@ -402,7 +431,7 @@ apiready = function(){
 			$api.byId('reportEvents').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				getLocalPosition(sendData);
+				sendData(position);
 			});
 
 			$api.byId('returnBtn').addEventListener("click", function(e){
@@ -423,8 +452,10 @@ apiready = function(){
 		el.setAttribute("style", "height:"+el.offsetWidth +'px;');
 		el = $api.byId('photoing2');
 		el.setAttribute("style", "height:"+el.offsetWidth + 'px;');
-		dynamicWeb();
-		getAddress(function(data){
-			$api.byId('positionMessage').value = data;
+		getLocalPosition(function(pos){
+			getAddress(pos, function(data){
+				$api.byId('positionMessage').value = data;
+			});
 		});
+		dynamicWeb();
 }

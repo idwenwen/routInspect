@@ -96,6 +96,7 @@ apiready = function(){
     		e.stopPropagation();
         uploadData(function(){
          info.start = true;
+         info.taskdata.userid = info.user.userid;
          animationStart(function(){}, "taskMap" , "../html/taskMap.html", info, true);
         })
     	});

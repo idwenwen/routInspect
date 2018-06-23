@@ -33,7 +33,6 @@ apiready = function(){
     	});
     }
 
-
     var aMapLBS = api.require('aMapLBS');
   	var positions = [];
   	var send = false;
