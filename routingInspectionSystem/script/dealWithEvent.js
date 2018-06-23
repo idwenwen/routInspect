@@ -142,19 +142,23 @@ apiready = function(){
 			for(var i = 0 ; i < data.position.length ; i++){
 				addExhibitionPic(data.position[i], "positionPhoto");
 			}
-			if(data.repaired && data.repaired.length > 0){
-				addResponseRepair(data.repaired);
+			if(data.suspend && data.suspend.length > 0){
+				addResponseRepair(data.suspend, 1);
 			}
-			else {
+			if(data.repaired && data.repaired.length > 0){
+				addResponseRepair(data.repaired, 2);
+			}
+			if(!(data.suspend && data.suspend.length > 0) && !(data.repaired && data.repaired.length > 0)) {
 				$api.byId('responseMessage').setAttribute("style", "display:none;");
 			}
 		}
 
-		var addResponseRepair = function(response){
+		var addResponseRepair = function(response, check){
+			var strss = ( check == 1 ? "推迟原因" : "处理说明" );
 			for(var i = 0 ; i < response.length ; i ++){
 				var pic = response[i].picture || [];
 				var str = "<div class='message-list'>"+
-					"<span class='message-title'>处理说明:</span>" +
+					"<span class='message-title'>" + strss + ":</span>" +
 					"<span class='message-content'>" + (response[i].requestcontent) + "</span>";
 					var id = "response" + (i + 1);
 					if(pic.length > 0){
@@ -358,10 +362,10 @@ apiready = function(){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').setAttribute("style", "display:none;");
 					$api.byId('completeStuff').setAttribute("style", "display:none;");
-					$api.byId('middle').removeAttribute("style");
-					$api.byId('hangup').removeAttribute("style");
-					$api.byId('statusmessage').setAttribute("style", "display:none;");
-					$api.byId('statusmessage').innerHTML = "待处理";
+					$api.byId('statusmessage').removeAttribute("style");
+					$api.byId('middle').setAttribute("style", "display:none;");
+					$api.byId('hangup').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').innerHTML = "延时-待审核";
 				}
 				else if(statusinfo == 32){
 					$api.byId('responseMessage').removeAttribute("style");

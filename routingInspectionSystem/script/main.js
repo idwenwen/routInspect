@@ -66,7 +66,16 @@ apiready = function(){
         showStatus = "待接单";
       }
       else if(status == 4){
-        showStatus = "挂起中";
+        showStatus = "挂起待审批";
+      }
+      else if(status == 8){
+        showStatus = "延时待审批";
+      }
+      else if(status == 32){
+        showStatus = "待处理";
+      }
+      else if(status == 64){
+        showStatus = "待审核";
       }
       else {
         showStatus = "处理中";
@@ -83,7 +92,7 @@ apiready = function(){
         container.innerHTML =
                 "<span class='name-info'>" + ("" + information) + "</span>" +
                 "<span class='task-status'>" + ("状态[" + showStatus + "]") + "</span>" +
-                "<span class='task-info'>" + ( "上报时间:" + repTime ) + "</span>" +
+                "<span class='task-info'>" + ( "说明:" + repTime ) + "</span>" +
                 "<span class='task-time'>" + ( "" + time ) + "</span>";
         $api.first($api.byId("topPartContent")).appendChild(container);
         container.addEventListener('click', function(e){
@@ -197,7 +206,6 @@ apiready = function(){
       if(data.length){
         var num = data.length;
         $api.byId('messageNumber').innerHTML = num;
-
         for(var i = 0 ; i < data.length ; i++){
           //处理当前获取的数据内容
           var id = data[i].id;
@@ -206,8 +214,11 @@ apiready = function(){
           var information = data[i].explain;
           var leftTime = data[i].limittime;
           var repTime = data[i].reporttime;
+          var bigcategoryname = data[i].bigcategoryname;
+          var subcategoryname = data[i].subcategoryname;
+          var types = bigcategoryname + "-" + subcategoryname;
 
-          addMessage(id, name, status, information, leftTime, repTime,
+          addMessage(id, name, status, types, leftTime, information,
             function(e, mid, mname, mstatus, minfo, mtime){
               //操作相关的info对象内容，并进行页面的内容的跳转。
               info.eventid = mid;
