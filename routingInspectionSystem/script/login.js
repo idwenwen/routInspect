@@ -6,14 +6,19 @@ apiready = function(){
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
+    var checkonline = true;
     api.addEventListener({
-        name: 'online'
+        name: 'onlineoff'
     }, function(ret, err) {
-        if (ret) {
-        	//doNothing
-        } else {
-            alert("网络连接出现问题，请确保当前连接可用");
+        if(err){
+          alert(JSON.stringify(err));
+          return false;
         }
+        if(checkonline){
+          checkonline = false;
+          alert("当前网络状态不佳");
+        }
+
     });
 
     var checkBoxStuff = function(username, password){
@@ -78,7 +83,7 @@ apiready = function(){
                 positions = [];
                 positions.unshift([v.lon, v.lat]);
               }else{
-                alert( JSON.stringify( err ) );
+                // alert( JSON.stringify( err ) );
               }
           });
           aMapLBS.startLocation(function(ret, err) {
@@ -162,7 +167,7 @@ apiready = function(){
           }
 		    },
 		    function(ret,err){
-		    	alert(JSON.stringify(err));
+		    	// alert(JSON.stringify(err));
 		    }
 		  );
     }
@@ -177,7 +182,7 @@ apiready = function(){
             $api.byId('inputPassword').value = users.password;
             // loginfunc(users.username, users.password);
           }else{
-               alert( JSON.stringify( err ) );
+              //  alert( JSON.stringify( err ) );
           }
       });
 

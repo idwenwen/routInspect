@@ -344,6 +344,28 @@ apiready = function(){
 				animationStart(function(){}, "main", "../html/main.html", info, true);
 			},false);
 
+			$api.byId("enditall").addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				var val = $api.byId('otext').value;
+				if(!val){
+					alert("请说明异常结束原因!");
+					$api.byId('otext').focus();
+					return false;
+				}
+				else {
+					endtaskcheck(val);
+				}
+			});
+
+			$api.byId('blackall').addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				$api.byId('blackall').setAttribute("style", "display:none");
+				$api.byId('overtime').setAttribute("style", "display:none");
+			});
+
+
 			api.addEventListener({
 				name: 'keyback'
 			}, function(ret, err) {
@@ -429,7 +451,9 @@ apiready = function(){
 					}
 				},
 				function(ret,err){
-					alert(JSON.stringify(err));
+					api.sendEvent({
+              name: 'onlineoff'
+          });
 				});
 			}
 		}
@@ -518,13 +542,42 @@ apiready = function(){
 				 }
 			 },
 			 function(ret,err){
-				 alert(JSON.stringify(err));
+				 api.sendEvent({
+						 name: 'onlineoff'
+				 });
 			 }
 			);
 		}
 
+		var endtaskcheck = function(value){
+			connectToService( commonURL + "?action=taskfinish",
+			 {
+					 values: {"id": info.taskid, "explain": value}
+			 },
+			 function(ret){
+				 if(ret.result){
+					 animationStart(function(){}, "main", "../html/main.html", info, true);
+				 }
+				 else {
+					 //  alert(JSON.stringify(ret));
+					 alert("任务完成提交失败！");
+				 }
+			 },
+			 function(ret,err){
+				 alert(JSON.stringify(err));
+			 }
+		 );
+		}
+
 		var endTask = function(){
 			var unmark = [];
+			var plantime = info.taskdata.planendtime;
+			var date1 = new Date();
+			var date2 = new Date(plantime);
+			var vuired = false;
+			if(date1.getTime() - date2.getTime() > 0){
+				vuired = true;
+			}
 			connectToService( commonURL + "?action=taskpoint",
 			 {
 					 values: {"id": info.taskid}
@@ -542,51 +595,41 @@ apiready = function(){
 						 for(var i = 0 ; i < unmark.length ; i ++){
 							 msgs += (unmark[i].index + 1) + "." + unmark[i].name + ", ";
 						 }
+						 if(vuired){
+							 msgs = "当前任务已超期，并且点 " + msgs + "未打卡成功，确定结束当前任务吗?";
+						 }
+						 else {
+							 msgs = "当前任务还有 " + msgs + "点未打卡成功，确定结束当前任务吗?"
+						 }
 			 				api.confirm({
 			 				    title: '提示',
-			 				    msg: '此次任务还有 ' + msgs + "打卡未成功，确定结束当前任务吗",
+			 				    msg: msgs,
 			 				    buttons: ['确定', '取消']
 			 				}, function(ret, err){
 			 				    if( ret.buttonIndex == 1 ){
-			 							connectToService( commonURL + "?action=taskfinish",
-			 							 {
-			 									 values: {"id": info.taskid}
-			 							 },
-			 							 function(ret){
-			 								 if(ret.result){
-			 									 animationStart(function(){}, "main", "../html/main.html", info, true);
-			 								 }
-			 								 else {
-												 //  alert(JSON.stringify(ret));
-			 									 alert("任务完成提交失败！");
-			 								 }
-			 							 },
-			 							 function(ret,err){
-			 								 alert(JSON.stringify(err));
-			 							 }
-			 						 );
+			 							$api.byId('overtime').removeAttribute("style");
+										$api.byId('blackall').removeAttribute("style");
+										$api.byId('oexplain').innerHTML = "异常说明";
 			 				    }
 			 				});
 		 				}
 						else{
-							connectToService( commonURL + "?action=taskfinish",
-							 {
-									 values: {"id": info.taskid}
-							 },
-							 function(ret){
-								 if(ret.result){
-									 alert("任务完成!");
-									 animationStart(function(){}, "main", "../html/main.html", info, true);
-								 }
-								 else {
-									 //  alert(JSON.stringify(ret));
-									 alert("任务完成提交失败！");
-								 }
-							 },
-							 function(ret,err){
-								 alert(JSON.stringify(err));
-							 }
-						 );
+							if(vuired){
+								api.confirm({
+				 				    title: '提示',
+				 				    msg: "当前任务超时完成",
+				 				    buttons: ['确定', '取消']
+				 				}, function(ret, err){
+				 				    if( ret.buttonIndex == 1 ){
+				 							$api.byId('overtime').removeAttribute("style");
+											$api.byId('blackall').removeAttribute("style");
+											$api.byId('oexplain').innerHTML = "超时完成说明";
+				 				    }
+				 				});
+							}
+							else {
+								endtaskcheck("");
+							}
 						}
 				 }
 				 else {
@@ -595,7 +638,9 @@ apiready = function(){
 				 }
 			 },
 			 function(ret,err){
-				 alert(JSON.stringify(err));
+				 api.sendEvent({
+						 name: 'onlineoff'
+				 });
 			 }
 		 );
 		}

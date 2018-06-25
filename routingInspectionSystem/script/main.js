@@ -80,12 +80,18 @@ apiready = function(){
       else {
         showStatus = "处理中";
       }
-      var date = new Date(leftTime.replace(/-/g,"/"));
-      var nowDate = new Date();
-      var ms = (date.getTime() - nowDate.getTime()) / 1000 / 60;
-      var time = Math.floor(ms / 60) + '小时' + Math.floor(ms%60) + '分钟';
-      if(Math.floor(ms / 60) <= 0){
-        time = "已超时";
+      var time = "";
+      if(!leftTime){
+        time = "无限时";
+      }
+      else {
+        var date = new Date(leftTime.replace(/-/g,"/"));
+        var nowDate = new Date();
+        var ms = (date.getTime() - nowDate.getTime()) / 1000 / 60;
+        time = Math.floor(ms / 60) + '小时' + Math.floor(ms%60) + '分钟';
+        if(Math.floor(ms / 60) <= 0){
+          time = "已超时";
+        }
       }
      	var container = document.createElement("div");
         container.setAttribute("class", "eves-detail");
@@ -188,7 +194,9 @@ apiready = function(){
                   }
                 },
                 function(ret, err){
-                  alert(JSON.stringify(err));
+                  api.sendEvent({
+                      name: 'onlineoff'
+                  });
                 }
               );
             });
@@ -247,7 +255,9 @@ apiready = function(){
           }
         },
         function(ret){
-          alert(JSON.stringify(ret.desc));
+          api.sendEvent({
+              name: 'onlineoff'
+          });
         }
       );
 
@@ -264,7 +274,9 @@ apiready = function(){
           }
         },
         function(ret){
-          alert(JSON.stringify(ret.desc));
+          api.sendEvent({
+              name: 'onlineoff'
+          });
         }
       );
     }
@@ -308,7 +320,9 @@ apiready = function(){
               animationStart(function(){}, "login", "../html/login.html", info, true);
             },
             function(ret){
-              alert(JSON.stringify(ret.desc));
+              api.sendEvent({
+                  name: 'onlineoff'
+              });
             }
           );
   			});

@@ -24,8 +24,9 @@ apiready = function(){
           if( ret ){
             var pos = JSON.parse($api.getStorage('position'));
             pos = pos[0];
-            if(inited){
+            if(!inited){
               usePos(pos[0], pos[1]);
+              inited = true;
             }
             else {
               userMark.setPosition(new AMap.LngLat(pos[0], pos[1]));

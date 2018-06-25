@@ -21,6 +21,7 @@
         </div>
         <div id="main">
             <!-- 简易地图系列 -->
+            <div class="blackmodeall" id="blackall"  style="display:none;"></div>
             <div class="easymap" id="easymap">
 
             </div>
@@ -51,6 +52,11 @@
             <div class="exchange-map" id="excMap">
               <img src="../icon/exchangemap.png" alt="">
               <span>切换视图</span>
+            </div>
+            <div class="overtime-stuff" id="overtime" style="display:none;">
+              <span id="oexplain">异常说明</span>
+              <textarea name="name" rows="8" cols="80" class="overTime-text" id='otext'></textarea>
+              <button type="button" name="button" class="enditall" id="enditall">提交</button>
             </div>
             <button class="return-to-last-page" id="returnBtn">返回巡检任务页面</button>
             <button class="report-event" id="repEvent" style="display:none;">事件上报</button>

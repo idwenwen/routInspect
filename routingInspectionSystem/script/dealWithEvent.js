@@ -105,7 +105,9 @@ apiready = function(){
 						// alert(JSON.stringify(ret));
 			    },
 			    function(ret, err){
-						alert(JSON.stringify(err));
+						api.sendEvent({
+	              name: 'onlineoff'
+	          });
 			    }
 				);
 		}
@@ -143,19 +145,19 @@ apiready = function(){
 				addExhibitionPic(data.position[i], "positionPhoto");
 			}
 			if(data.suspend && data.suspend.length > 0){
-				addResponseRepair(data.suspend, 1);
+				addResponseRepair(data.suspend, data.state);
 			}
 			if(data.repaired && data.repaired.length > 0){
-				addResponseRepair(data.repaired, 2);
+				addResponseRepair(data.repaired, data.state, true);
 			}
 			if(!(data.suspend && data.suspend.length > 0) && !(data.repaired && data.repaired.length > 0)) {
 				$api.byId('responseMessage').setAttribute("style", "display:none;");
 			}
 		}
 
-		var addResponseRepair = function(response, check){
-			var strss = ( check == 1 ? "推迟原因" : "处理说明" );
+		var addResponseRepair = function(response, check, showing){
 			for(var i = 0 ; i < response.length ; i ++){
+				var strss = response[i].statename ? response[i].statename + "说明" : "处理说明";
 				var pic = response[i].picture || [];
 				var str = "<div class='message-list'>"+
 					"<span class='message-title'>" + strss + ":</span>" +
@@ -207,12 +209,22 @@ apiready = function(){
 				}
 
 				//添加回复内容
+				var state = check;
+				var alertMsg = "";
+				if((state == 32 || state == 2) && response.responsecontent){
+					alertMsg = "审批结果:未通过";
+				}
+				else {
+					alertMsg = "审批结果:已通过";
+				}
 				var str2 = "<div class='message-list'>"+
 					"<span class='message-title'>" + ("审核人:" + response[i].responsename) + "</span>" +
-					"<span class='message-content'>" + (response[i].responsecontent) + "</span>" +
+					"<span class='message-content'>" + (response[i].responsecontent) +
+					(showing ? ( "<br/>" + alertMsg ) : "") +
+					"</span>" +
 					"<span class='message-time'>"+ (response[i].responsetime) +"</span>" +
 				"</div>";
-				if(response.responsename){
+				if(response[i].responsename){
 					$api.append($api.byId("responseMessage"), str2);
 				}
 			}
@@ -264,7 +276,9 @@ apiready = function(){
 					}
 				},
 				function(ret, err){
-					alert(JSON.stringify(err));
+					api.sendEvent({
+              name: 'onlineoff'
+          });
 				}
 			);
 		}
@@ -294,7 +308,9 @@ apiready = function(){
 					}
 				},
 				function(ret, err){
-					alert(JSON.stringify(err));
+					api.sendEvent({
+              name: 'onlineoff'
+          });
 				}
 			);
 		}
@@ -318,7 +334,9 @@ apiready = function(){
 							}
 					},
 				function(ret, err){
-					alert(JSON.stringify(err));
+					api.sendEvent({
+              name: 'onlineoff'
+          });
 				}
 			);
 		}
@@ -404,6 +422,10 @@ apiready = function(){
 				alert("请输入反馈内容!");
 				return false;
 			}
+			if(uploadPic.length == 0){
+				alert("请上传处理情况照片!");
+				return false;
+			}
 			var data = {
 				values:{"userid": info.user.userid, "eventid": eventId, "explain":explain}
 			}
@@ -423,7 +445,9 @@ apiready = function(){
 					}
 				},
 				function(ret, err){
-					alert(JSON.stringify(err));
+					api.sendEvent({
+              name: 'onlineoff'
+          });
 				}
 			);
 		}

@@ -184,7 +184,9 @@ apiready = function(){
           }
         },
         function(ret, err){
-          alert(JSON.stringify(err));
+          api.sendEvent({
+              name: 'onlineoff'
+          });
         }
       );
     }
@@ -233,7 +235,9 @@ apiready = function(){
             }
           },
           function(ret, err){
-            fail & fail();
+            api.sendEvent({
+                name: 'onlineoff'
+            });
           }
         );
       }
