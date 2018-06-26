@@ -124,9 +124,18 @@ apiready = function(){
       				$api.offset($api.byId("chooseWorker")).h -
       				$api.offset($api.byId("taskMessage")).h -
       				$api.offset($api.byId("signInBtn")).h - 65;
-      			$api.byId("pictureUp").setAttribute("src", url);
-      			$api.byId("pictureUp").removeAttribute("hidden");
-      			$api.byId("pictureUp").setAttribute("style", "display:table;");
+
+            //TODO:测试 
+            var pic = $api.byId('pictureUp');
+      			pic.setAttribute("src", url);
+            if(pic.width > pic.height){
+              pic.setAttribute("class", "pictureupw");
+            }
+            else {
+              pic.setAttribute("class", "pictureuph");
+            }
+      			pic.removeAttribute("hidden");
+      			pic.setAttribute("style", "display:block;");
       			$api.byId("hintForSelector").setAttribute("hidden", "hidden");
       			$api.byId("hintPic").setAttribute("hidden", "hidden");
       			$api.byId("addPic").setAttribute("style", "height:" + height + "px;");
