@@ -285,7 +285,11 @@ apiready = function(){
 							    name: 'hasGetPosition'
 							});
 					});
+					setTimeout(function(){
+						$api.byId('checkTypeList').removeAttribute("style");
+					}, 500);
 					animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
+
 				}
 				else {
 				  connectToService( commonURL + "?action=event",
@@ -297,6 +301,9 @@ apiready = function(){
 						function(ret){
 								if(ret.result){
 									alert("事件上报成功!");
+									setTimeout(function(){
+										$api.byId('checkTypeList').removeAttribute("style");
+									}, 500);
 									animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
 								}
 								else {
@@ -442,13 +449,20 @@ apiready = function(){
 			$api.byId('returnBtn').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
+				setTimeout(function(){
+					$api.byId('checkTypeList').removeAttribute("style");
+				}, 500);
 				animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
+
 			});
 
 			api.addEventListener({
 				name: 'keyback'
 			}, function(ret, err) {
 				animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
+				setTimeout(function(){
+					$api.byId('checkTypeList').removeAttribute("style");
+				}, 500);
 			});
 
 		}

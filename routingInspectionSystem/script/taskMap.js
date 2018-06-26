@@ -659,10 +659,10 @@ apiready = function(){
 			}
 			else {
 				$api.byId('repEvent').removeAttribute("style");
-				$api.byId('endTask').removeAttribute("style");
+				$api.byId('endTask').setAttribute("style", "display:none;");
 				$api.byId('returnBtn').setAttribute("style", "display:none;");
-				if(leader != info.user.userid){
-					$api.byId('repEvent').setAttribute("class", "return-to-last-page");
+				if(leader == info.user.userid){
+					$api.byId('repEvent').setAttribute("class", "report-event");
 					$api.byId('endTask').setAttribute("style", "display:none;");
 				}
 				if(!inited){
