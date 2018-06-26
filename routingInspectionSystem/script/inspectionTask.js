@@ -131,17 +131,15 @@ apiready = function(){
             $api.byId("hintForSelector").setAttribute("hidden", "hidden");
             $api.byId("hintPic").setAttribute("hidden", "hidden");
             $api.byId("addPic").setAttribute("style", "height:" + height + "px;");
+            var addPicWidth = $api.byId('addPic').offsetWidth;
             //TODO:测试
             var pic = $api.byId('pictureUp');
       			pic.setAttribute("src", url);
             pic.onload = function(){
-              alert(pic.width + " " + pic.height);
               if(pic.width > pic.height){
-                alert("step1");
                 pic.setAttribute("class", "pictureupw");
               }
               else {
-                alert("step2");
                 pic.setAttribute("class", "pictureuph");
               }
         			pic.removeAttribute("hidden");

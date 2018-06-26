@@ -134,7 +134,7 @@ apiready = function(){
 				$api.byId('hangup').setAttribute("style", "display:none;");
 				$api.byId('statusmessage').removeAttribute("style");
 			}
-			if(reportuser == info.user.userid && eventStatus == 1){
+			if(reportuser == info.user.userid && eventStatus == 1 && data.typedepartmentid != info.user.departmentid){
 				$api.byId('accept').setAttribute("style", "display:none;");
 				$api.byId('statusmessage').removeAttribute("style");
 			}
