@@ -4,6 +4,10 @@ apiready = function(){
     info.history.page = "main";
     info.history.url = "../html/main.html";
 
+    // var info ={user:{}};
+    // info.user.userid = "1";
+    // info.user.username = "check";
+
     //将当前的页面设置为占用手机就全屏内容。
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
@@ -124,21 +128,25 @@ apiready = function(){
       				$api.offset($api.byId("chooseWorker")).h -
       				$api.offset($api.byId("taskMessage")).h -
       				$api.offset($api.byId("signInBtn")).h - 65;
-
-            //TODO:测试 
+            $api.byId("hintForSelector").setAttribute("hidden", "hidden");
+            $api.byId("hintPic").setAttribute("hidden", "hidden");
+            $api.byId("addPic").setAttribute("style", "height:" + height + "px;");
+            //TODO:测试
             var pic = $api.byId('pictureUp');
       			pic.setAttribute("src", url);
-            if(pic.width > pic.height){
-              pic.setAttribute("class", "pictureupw");
+            pic.onload = function(){
+              alert(pic.width + " " + pic.height);
+              if(pic.width > pic.height){
+                alert("step1");
+                pic.setAttribute("class", "pictureupw");
+              }
+              else {
+                alert("step2");
+                pic.setAttribute("class", "pictureuph");
+              }
+        			pic.removeAttribute("hidden");
+        			pic.setAttribute("style", "display:inline-block;");
             }
-            else {
-              pic.setAttribute("class", "pictureuph");
-            }
-      			pic.removeAttribute("hidden");
-      			pic.setAttribute("style", "display:block;");
-      			$api.byId("hintForSelector").setAttribute("hidden", "hidden");
-      			$api.byId("hintPic").setAttribute("hidden", "hidden");
-      			$api.byId("addPic").setAttribute("style", "height:" + height + "px;");
     			}
     		},
     		function(err){
