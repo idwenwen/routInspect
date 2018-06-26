@@ -199,6 +199,9 @@
 	background-color: #fff;
 	position: relative;
 	z-index: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	/*transition:height 1s;
 	-moz-transition:height 1s;
 	-webkit-transition:height 1s;
@@ -228,10 +231,10 @@
 }
 
 #pictureUp{
-	transform: translate(-50%,-50%);
+	/*transform: translate(-50%,-50%);
 	position: absolute;
 	top: 50%;
-	left: 50%;
+	left: 50%;*/
 	/*animation: showing 1s 1;
 	animation-delay: 1s;
 	animation-fill-mode:forwards;*/
