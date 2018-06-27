@@ -146,9 +146,11 @@ apiready = function(){
 			}
 			if(data.suspend && data.suspend.length > 0){
 				addResponseRepair(data.suspend, data.state);
+				$api.byId('responseMessage').removeAttribute("style");
 			}
 			if(data.repaired && data.repaired.length > 0){
 				addResponseRepair(data.repaired, data.state, true);
+				$api.byId('responseMessage').removeAttribute("style");
 			}
 			if(!(data.suspend && data.suspend.length > 0) && !(data.repaired && data.repaired.length > 0)) {
 				$api.byId('responseMessage').setAttribute("style", "display:none;");
@@ -211,7 +213,7 @@ apiready = function(){
 				//添加回复内容
 				var state = check;
 				var alertMsg = "";
-				if((state == 32 || state == 2) && response.responsecontent){
+				if((state == 32 || state == 2) && response[i].responsecontent){
 					alertMsg = "审批结果:未通过";
 				}
 				else {
