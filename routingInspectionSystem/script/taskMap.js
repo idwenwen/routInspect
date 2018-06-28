@@ -238,7 +238,7 @@ apiready = function(){
 				newEle.innerHTML = "<span class='num " + eleColor + "'>" + (index+1) + "</span>" +
 					"<span class='name'>" + data.info + "</span>";
 				if( check ){
-					 newEle.innerHTML = "<span class='num lastpp numcolorgr'>" + (index+1) + "</span>" +
+					 newEle.innerHTML = "<span class='num lastpp " + eleColor + "'>" + (index+1) + "</span>" +
 						"<span class='name'>" + data.info + "</span>";
 				}
 				$api.byId("easymap").appendChild(newEle);
@@ -484,7 +484,7 @@ apiready = function(){
 					}
 					pointlist[data[i].index] = obj;
 				}
-				for(var i = 0 ; i < pointlist.length - 1 ; i++){
+				for(var i = 0 ; i < pointlist.length ; i++){
 					if(pointlist[i]){
 						if(pointlist[i].marker){
 							pointlist[i].color = "green";
@@ -663,7 +663,7 @@ apiready = function(){
 				$api.byId('returnBtn').setAttribute("style", "display:none;");
 				if(leader == info.user.userid){
 					$api.byId('repEvent').setAttribute("class", "report-event");
-					$api.byId('endTask').setAttribute("style", "display:none;");
+					$api.byId('endTask').removeAttribute("style");
 				}
 				if(!inited){
 					inited = true;

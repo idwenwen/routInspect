@@ -161,6 +161,7 @@ apiready = function(){
             setTimeout(function(){
   		    	     animationStart(function(){}, 'main', './main.html', param, true);
             },10);
+            // append();
           }
           else {
             alert(ret.desc);
@@ -170,6 +171,25 @@ apiready = function(){
 		    	// alert(JSON.stringify(err));
 		    }
 		  );
+    }
+
+    var indexes = 0;
+    var append = function(){
+      api.addEventListener({
+          name: 'refreshmap'
+      }, function(ret, err){
+          var pos = $api.getStorage('position');
+          if(pos){
+            pos = JSON.parse(pos);
+          }
+          else {
+            return false;
+          }
+          var s = document.createElement("span");
+          s.innerHTML = pos[0][0] + "----" + pos[0][1];
+          $api.byId('checkthings').appendChild(s);
+      });
+
     }
 
     var autoLogin = function(){
