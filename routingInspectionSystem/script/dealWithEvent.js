@@ -101,6 +101,7 @@ apiready = function(){
 						values:{"id": id}
 					}
 					,function(ret){
+						displayPic(eventStatus);
 						addResponseExhibition(ret.data);
 						// alert(JSON.stringify(ret));
 			    },
@@ -274,7 +275,7 @@ apiready = function(){
 						});
 						info.eventid = "";
 						info.eventstatus = "";
-						animationStart(function(){}, "main", "../html/main.html", info ,true);
+						animationStart(function(){}, "eventlist", "../html/eventlist.html", info ,true);
 					}
 				},
 				function(ret, err){
@@ -306,7 +307,7 @@ apiready = function(){
 						});
 						info.eventid = "";
 						info.eventstatus = "";
-						animationStart(function(){}, "main", "../html/main.html", info ,true);
+						animationStart(function(){}, "eventlist", "../html/eventlist.html", info ,true);
 					}
 				},
 				function(ret, err){
@@ -442,7 +443,7 @@ apiready = function(){
 						    title: '提示',
 						    msg: '事件处理上报成功',
 						}, function(ret, err){
-						    animationStart(function(){}, "main", "../html/main.html", info, true);
+						    animationStart(function(){}, "eventlist", "../html/eventlist.html", info, true);
 						});
 					}
 				},
@@ -528,7 +529,7 @@ apiready = function(){
 			$api.byId('returnBtn').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				animationStart(function(){}, "main", "../html/main.html", info, true);
+				animationStart(function(){}, "eventlist", "../html/eventlist.html", info, true);
 			});
 
 			$api.byId('inputOne').addEventListener("input", function(e){
@@ -600,14 +601,13 @@ apiready = function(){
 			api.addEventListener({
 				name: 'keyback'
 			}, function(ret, err) {
-				animationStart(function(){}, "main", "../html/main.html", info, true);
+				animationStart(function(){}, "eventlist", "../html/eventlist.html", info, true);
 			});
 
 		}
 
 		var el = $api.byId('addResponsePic');
 		el.setAttribute("style", "height:"+el.offsetWidth +'px;');
-		displayPic(eventStatus);
 		requestForData(eventId);
 		dynamicWeb();
 }

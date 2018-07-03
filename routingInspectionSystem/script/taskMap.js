@@ -27,31 +27,28 @@ apiready = function(){
           layers:[layer] //当只想显示标准图层时layers属性可缺省
     	});
 			map.on("complete", function(){
-				drawingPoints();
-				if(visit){
+				if(pointlist.length > 0){
+					drawingPoints();
+				}
+				else {
 					api.addEventListener({
-					    name: 'postionChange'
+					    name: 'drawingMarker'
 					}, function(ret, err){
-					    if( ret ){
-								var pos = JSON.parse($api.getStorage('position'));
-								pos = pos[0];
-								usePos(pos[0], pos[1]);
-								checksignin(pos);
-								$api.byId('blackmode').setAttribute("style", "display:none;");
-								api.removeEventListener({
-								    name: 'postionChange'
-								});
-					    }else{
-					    }
+							if(err){
+								alert(JSON.stringify(err));
+							}
+							drawingPoints();
+							api.removeEventListener({
+							    name: 'drawingMarker'
+							});
 					});
+				}
+				if(visit){
 					setTimeout(function(){
 						if(initPlace){
 							return false;
 						}
 						$api.byId('blackmode').setAttribute("style", "display:none;");
-						api.removeEventListener({
-								name: 'postionChange'
-						});
 						var p = getCenterPoint();
 						setTimeout(function(){
 							map.setZoomAndCenter(15, p);
@@ -82,7 +79,7 @@ apiready = function(){
 		var getCenterPoint = function(){
 			if(pointlist.length > 0){
 				if(typeof pointlist[0].point[0] == "object"){
-					return pointlist[0].point[0];
+					return calculatePointForRoute(pointlist[0].point);
 				}
 				else {
 					return pointlist[0].point;
@@ -341,7 +338,7 @@ apiready = function(){
 			$api.byId('returnBtns').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				animationStart(function(){}, "main", "../html/main.html", info, true);
+				animationStart(function(){}, "noticeclist", "../html/noticeclist.html", info);
 			},false);
 
 			$api.byId("enditall").addEventListener("click", function(e){
@@ -369,7 +366,7 @@ apiready = function(){
 			api.addEventListener({
 				name: 'keyback'
 			}, function(ret, err) {
-				animationStart(function(){}, "main", "../html/main.html", info, true);
+				animationStart(function(){}, "noticelist", "../html/noticelist.html", info);
 			});
 		}
 
@@ -447,7 +444,7 @@ apiready = function(){
 							exchangeForData(ret.data, true);
 					}
 					else {
-						alert("请求数据出错，可能是网络不太好！");
+							alert("请求数据出错，可能是网络不太好！");
 					}
 				},
 				function(ret,err){
@@ -490,7 +487,7 @@ apiready = function(){
 							pointlist[i].color = "green";
 						}
 						else {
-							if(pointlist[i+1].marker){
+							if(pointlist[i+1] && pointlist[i+1].marker){
 								pointlist[i].color = "red";
 							}
 						}
@@ -502,6 +499,10 @@ apiready = function(){
 				pointlist = data;
 			}
 			pointlist = easyMark(pointlist);
+			api.sendEvent({
+			    name: 'drawingMarker'
+			});
+
 		}
 
 		//绘制实体地图点内容。
@@ -556,7 +557,7 @@ apiready = function(){
 			 },
 			 function(ret){
 				 if(ret.result){
-					 animationStart(function(){}, "main", "../html/main.html", info, true);
+					 animationStart(function(){}, "noticelist", "../html/noticelist.html", info);
 				 }
 				 else {
 					 //  alert(JSON.stringify(ret));
@@ -679,6 +680,7 @@ apiready = function(){
 								var pos = JSON.parse($api.getStorage('position'));
 								pos = pos[0];
 								usePos(pos[0], pos[1]);
+								$api.byId('blackmode').setAttribute("style", "display:none;");
 							}
 							refreshMap();
 				    }else{

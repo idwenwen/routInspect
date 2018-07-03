@@ -4,6 +4,12 @@ apiready = function(){
   var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
   $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
+  var positioncache = [];
+
+  var cacherequest = [];
+
+  var addType = 2;
+
   var inited = false;
   var initMap = function(){
     var	layer =  new AMap.TileLayer({
@@ -18,7 +24,7 @@ apiready = function(){
     map.on("complete", function(){
       api.addEventListener(
         {
-          name: 'postionChange'
+          name: 'refreshmap'
         },
         function(ret, err){
           if( ret ){
@@ -27,9 +33,17 @@ apiready = function(){
             if(!inited){
               usePos(pos[0], pos[1]);
               inited = true;
+              positioncache = pos;
+              api.sendEvent({
+                  name: 'uploadgps'
+              });
             }
             else {
-              userMark.setPosition(new AMap.LngLat(pos[0], pos[1]));
+              alert(pos);
+              positioncache = pos;
+              api.sendEvent({
+                  name: 'uploadgps'
+              });
             }
             $api.byId('blackmode').setAttribute("style", "display:none;");
             $api.byId('checkthisout').setAttribute("style", "display:none;");
@@ -66,7 +80,7 @@ apiready = function(){
     $api.byId('upgps').addEventListener("click", function(e){
       e.preventDefault();
       e.stopPropagation();
-      $api.byId('blackmode').removeAttribute("style");
+      $api.byId('blackMode').removeAttribute("style");
       $api.byId('gpsinfo').removeAttribute("style");
     });
 
@@ -76,6 +90,132 @@ apiready = function(){
       $api.byId('blackmode').setAttribute("style", "display:none;");
       $api.byId('gpsinfo').setAttribute("style", "display:none;");
     });
+
+    $api.byId("scannerOpen").addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      scannerOpen();
+    });
+
+    $api.byId("typegps").addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      $api.byId('typegps').setAttribute("class", "type1 colorchange");
+      $api.byId('typeinstrument').setAttribute("class", "type2");
+      addType = 2;
+    })
+
+    $api.byId("typeinstrument").addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      $api.byId('typeinstrument').setAttribute("class", "type2 colorchange");
+      $api.byId('typegps').setAttribute("class", "type1");
+      addType = 4;
+    })
+
+    $api.byId('checkinbutn').addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      updateofgps();
+    });
+
+    $api.byId('returnBtn').addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      animationStart(function(){}, "modellist", "../html/modellist.html", info);
+    });
+
+    $api.byId('blackMode').addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      $api.byId("blackMode").setAttribute("style", "display:none;");
+      $api.byId("gpsinfo").setAttribute("style", "display:none;");
+    });
+
+    api.addEventListener({
+      name: 'keyback'
+    }, function(ret, err) {
+      animationStart(function(){}, "modellist", "../html/modellist.html", info);
+    });
+  }
+
+  var FNScanner = api.require('FNScanner');
+  var scannerOpen = function(){
+    FNScanner.openView({
+        autorotation: true
+    }, function(ret, err) {
+        if (ret) {
+            if(ret.eventType == "success"){
+              FNScanner.closeView();
+              alert("success:" + ret.content);
+            }
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
+  }
+
+  var requestInstrument = function(){
+
+  }
+
+  var updateofgps = function(){
+    var name = $api.byId('forname').value;
+    if(!name){
+        alert("请为当前点取名");
+        return false;
+    }
+    var val = {"type": addType, "name": name}
+    if(positioncache.length == 0){
+      cacherequest.push(val);
+      api.addEventListener({
+          name: 'uploadgps'
+      }, function(ret, err){
+          if(err){
+            api.sendEvent({
+                name: 'onlineoff'
+            });
+            return false;
+          }
+          cacherequest.forEach(function(item, index){
+            var val = item;
+            val.lon = positioncache[0];
+            val.lat = positioncache[1];
+            ask(val);
+          });
+          cacherequest = [];
+          api.removeEventListener({
+              name: 'uploadgps'
+          })
+      });
+    }
+    else{
+      val.lon = positioncache[0];
+      val.lat = positioncache[1];
+      ask(val);
+    }
+    $api.byId('blackMode').setAttribute("style", "display:none;");
+    $api.byId("gpsinfo").setAttribute("style", "display:none");
+  }
+
+  var ask = function(val, func){
+    connectToService( commonURL + "?action=point",
+      {
+          values: val
+      },
+      function(ret){
+        if(ret.result){
+            func && func();
+        }
+        else {
+          alert("请求数据出错，可能是网络不太好！");
+        }
+      },
+      function(ret,err){
+        api.sendEvent({
+            name: 'onlineoff'
+        });
+      });
   }
 
   var initPage = function(){

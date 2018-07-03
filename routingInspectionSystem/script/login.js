@@ -98,9 +98,6 @@ apiready = function(){
                       name: 'refreshmap'
                     });
                   }
-                  api.sendEvent({
-                      name: 'postionChange'
-                  });
                   // alert($api.getStorage("position"));
 
                 }
@@ -159,7 +156,7 @@ apiready = function(){
             param.history.page = "login";
             param.history.url = "../html/login.html";
             setTimeout(function(){
-  		    	     animationStart(function(){}, 'main', './main.html', param, true);
+  		    	     animationStart(function(){}, 'modellist', './modellist.html', param, true);
             },10);
             // append();
           }

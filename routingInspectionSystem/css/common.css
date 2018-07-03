@@ -37,10 +37,6 @@ html, body{
 	padding: 10px;
 }
 
-.return-btn:hover{
-	background-color: #003366;
-}
-
 .return-btn > img{
 	width: 30px;
 	height: 30px;
@@ -90,7 +86,7 @@ html, body{
 	height: 100%;
 	padding: 20px;
 	font-size: 130%;
-	background-image: url(image/background.jpg);
+  background-color: #eee;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	z-index: 1;

@@ -163,26 +163,40 @@ apiready = function(){
 
 		//数据请求
 		var checkData = function(showStuffO, showStuffT){
-			connectToService(commonURL + "?action=eventclass",
-	    	null,function(ret){
-        	if(ret.result == true){
-						drawingDetail(ret.data, showStuffO);
-					}
-		    },
-		    function(ret){
-          alert(JSON.stringify(ret.desc));
-		    }
-			);
-			connectToService(commonURL + "?action=eventroad",
-	    	null,function(ret){
-        	if(ret.result == true){
-						drawingDetailT(ret.data, showStuffT);
-					}
-		    },
-		    function(ret){
-          alert(JSON.stringify(ret.desc));
-		    }
-			);
+			var data = $api.getStorage('eventclass');
+			if(data){
+				drawingDetail(data, showStuffO);
+			}
+			else {
+				connectToService(commonURL + "?action=eventclass",
+		    	null,function(ret){
+	        	if(ret.result == true){
+							$api.setStorage('eventclass', ret.data);
+							drawingDetail(ret.data, showStuffO);
+						}
+			    },
+			    function(ret){
+	          alert(JSON.stringify(ret.desc));
+			    }
+				);
+			}
+			var data2 = $api.getStorage('eventroad');
+			if(data2){
+				drawingDetailT(data2, showStuffT);
+			}
+			else {
+				connectToService(commonURL + "?action=eventroad",
+		    	null,function(ret){
+	        	if(ret.result == true){
+							$api.setStorage('eventroad', ret.data);
+							drawingDetailT(ret.data, showStuffT);
+						}
+			    },
+			    function(ret){
+	          alert(JSON.stringify(ret.desc));
+			    }
+				);
+			}
 		}
 
 		//当前页面照片内容获取\
@@ -304,7 +318,7 @@ apiready = function(){
 									setTimeout(function(){
 										$api.byId('checkTypeList').removeAttribute("style");
 									}, 500);
-									animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
+									animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:false));
 								}
 								else {
 									alert("事件未上报成功: " + ret.desc);

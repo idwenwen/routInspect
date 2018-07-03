@@ -8,22 +8,47 @@ apiready = function(){
   $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
   var dynamicWeb = function(){
+
+    $api.byId('events').addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      animationStart(function(){}, "eventlist", "../html/eventlist.html", info, true);
+    });
+
     $api.byId('routing').addEventListener("click", function(e){
       e.preventDefault();
-      e.stopPosition();
-      animationStart(function(){}, "main", "../html/main.html", info, true);
+      e.stopPropagation();
+      animationStart(function(){}, "noticelist", "../html/noticelist.html", info, true);
     });
 
     $api.byId('getgps').addEventListener("click", function(e){
       e.preventDefault();
-      e.stopPosition();
+      e.stopPropagation();
       animationStart(function(){}, "getgps", "../html/getgps.html", info, true);
+    });
+
+    $api.byId('fastReport').addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      animationStart(function(){}, "reportEvent", "../html/reportEvent.html", info, true);
     });
 
     $api.byId('changeusers').addEventListener("click", function(e){
       e.preventDefault();
-      e.stopPosition();
-      animationStart(function(){}, "login", "../html/login.html", info, true);
+      e.stopPropagation();
+      connectToService(commonURL + "?action=logout",
+        {
+          values: { "userid": info.user.userid }
+        },
+        function(ret){
+          animationStart(function(){}, "login", "../html/login.html", info, true);
+        },
+        function(ret){
+          api.sendEvent({
+              name: 'onlineoff'
+          });
+        }
+      );
     });
 
     api.addEventListener({
@@ -32,4 +57,6 @@ apiready = function(){
       api.toLauncher();
     });
   }
+
+  dynamicWeb();
 }

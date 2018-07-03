@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>routingInspectionSystem</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/eventlist.css">
+    <script type="text/javascript" src="../script/api.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <div id="header">
+          	<div class="return-btn" id="returnBtn">
+          		<img src="../icon/back.png">
+          	</div>
+            <div>事件列表</div>
+            <div class="header-right-btn" id="reportEve">事件上报</div>
+        </div>
+        <div id="main">
+            <div class="button-list">
+              <div class="button-con b1 colorchoose" id="b1">待处理</div>
+              <div class="button-con b2" id="b2">处理中</div>
+              <div class="button-con b3" id="b3">待审核</div>
+              <div class="button-con b4" id="b4">已完成</div>
+            </div>
+            <div class="content-list" id="typelist1">
+
+            </div>
+            <div class="content-list" id="typelist2" style="display:none;">
+
+            </div>
+            <div class="content-list" id="typelist3" style="display:none;">
+
+            </div>
+            <div class="content-list" id="typelist4" style="display:none;">
+
+            </div>
+        </div>
+        <div id="footer">
+            <h5>Copyright &copy;<span id="year"></span> </h5>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/eventlist.js"></script>
+</html>

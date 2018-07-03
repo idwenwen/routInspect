@@ -27,10 +27,10 @@
                 <li>
                   <img src="../icon/operation.png" alt="">
                   <span class="etitle">问题操作:</span>
-                  <button class="middle" id="accept">接单</button>
+                  <button class="middle" id="accept" style= "display:none;">接单</button>
                   <button class="doing-it" id="middle" style= "display:none;">延时</button>
                   <button class="hangup" id="hangup" style= "display:none;">挂起</button>
-                  <span class="right" style="display:none;" id="statusmessage">处理中...</span>
+                  <span class="right" id="statusmessage">加载中</span>
                 </li>
                 <li>
                   <img src="../icon/name.png" alt="">
@@ -81,7 +81,7 @@
                   <span class="etitle">反馈信息</span>
 
                 </li>
-                <li id="responseList">
+                <li id="responseList" style="display:none;">
                   <img src="../icon/response.png" alt="">
                   <span class="etitle">事件反馈:</span>
                   <input type="text" id="responseEvent" placeholder="处理结果反馈"/>
@@ -93,7 +93,7 @@
                 </li>
               </ul>
             </div>
-            <button class="check-events" id="completeStuff">提交</button>
+            <button class="check-events" id="completeStuff"  style="display:none;">提交</button>
             <div class="black-mode" id="blackMode" style="display:none;"></div>
             <div class="showingPhoto" id="showingPhoto" style="display:none;">
               <div class="img-container">

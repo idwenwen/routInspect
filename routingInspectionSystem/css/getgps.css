@@ -2,7 +2,6 @@
 	padding: 0;
 	width: 100%;
 	height: 100%;
-	background-image: url(../image/background.jpg);
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	padding-top: 15px;
@@ -57,7 +56,7 @@
 
 .gpsinfo{
   width: 100%;
-  height: 60%;
+  height: 250px;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -67,10 +66,6 @@
   z-index: 12;
 }
 
-.gpsinfo > input{
-  outline:none;
-}
-
 .name-info{
   width: 94%;
   height: 60px;
@@ -78,8 +73,83 @@
   border: 1px solid #00bbff;
   border-radius: 5px;
   box-shadow: 0px 0px 5px #bbb;
-  padding: 5px;
-  line-height: 60px;
+  padding-left: 5px;
+  line-height: 50px;
+	position: relative;
+}
+
+.scanner{
+	width: 94%;
+	height: 60px;
+	margin: 3.2%;
+	margin-top: 0px;
+	border: 1px solid #00bbff;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px #bbb;
+	background-color: #eee;
+	padding-left: 5px;
+	line-height: 50px;
+	position: relative;
+	color: #00bbff;
+}
+
+.name-info > label{
+	position: absolute;
+	width: 50px;
+	text-align: center;
+	line-height: 60px;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	left: 0px;
+}
+
+.forname{
+	height: 60px;
+	width: 100%;
+	outline: none;
+	padding-left: 50px;
+	color: #aaa;
+	line-height: 60px;
+	position: relative;
+}
+
+.type-choose{
+	width: 94%;
+	height: 60px;
+	margin: 3.2%;
+	margin-top: 0px;
+	border: 1px solid #00bbff;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px #bbb;
+	line-height: 50px;
+	position: relative;
+	color: #00bbff;
+}
+
+.type1{
+	width: 50%;
+	height: 100%;
+	display: inline-block;
+	line-height: 60px;
+	text-align: center;
+	font-size: 120%;
+}
+
+.type2{
+	width: 50%;
+	height: 100%;
+	display: inline-block;
+	line-height: 60px;
+	text-align: center;
+	font-size: 120%;
+	position: absolute;
+	right: 0px;
+}
+
+.colorchange{
+	background-color: #00bbff;
+	color: white;
 }
 
 .checkinbutn{
