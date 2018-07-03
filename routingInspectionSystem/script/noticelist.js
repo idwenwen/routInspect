@@ -82,7 +82,6 @@ apiready = function(){
               ,function(ret){
                 //TODO:获取相关的数据之后进行内容展示和编写。
                 if(ret.result){
-                  // alert(JSON.stringify(ret));
                   var rtype =ret.data.state;
                   info.check = addcheck;
                   if(rtype == 1){

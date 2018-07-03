@@ -104,6 +104,7 @@ apiready = function(){
 						displayPic(eventStatus);
 						addResponseExhibition(ret.data);
 						// alert(JSON.stringify(ret));
+						drawingmatch();
 			    },
 			    function(ret, err){
 						api.sendEvent({
@@ -139,6 +140,9 @@ apiready = function(){
 				$api.byId('accept').setAttribute("style", "display:none;");
 				$api.byId('statusmessage').removeAttribute("style");
 			}
+			if(delaycheck(data)){
+				$api.byId('middle').setAttribute("style", "display:none;");
+			}
 			for(var i = 0 ; i < data.accident.length ; i++){
 				addExhibitionPic(data.accident[i], "eventPhoto");
 			}
@@ -155,6 +159,25 @@ apiready = function(){
 			}
 			if(!(data.suspend && data.suspend.length > 0) && !(data.repaired && data.repaired.length > 0)) {
 				$api.byId('responseMessage').setAttribute("style", "display:none;");
+			}
+		}
+
+		var delaycheck = function(data){
+			if(data.state == 2 || data.state == 32){
+				for(var i = 0 ; i < data.suspend.length ; i++){ 
+					if(data.suspend[i].state == 8){
+						return true;
+					}
+				}
+				return false;
+			}
+			else {
+				if(data.state == 16){
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
 		}
 
@@ -392,9 +415,9 @@ apiready = function(){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').removeAttribute("style");
 					$api.byId('completeStuff').removeAttribute("style");
-					$api.byId('statusmessage').removeAttribute("style");
-					$api.byId('middle').setAttribute("style", "display:none;");
-					$api.byId('hangup').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').setAttribute("style", "display:none;");
+					$api.byId('middle').removeAttribute("style");
+					$api.byId('hangup').removeAttribute("style");
 					$api.byId('statusmessage').innerHTML = "处理中";
 				}
 				else if(statusinfo == 64){
@@ -416,6 +439,11 @@ apiready = function(){
 					$api.byId('statusmessage').innerHTML = "超时完成";
 				}
 			}
+		}
+
+		var drawingmatch = function(){
+			var el = $api.byId('addResponsePic');
+			el.setAttribute("style", "height:"+el.offsetWidth +'px;');
 		}
 
 		//完成相关的事件
@@ -586,7 +614,7 @@ apiready = function(){
 			$api.byId('deleteBtn').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				$api.byId(pidcheck).removeChild($api.byId(id));
+				$api.byId(pidcheck).removeChild($api.byId(target));
 				for(var i = 0 ; i < uploadPic.length ; i++){
 					if(uploadPic[i] == deleteUrl){
 						uploadPic.splice(i, 1);
@@ -596,6 +624,8 @@ apiready = function(){
 				if(uploadPic.length <= 5){
 					$api.byId('deleteBtn').setAttribute("style", "height:" + $api.byId('deleteBtn').offset + "px;");
 				}
+				$api.byId('showingPhoto').setAttribute("style", "display:none;");
+				$api.byId('blackMode').setAttribute("style", "display:none;");
 			});
 
 			api.addEventListener({
@@ -606,8 +636,7 @@ apiready = function(){
 
 		}
 
-		var el = $api.byId('addResponsePic');
-		el.setAttribute("style", "height:"+el.offsetWidth +'px;');
+
 		requestForData(eventId);
 		dynamicWeb();
 }

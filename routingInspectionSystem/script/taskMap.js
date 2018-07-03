@@ -28,6 +28,7 @@ apiready = function(){
     	});
 			map.on("complete", function(){
 				if(pointlist.length > 0){
+					alert("step1");
 					drawingPoints();
 				}
 				else {

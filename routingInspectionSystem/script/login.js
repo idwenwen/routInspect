@@ -16,7 +16,6 @@ apiready = function(){
         }
         if(checkonline){
           checkonline = false;
-          alert("当前网络状态不佳");
         }
 
     });

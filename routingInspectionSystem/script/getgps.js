@@ -39,7 +39,6 @@ apiready = function(){
               });
             }
             else {
-              alert(pos);
               positioncache = pos;
               api.sendEvent({
                   name: 'uploadgps'
@@ -147,7 +146,6 @@ apiready = function(){
         if (ret) {
             if(ret.eventType == "success"){
               FNScanner.closeView();
-              alert("success:" + ret.content);
             }
         } else {
             alert(JSON.stringify(err));

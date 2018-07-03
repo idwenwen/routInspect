@@ -24,7 +24,7 @@ apiready = function(){
     $api.byId('getgps').addEventListener("click", function(e){
       e.preventDefault();
       e.stopPropagation();
-      animationStart(function(){}, "getgps", "../html/getgps.html", info, true);
+      animationStart(function(){}, "getgps", "../html/getgps.html", info);
     });
 
     $api.byId('fastReport').addEventListener("click", function(e){
