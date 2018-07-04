@@ -204,8 +204,7 @@ apiready = function(){
 
     }
 
-    $api.clearStorage("position");
-    $api.clearStorage("taskpoint");
+    $api.clearStorage();
 
     window.$api.byId('submitBtn').addEventListener("click", function(){
 

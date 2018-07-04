@@ -34,7 +34,7 @@ apiready = function(){
       container.addEventListener('click', function(e){
           e.preventDefault();
           e.stopPropagation();
-          funcdescide && funcdescide(e, noticeId, time, name, information, routing);
+          funcdescide && funcdescide(e, noticeId, time, name, information, routing, type);
       }, false)
   }
 
@@ -72,46 +72,78 @@ apiready = function(){
           havetask = true;
         }
         addNotcie(id, left, name, information, routing, type,
-          function(e, id, time, name, information, routing){
+          function(e, id, time, name, information, routing, type){
             //依据type来进行页面的跳转。如果是进行之中的任务则直接跳转到地图页面.
             //如果是为开始跳转到inspectionRouting页面，警告跳转到处理界面。
-            connectToService(commonURL + "?action=taskdetail",
-              {
-                values:{"id": id}
+
+            if(type == 1){
+              if(havetask){
+                alert("您当前已经有正在进行的任务");
+                return false;
               }
-              ,function(ret){
-                //TODO:获取相关的数据之后进行内容展示和编写。
-                if(ret.result){
-                  var rtype =ret.data.state;
-                  info.check = addcheck;
-                  if(rtype == 1){
-                    if(havetask){
-                      alert("您当前已经有正在进行的任务");
-                      return false;
-                    }
-                    info.taskid = id;
-                    info.taskdata = ret.data;
-                    animationStart(function(){}, "inspectionTask" , "../html/inspectionTask.html" , info, true);
-                  }
-                  else if(rtype == 2){
-                    info.taskid = id;
-                    info.taskdata = ret.data;
-                    info.start = true;
-                    animationStart(function(){}, "taskMap" , "../html/taskMap.html" , info);
-                  }
-                  else if(rtype == 3){
-                    info.taskid = id;
-                    info.taskdata = ret.data;
-                    animationStart(function(){}, "mistakeForTask" , "../html/mistakeForTask.html" , info, true);
-                  }
+            }
+
+            var innerfunc = function(rtype, ret){
+              info.check = addcheck;
+              if(rtype == 1){
+                info.taskid = id;
+                info.taskdata = ret.data;
+                animationStart(function(){}, "inspectionTask" , "../html/inspectionTask.html" , info, true);
+              }
+              else if(rtype == 2){
+                var ref = false;
+                if(info.taskid != id){
+                  ref = true;
                 }
-              },
-              function(ret, err){
-                api.sendEvent({
-                    name: 'onlineoff'
-                });
+                info.taskid = id;
+                info.taskdata = ret.data;
+                info.start = true;
+                animationStart(function(){}, "taskMap" , "../html/taskMap.html" , info, ref );
               }
-            );
+              else if(rtype == 3){
+                info.taskid = id;
+                info.taskdata = ret.data;
+                animationStart(function(){}, "mistakeForTask" , "../html/mistakeForTask.html" , info, true);
+              }
+            }
+
+            var taskdetails = $api.getStorage('taskdetails');
+            var taskinfo = "";
+            if(taskdetails){
+              for(var i = 0; i < taskdetails.length; i++){
+                if(taskdetails[i].id == id){
+                  taskinfo = taskdetails[i].detail;
+                  break;
+                }
+              }
+            }
+            else {
+              taskdetails = [];
+            }
+            if(!taskinfo){
+              connectToService(commonURL + "?action=taskdetail",
+                {
+                  values:{"id": id}
+                }
+                ,function(ret){
+                  //TODO:获取相关的数据之后进行内容展示和编写。
+                  if(ret.result){
+                    var rtype =ret.data.state;
+                    taskdetails.push({"id":id, "detail":ret});
+                    $api.setStorage('taskdetails', taskdetails);
+                    innerfunc(rtype, ret);
+                  }
+                },
+                function(ret, err){
+                  api.sendEvent({
+                      name: 'onlineoff'
+                  });
+                }
+              );
+            }
+            else {
+              innerfunc(type, taskinfo);
+            }
           });
       })();
     }
@@ -150,15 +182,14 @@ apiready = function(){
       function(ret){
         if(ret.result){
           accordingToDatan(ret.data);
+          $api.byId('loading').setAttribute("style", "display:none;");
         }
         else {
           alert("获取任务信息失败");
         }
       },
       function(ret){
-        api.sendEvent({
-            name: 'onlineoff'
-        });
+        request();
       }
     );
   }

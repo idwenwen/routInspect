@@ -130,15 +130,11 @@ apiready = function(){
         function(ret){
           if(ret.result){
             accordingToData(ret.data);
-          }
-          else {
-            alert("获取事件信息失败");
+            $api.byId('loading').setAttribute("style", "display:none;");
           }
         },
         function(ret){
-          api.sendEvent({
-              name: 'onlineoff'
-          });
+          request();
         }
       );
     }

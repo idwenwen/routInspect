@@ -28,8 +28,8 @@ apiready = function(){
     	});
 			map.on("complete", function(){
 				if(pointlist.length > 0){
-					alert("step1");
 					drawingPoints();
+					$api.byId('loading').setAttribute("style", "display:none;");
 				}
 				else {
 					api.addEventListener({
@@ -39,6 +39,7 @@ apiready = function(){
 								alert(JSON.stringify(err));
 							}
 							drawingPoints();
+							$api.byId('loading').setAttribute("style", "display:none;");
 							api.removeEventListener({
 							    name: 'drawingMarker'
 							});
@@ -339,7 +340,7 @@ apiready = function(){
 			$api.byId('returnBtns').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				animationStart(function(){}, "noticeclist", "../html/noticeclist.html", info);
+				animationStart(function(){}, "noticelist", "../html/noticelist.html", info);
 			},false);
 
 			$api.byId("enditall").addEventListener("click", function(e){
@@ -544,9 +545,7 @@ apiready = function(){
 				 }
 			 },
 			 function(ret,err){
-				 api.sendEvent({
-						 name: 'onlineoff'
-				 });
+				 requestMark(val);
 			 }
 			);
 		}

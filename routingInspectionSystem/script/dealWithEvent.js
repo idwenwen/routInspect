@@ -164,7 +164,7 @@ apiready = function(){
 
 		var delaycheck = function(data){
 			if(data.state == 2 || data.state == 32){
-				for(var i = 0 ; i < data.suspend.length ; i++){ 
+				for(var i = 0 ; i < data.suspend.length ; i++){
 					if(data.suspend[i].state == 8){
 						return true;
 					}
@@ -381,6 +381,7 @@ apiready = function(){
 				$api.byId('responseMessage').setAttribute("style", "display:none;");
 				$api.byId('responseList').setAttribute("style", "display:none;");
 				$api.byId('completeStuff').setAttribute("style", "display:none;");
+				$api.byId('statusmessage').innerHTML = "待接单";
 			}
 			else {
 				$api.byId('accept').setAttribute("style", "display:none;");

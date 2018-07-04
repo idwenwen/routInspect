@@ -15,7 +15,7 @@ apiready = function(){
 		var hasGot = false;
 		var getLocalPosition = function(func){
 			api.addEventListener({
-			    name: 'postionChange'
+			    name: 'refreshmap'
 			}, function(ret, err){
 					if(hasGot){
 						return false;
@@ -173,6 +173,7 @@ apiready = function(){
 	        	if(ret.result == true){
 							$api.setStorage('eventclass', ret.data);
 							drawingDetail(ret.data, showStuffO);
+							$api.byId('loading').setAttribute("style", "display:none;");
 						}
 			    },
 			    function(ret){
@@ -302,7 +303,7 @@ apiready = function(){
 					setTimeout(function(){
 						$api.byId('checkTypeList').removeAttribute("style");
 					}, 500);
-					animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
+					animationStart(function(){}, history.page, history.url, info);
 
 				}
 				else {
@@ -318,7 +319,7 @@ apiready = function(){
 									setTimeout(function(){
 										$api.byId('checkTypeList').removeAttribute("style");
 									}, 500);
-									animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:false));
+									animationStart(function(){}, history.page, history.url, info);
 								}
 								else {
 									alert("事件未上报成功: " + ret.desc);
@@ -466,14 +467,14 @@ apiready = function(){
 				setTimeout(function(){
 					$api.byId('checkTypeList').removeAttribute("style");
 				}, 500);
-				animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
+				animationStart(function(){}, history.page, history.url, info);
 
 			});
 
 			api.addEventListener({
 				name: 'keyback'
 			}, function(ret, err) {
-				animationStart(function(){}, history.page, history.url, info, (history.page == "taskMap" ? false:true));
+				animationStart(function(){}, history.page, history.url, info);
 				setTimeout(function(){
 					$api.byId('checkTypeList').removeAttribute("style");
 				}, 500);

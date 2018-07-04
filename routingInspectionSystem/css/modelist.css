@@ -42,3 +42,9 @@
   line-height: 40px;
   text-align: center;
 }
+
+#pagefoot{
+	padding-left: 20px;
+	position: absolute;
+	bottom: 10px;
+}
