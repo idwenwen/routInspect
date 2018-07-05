@@ -119,7 +119,7 @@ apiready = function(){
       api.addEventListener({
         name: 'keyback'
       }, function(ret, err) {
-        animationStart(function(){}, "noticelist", "../html/noticelist.html", info);
+        animationStart(function(){}, "noticelist", "../html/noticelist.html", info, true);
       });
 
     	$api.byId("addPic").addEventListener("click", function(e){

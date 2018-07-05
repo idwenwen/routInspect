@@ -338,7 +338,7 @@ apiready = function(){
 			$api.byId('returnBtns').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				animationStart(function(){}, history.page, history.url, info);
+				animationStart(function(){}, history.page, history.url, info, (history.page == "noticelist"? true:false));
 			},false);
 
 			$api.byId("enditall").addEventListener("click", function(e){
@@ -366,7 +366,7 @@ apiready = function(){
 			api.addEventListener({
 				name: 'keyback'
 			}, function(ret, err) {
-				animationStart(function(){}, history.page, history.url, info);
+				animationStart(function(){}, history.page, history.url, info, (history.page == "noticelist"? true: false));
 			});
 		}
 

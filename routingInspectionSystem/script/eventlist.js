@@ -213,7 +213,7 @@ apiready = function(){
       var refreshInterval = function(){
         setTimeout(function(){
           request(refreshInterval);
-        },10000);
+        },15000);
       }
       refreshInterval();
     }

@@ -205,6 +205,7 @@ apiready = function(){
       function(ret){
         if(ret.result){
             func && func();
+            alert("打卡点上传成功!");
         }
         else {
           alert("请求数据出错，可能是网络不太好！");

@@ -6,6 +6,7 @@ apiready = function(){
   info.history.url = "../html/noticelist.html";
   var check = info.check || 1;
   var addcheck = check;
+  $api.rmStorage('taskdetails');
 
   var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
   $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
@@ -98,6 +99,8 @@ apiready = function(){
                 info.taskid = id;
                 info.taskdata = ret.data;
                 info.start = true;
+                info.history.page = "noticelist";
+                info.history.url = "../html/noticelist.html";
                 animationStart(function(){}, "taskMap" , "../html/taskMap.html" , info, ref );
               }
               else if(rtype == 3){
@@ -250,7 +253,7 @@ apiready = function(){
     var refreshInterval = function(){
       setTimeout(function(){
         request(refreshInterval);
-      },10000);
+      },15000);
     }
     refreshInterval();
   }
