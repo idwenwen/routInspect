@@ -122,7 +122,7 @@ apiready = function(){
       });
     }
 
-    var request = function(){
+    var request = function(callback){
       connectToService(commonURL + "?action=eventlist",
         {
           values: { "userid": info.user.userid }
@@ -131,10 +131,11 @@ apiready = function(){
           if(ret.result){
             accordingToData(ret.data);
             $api.byId('loading').setAttribute("style", "display:none;");
+            callback && callback();
           }
         },
         function(ret){
-          request();
+          request(callback);
         }
       );
     }
@@ -209,9 +210,12 @@ apiready = function(){
       dynamic();
       request();
       changelist(check);
-      setInterval(function(){
-        request();
-      })
+      var refreshInterval = function(){
+        setTimeout(function(){
+          request(refreshInterval);
+        },10000);
+      }
+      refreshInterval();
     }
 
     initedPage();

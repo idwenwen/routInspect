@@ -174,7 +174,7 @@ apiready = function(){
     });
   }
 
-  var request = function(){
+  var request = function(callback){
     connectToService(commonURL + "?action=tasklist",
       {
         values: { "userid": info.user.userid }
@@ -183,13 +183,14 @@ apiready = function(){
         if(ret.result){
           accordingToDatan(ret.data);
           $api.byId('loading').setAttribute("style", "display:none;");
+          callback && callback();
         }
         else {
           alert("获取任务信息失败");
         }
       },
       function(ret){
-        request();
+        request(callback);
       }
     );
   }
@@ -246,9 +247,12 @@ apiready = function(){
     dynamic();
     request();
     changelist(check);
-    setInterval(function(){
-      request();
-    })
+    var refreshInterval = function(){
+      setTimeout(function(){
+        request(refreshInterval);
+      },10000);
+    }
+    refreshInterval();
   }
 
   initedPage();

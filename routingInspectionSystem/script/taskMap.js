@@ -557,7 +557,7 @@ apiready = function(){
 			 },
 			 function(ret){
 				 if(ret.result){
-					 animationStart(function(){}, "noticelist", "../html/noticelist.html", info);
+					 animationStart(function(){}, "noticelist", "../html/noticelist.html", info, true);
 				 }
 				 else {
 					 //  alert(JSON.stringify(ret));

@@ -16,7 +16,8 @@ apiready = function(){
         zooms:[3,19],    //可见级别
         visible:true,    //是否可见
         opacity:1,       //透明度
-        zIndex:0         //叠加层级
+        zIndex:0,         //叠加层级
+        resizeEnable: true
     });
     map = new AMap.Map('mapContainer',{
         layers:[layer] //当只想显示标准图层时layers属性可缺省

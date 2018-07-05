@@ -31,11 +31,12 @@
 		    url: urls,
 		    method: 'post',
 		    data: data || "",
+				timeout:5,
 		}, function(ret, err) {
 		    if (ret) {
 		        success.call(null, ret, err);
 		    } else {
-		    	fail.call(null, ret, err);
+		    	connectToService(urls, data, success, fail);
 		    }
 		});
 	}

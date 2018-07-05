@@ -166,6 +166,7 @@ apiready = function(){
 			var data = $api.getStorage('eventclass');
 			if(data){
 				drawingDetail(data, showStuffO);
+				$api.byId('loading').setAttribute("style", "display:none;");
 			}
 			else {
 				connectToService(commonURL + "?action=eventclass",
