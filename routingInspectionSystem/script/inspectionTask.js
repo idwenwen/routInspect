@@ -101,6 +101,8 @@ apiready = function(){
         uploadData(function(){
          info.start = true;
          info.taskdata.userid = info.user.userid;
+         info.history.page = "noticelist";
+         info.history.url = "../html/noticelist.html";
          animationStart(function(){}, "taskMap" , "../html/taskMap.html", info, true);
         })
     	});
@@ -109,6 +111,8 @@ apiready = function(){
     		e.preventDefault();
     		e.stopPropagation();
     		info.start = false;
+        info.history.page = "inspectionTask";
+        info.history.url = "../html/inspectionTask.html";
     		animationStart(function(){}, "taskMap" , "../html/taskMap.html", info, true);
     	});
 

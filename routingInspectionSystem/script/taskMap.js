@@ -2,8 +2,6 @@ apiready = function(){
 
 		var info = api.pageParam.info;
     var history = info.history;
-    info.history.page = "taskMap";
-		info.history.url = "../html/taskMap.html";
 		var visit = info.start;
 		var taskData = info.taskdata;
 		var leader = taskData.userid;
@@ -340,7 +338,7 @@ apiready = function(){
 			$api.byId('returnBtns').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				animationStart(function(){}, "noticelist", "../html/noticelist.html", info);
+				animationStart(function(){}, history.page, history.url, info);
 			},false);
 
 			$api.byId("enditall").addEventListener("click", function(e){
@@ -368,7 +366,7 @@ apiready = function(){
 			api.addEventListener({
 				name: 'keyback'
 			}, function(ret, err) {
-				animationStart(function(){}, "noticelist", "../html/noticelist.html", info);
+				animationStart(function(){}, history.page, history.url, info);
 			});
 		}
 
