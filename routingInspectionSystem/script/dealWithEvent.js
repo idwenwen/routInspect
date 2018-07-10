@@ -164,6 +164,9 @@ apiready = function(){
 
 		var delaycheck = function(data){
 			if(data.state == 2 || data.state == 32){
+				if(!data.suspend){
+					return false;
+				}
 				for(var i = 0 ; i < data.suspend.length ; i++){
 					if(data.suspend[i].state == 8){
 						return true;

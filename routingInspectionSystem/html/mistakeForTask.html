@@ -14,20 +14,18 @@
 <body>
     <div id="wrap">
         <div id="header">
-            <div>异常报告</div>
+          <div class="return-btn" id="returnBtn">
+            <img src="../icon/back.png">
+          </div>
+            <div>任务报告</div>
         </div>
         <div id="main">
           <div class="info-list">
             <ui>
               <li>
                 <img src="../icon/name.png" alt="">
-                <span class="title">人员姓名:</span>
-                <span class="message" id="infoName"></span>
-              </li>
-              <li>
-                <img src="../icon/tiktok.png" alt="">
-                <span class="title">截止时间:</span>
-                <span class="message" id="infoTime"></span>
+                <span class="title">任务状态:</span>
+                <span class="message" id="infoStatus"></span>
               </li>
               <li>
                 <img src="../icon/task.png" alt="">
@@ -35,23 +33,47 @@
                 <span class="message" id="infoTitle"></span>
               </li>
               <li>
+                <img src="../icon/tiktok.png" alt="">
+                <span class="title">开始时间:</span>
+                <span class="message" id="planStartTime"></span>
+              </li>
+              <li>
+                <img src="../icon/tiktok.png" alt="">
+                <span class="title">截止时间:</span>
+                <span class="message" id="planEndTime"></span>
+              </li>
+              <li>
+                <img src="../icon/content.png" alt="">
+                <span class="title">结束时间:</span>
+                <span class="message" id="actualEndTime"></span>
+              </li>
+              <li id="groups">
+                <img src="../icon/content.png" alt="">
+                <span class="title">任务成员:</span>
+                <span class="message" id="groupcontent"></span>
+              </li>
+              <li>
                 <img src="../icon/content.png" alt="">
                 <span class="title">任务内容:</span>
                 <span class="message" id="infoContent"></span>
               </li>
               <li>
-                <img src="../icon/exception.png" alt="">
-                <span class="title">异常结果:</span>
-                <span class="message" id="infoResult"></span>
-              </li>
-              <li>
                 <img src="../icon/explain.png" alt="">
                 <span class="title">原因说明:</span>
-                <textarea name="name" rows="8" cols="80" id="textareaContent"></textarea>
+                <span class="message" id="explain"></span>
+              </li>
+              <li id="response">
+                <img src="../icon/explain.png" alt="">
+                <span class="title">审核意见:</span>
+                <span class="message" id="responseContent"></span>
+              </li>
+              <li id="responser">
+                <img src="../icon/explain.png" alt="">
+                <span class="title">审核结果:</span>
+                <span class="message" id="responseResult"></span>
               </li>
             </ui>
           </div>
-          <button class="submitresponse">确定完成</button>
         </div>
         <div id="footer">
             <h5>Copyright &copy;<span id="year"></span> </h5>

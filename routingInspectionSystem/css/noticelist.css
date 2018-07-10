@@ -38,8 +38,8 @@
 }
 
 .button-con{
-  border-left: 1px solid #aaa;
-  width: 33.33%;
+	border-left: 1px solid #aaa;
+  width: 25%;
   height: 50px;
   line-height: 50px;
   display: inline-block;
@@ -53,10 +53,15 @@
 
 .b2{
   position: absolute;
-  left: 33.34%;
+  left: 25%;
 }
 
 .b3{
+  position: absolute;
+  left: 50%;
+}
+
+.b4{
   position: absolute;
   right: 0;
 }

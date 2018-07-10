@@ -11,7 +11,7 @@ apiready = function(){
   var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
   $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
-  var addNotcie = function(noticeId, time, name, information, routing, type,funcdescide){
+  var addNotcie = function(noticeId, time, name, information, routing, type , explain, response, result, funcdescide){
     var parent = "";
     if(type == 2){
       parent = $api.byId('typelist2');
@@ -19,8 +19,23 @@ apiready = function(){
     else if(type == 1){
       parent = $api.byId('typelist1');
     }
-    else {
+    else if((type == 32 || type == 128) && typeof result != "boolean"){
       parent = $api.byId('typelist3');
+      information = "待审核（"+information+")"
+    }
+    else {
+      parent = $api.byId('typelist4');
+      if(type == 32 || type == 128 || type == 64){
+        if(result === false || result === null){
+          information = "异常结束（" + information + "）";
+        }
+        else {
+          information = "正常结束";
+        }
+      }
+      else {
+        information = "正常结束";
+      }
     }
     var container = document.createElement("div");
       container.setAttribute("class", "notice-detail");
@@ -29,7 +44,7 @@ apiready = function(){
           "<span class='notice-name'>" + ("" + name) + "</span>" +
           (routing ? ("<span class='notice-routing'>" + ("" + routing) + "</span>") : "") +
           "<span class='notice-introduction'>" + ("" + information) +
-          "<span class='notice-time'>" + ("" + time) + "</span></span>" +
+          ((parent.getAttribute("id") !== "typelist3" && parent.getAttribute("id") !== "typelist4" ) ? ("<span class='notice-time'>" + ("" + time) + "</span></span>"): "") +
           "</div>";
       parent.appendChild(container);
       container.addEventListener('click', function(e){
@@ -44,9 +59,9 @@ apiready = function(){
     $api.byId('typelist3').innerHTML = "";
     $api.byId('typelist1').innerHTML = "";
     $api.byId('typelist2').innerHTML = "";
+    $api.byId('typelist4').innerHTML = "";
     if(data.length){
       var num = data.length;
-
       for(var i = 0 ; i < data.length ; i++){
         //获取服务器护具内容，进行页面信息的展示
         (function(){
@@ -59,6 +74,9 @@ apiready = function(){
         var type = data[i].state
         var nowTime = new Date();
         var limitT = new Date(etime);
+        var explain = data[i].explain;
+        var response = data[i].response;
+        var result = data[i].result;
         var between = limitT.getTime() - nowTime.getTime();
         var left = "";
         if(between > 0){
@@ -72,7 +90,7 @@ apiready = function(){
         if(type == 2){
           havetask = true;
         }
-        addNotcie(id, left, name, information, routing, type,
+        addNotcie(id, left, name, information, routing, type, explain, response, result,
           function(e, id, time, name, information, routing, type){
             //依据type来进行页面的跳转。如果是进行之中的任务则直接跳转到地图页面.
             //如果是为开始跳转到inspectionRouting页面，警告跳转到处理界面。
@@ -103,7 +121,7 @@ apiready = function(){
                 info.history.url = "../html/noticelist.html";
                 animationStart(function(){}, "taskMap" , "../html/taskMap.html" , info, ref );
               }
-              else if(rtype == 3){
+              else {
                 info.taskid = id;
                 info.taskdata = ret.data;
                 animationStart(function(){}, "mistakeForTask" , "../html/mistakeForTask.html" , info, true);
@@ -152,7 +170,7 @@ apiready = function(){
     }
   }
   var eli = [];
-  for(var i = 1 ; i < 4 ; i++){
+  for(var i = 1 ; i < 5 ; i++){
     if($api.byId('typelist' + i).children.length == 0){
       eli.push(i);
     }
@@ -199,7 +217,7 @@ apiready = function(){
   }
 
   var changelist = function(id){
-    for(var i = 1; i < 4; i++){
+    for(var i = 1; i < 5; i++){
       if(i == id){
         $api.byId('typelist' + i).removeAttribute("style");
         $api.byId('b' + i).setAttribute("class", "button-con b" + i +" colorchoose");
@@ -231,6 +249,13 @@ apiready = function(){
       e.stopPropagation();
       changelist(3);
       addcheck = 3;
+    });
+
+    $api.byId('b4').addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      changelist(4);
+      addcheck = 4;
     });
 
     $api.byId('returnBtn').addEventListener("click", function(e){

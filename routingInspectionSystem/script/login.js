@@ -43,6 +43,7 @@ apiready = function(){
     var showingErrMessage = false;
     var showingFailMessage = false;
     var alerts  = true;
+    var checkrefresh = 0;
 
   	var startlbsPO = function(ms, ms2, userid){
     	aMapLBS.configManager({
@@ -74,17 +75,17 @@ apiready = function(){
       		// 			});
       		// 		},ms);
           //通过LBS进行连续定位
-          api.addEventListener({
-              name: 'changePositionList'
-          }, function(ret, err){
-              if( ret ){
-                var v = ret.value;
-                positions = [];
-                positions.unshift([v.lon, v.lat]);
-              }else{
-                // alert( JSON.stringify( err ) );
-              }
-          });
+          // api.addEventListener({
+          //     name: 'changePositionList'
+          // }, function(ret, err){
+          //     if( ret ){
+          //       var v = ret.value;
+          //       positions = [];
+          //       positions.unshift([v.lon, v.lat]);
+          //     }else{
+          //       // alert( JSON.stringify( err ) );
+          //     }
+          // });
           aMapLBS.startLocation(function(ret, err) {
                 if (ret.status) {
                   if(positions.length >= 100){
@@ -92,7 +93,9 @@ apiready = function(){
                   }
                   positions.unshift([ret.lon, ret.lat]);
                   $api.setStorage('position', JSON.stringify(positions));
-                  if(positions.length >= 4){
+                  checkrefresh++;
+                  if(checkrefresh >= 5){
+                    checkrefresh = 0;
                     api.sendEvent({
                       name: 'refreshmap'
                     });

@@ -162,7 +162,7 @@ apiready = function(){
 				var pos = JSON.parse($api.getStorage('position'));
 				if(pos && pos.length >= 2){
 
-					for(var i = pos.length - 1; i >= 0 ; i--){
+					for(var i = pos.length - 1; i >= 0 && i < 10 ; i--){
 						arr.push(pos[i]);
 						checksignin(pos[i]);
 					}
@@ -171,13 +171,13 @@ apiready = function(){
 						userMark.setPosition(new AMap.LngLat(pos[0][0], pos[0][1]));
 						drawLine(arr);
 					}
-					api.sendEvent({
-						name: 'changePositionList',
-						extra: {
-						  lat: pos[0][1],
-							lon: pos[0][0]
-						}
-					});
+					// api.sendEvent({
+					// 	name: 'changePositionList',
+					// 	extra: {
+					// 	  lat: pos[0][1],
+					// 		lon: pos[0][0]
+					// 	}
+					// });
 				}
 		}
 
