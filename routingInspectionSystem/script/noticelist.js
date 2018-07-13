@@ -11,7 +11,7 @@ apiready = function(){
   var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
   $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
-  var addNotcie = function(noticeId, time, name, information, routing, type , explain, response, result, funcdescide){
+  var addNotcie = function(noticeId, time, name, information, routing, type , explain, response, result, urgent, funcdescide){
     var parent = "";
     if(type == 2){
       parent = $api.byId('typelist2');
@@ -25,6 +25,7 @@ apiready = function(){
     }
     else {
       parent = $api.byId('typelist4');
+      urgent = false;
       if(type == 32 || type == 128 || type == 64){
         if(result === false || result === null){
           information = "异常结束（" + information + "）";
@@ -40,13 +41,18 @@ apiready = function(){
     var container = document.createElement("div");
       container.setAttribute("class", "notice-detail");
       container.innerHTML =
-          "<div class='notice-content'>"+
+          "<div class='notice-content " + (urgent ? "notice-content2" : "") + "'>"+
           "<span class='notice-name'>" + ("" + name) + "</span>" +
           (routing ? ("<span class='notice-routing'>" + ("" + routing) + "</span>") : "") +
           "<span class='notice-introduction'>" + ("" + information) +
           ((parent.getAttribute("id") !== "typelist3" && parent.getAttribute("id") !== "typelist4" ) ? ("<span class='notice-time'>" + ("" + time) + "</span></span>"): "") +
           "</div>";
-      parent.appendChild(container);
+      if(urgent && parent.children[0]){
+        parent.insertBefore(container, parent.children[0]);
+      }
+      else {
+        parent.appendChild(container);
+      }
       container.addEventListener('click', function(e){
           e.preventDefault();
           e.stopPropagation();
@@ -77,6 +83,7 @@ apiready = function(){
         var explain = data[i].explain;
         var response = data[i].response;
         var result = data[i].result;
+        var urgent = data[i].urgent;
         var between = limitT.getTime() - nowTime.getTime();
         var left = "";
         if(between > 0){
@@ -90,7 +97,7 @@ apiready = function(){
         if(type == 2){
           havetask = true;
         }
-        addNotcie(id, left, name, information, routing, type, explain, response, result,
+        addNotcie(id, left, name, information, routing, type, explain, response, result, urgent,
           function(e, id, time, name, information, routing, type){
             //依据type来进行页面的跳转。如果是进行之中的任务则直接跳转到地图页面.
             //如果是为开始跳转到inspectionRouting页面，警告跳转到处理界面。

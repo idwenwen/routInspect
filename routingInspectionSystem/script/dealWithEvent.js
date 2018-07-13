@@ -18,10 +18,8 @@ apiready = function(){
 		var addExhibitionPic = function(imgUrl, pid, id, photo){
 			var el = document.createElement("div");
 			el.setAttribute("class", "list-photo");
-			if(photo){
-				el.setAttribute("pid", pid);
-				el.setAttribute("id", id);
-			}
+			el.setAttribute("pid", pid);
+			el.setAttribute("id", id);
 			var img = new Image();
 			img.src = imgUrl;
 			img.onload = function(){
@@ -46,10 +44,10 @@ apiready = function(){
 				el.addEventListener("click", function(e){
 					e.preventDefault();
 					e.stopPropagation();
+					target = id;
+					pidcheck = pid;
+					deleteUrl = imgUrl;
 					if(photo){
-						target = id;
-						deleteUrl = imgUrl;
-						pidcheck = pid;
 						$api.byId("deleteBtn").removeAttribute("style");
 					}
 					else {
@@ -58,10 +56,26 @@ apiready = function(){
 					$api.byId("checkPhoto").setAttribute("src", imgUrl);
 					$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
 					$api.byId('showingPhoto').removeAttribute("style");
+					if(photo){
+						$api.byId('showingPhoto').setAttribute("style", "padding-bottom:85px;");
+					}
 					if(check == 2){
 						$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
 					}
 					$api.byId('blackMode').removeAttribute("style");
+					var index = checkindexForArr($api.byId(pidcheck).children, id);
+					if(index <= 0){
+						$api.byId('leftImage').setAttribute("style", "display:none;");
+					}
+					else {
+						$api.byId('leftImage').setAttribute("style", "display:block;");
+					}
+					if(index >= checkNumber - 1){
+						$api.byId('rightImage').setAttribute("style", "display:none;");
+					}
+					else {
+						$api.byId('rightImage').setAttribute("style", "display:block;");
+					}
 				});
 				if(!photo){
 					$api.byId('' + pid).appendChild(el);
@@ -71,6 +85,27 @@ apiready = function(){
 				}
 				el.setAttribute("style", "height:" + el.offsetWidth + "px;");
 			}
+		}
+
+		var checkIndex = -1;
+		var checkNumber = 0;
+
+		var checkindexForArr = function(arr, tar){
+			var index = -1;
+			checkNumber = 0;
+			for(var i = 0 ; ; i++){
+					if(!arr[i+""]){
+						break;
+					}
+					if(arr[i+""].getAttribute("id") == "addResponsePic" ){
+						break;
+					}
+					if(arr[i+""].getAttribute("id") == target){
+						index = i;
+					}
+					checkNumber ++;
+			}
+			return index;
 		}
 
 		//
@@ -144,10 +179,10 @@ apiready = function(){
 				$api.byId('middle').setAttribute("style", "display:none;");
 			}
 			for(var i = 0 ; i < data.accident.length ; i++){
-				addExhibitionPic(data.accident[i], "eventPhoto");
+				addExhibitionPic(data.accident[i], "eventPhoto", "eventsPic"+i);
 			}
 			for(var i = 0 ; i < data.position.length ; i++){
-				addExhibitionPic(data.position[i], "positionPhoto");
+				addExhibitionPic(data.position[i], "positionPhoto", "positionsPic"+i);
 			}
 			if(data.suspend && data.suspend.length > 0){
 				addResponseRepair(data.suspend, data.state);
@@ -193,7 +228,7 @@ apiready = function(){
 					"<span class='message-content'>" + (response[i].requestcontent) + "</span>";
 					var id = "response" + (i + 1);
 					if(pic.length > 0){
-						str += "<div class='message-photo'>";
+						str += "<div class='message-photo' id="+id+">";
 						for(var j = 0 ; j < pic.length ; j++){
 							var picstr =
 								"<div class='list-photo' id=" + (id + "" + j) + ">"+
@@ -225,11 +260,27 @@ apiready = function(){
 							$api.byId(elid).addEventListener("click", function(e){
 								e.preventDefault();
 								e.stopPropagation();
+								target = elid ;
+								pidcheck = id;
+								deleteUrl = imgUrl;
 								$api.byId("checkPhoto").setAttribute("src", imgUrl);
 								$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
 								$api.byId('showingPhoto').removeAttribute("style");
 								if(check == 2){
 									$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
+								}
+								var index = checkindexForArr($api.byId(pidcheck).children, id);
+								if(index <= 0){
+									$api.byId('leftImage').setAttribute("style", "display:none;");
+								}
+								else {
+									$api.byId('leftImage').setAttribute("style", "display:block;");
+								}
+								if(index >= checkNumber - 1){
+									$api.byId('rightImage').setAttribute("style", "display:none;");
+								}
+								else {
+									$api.byId('rightImage').setAttribute("style", "display:block;");
 								}
 								$api.byId('blackMode').removeAttribute("style");
 							});
@@ -241,6 +292,9 @@ apiready = function(){
 				var state = check;
 				var alertMsg = "";
 				if((state == 32 || state == 2) && response[i].responsecontent){
+					alertMsg = "审批结果:未通过";
+				}
+				else if(response[i].responsecontent && i < response.length - 1){
 					alertMsg = "审批结果:未通过";
 				}
 				else {
@@ -354,12 +408,13 @@ apiready = function(){
 				}
 				,function(ret){
 					if(ret.result){
-								$api.byId('name').innerHTML = info.user.username;
+								$api.byId('name').innerHTML = info.user.name;
 								$api.byId('hangup').removeAttribute("style");
 								$api.byId('accept').setAttribute("style", "display:none;");
 								$api.byId('middle').removeAttribute("style");
 								$api.byId('responseList').removeAttribute("style");
 								$api.byId('completeStuff').removeAttribute("style");
+								drawingmatch();
 							}
 					},
 				function(ret, err){
@@ -376,6 +431,7 @@ apiready = function(){
 			$api.byId('blackMode').setAttribute("style", "display:none;");
 			$api.byId('showingPhoto').setAttribute("style", "display:none;");
 			$api.byId('hangupReason').setAttribute("style", "display:none;");
+			checkIndex = -1;
 			if(statusinfo == 1){
 				$api.byId('hangup').setAttribute("style", "display:none;");
 				$api.byId('accept').removeAttribute("style");
@@ -441,6 +497,15 @@ apiready = function(){
 					$api.byId('middle').setAttribute("style", "display:none;");
 					$api.byId('hangup').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "超时完成";
+				}
+				else {
+					$api.byId('responseMessage').removeAttribute("style");
+					$api.byId('responseList').setAttribute("style", "display:none;");
+					$api.byId('completeStuff').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').removeAttribute("style");
+					$api.byId('middle').setAttribute("style", "display:none;");
+					$api.byId('hangup').setAttribute("style", "display:none;");
+					$api.byId('statusmessage').innerHTML = "已完成";
 				}
 			}
 		}
@@ -630,6 +695,7 @@ apiready = function(){
 				}
 				$api.byId('showingPhoto').setAttribute("style", "display:none;");
 				$api.byId('blackMode').setAttribute("style", "display:none;");
+				checkIndex = -1;
 			});
 
 			api.addEventListener({
@@ -637,6 +703,80 @@ apiready = function(){
 			}, function(ret, err) {
 				animationStart(function(){}, "eventlist", "../html/eventlist.html", info, true);
 			});
+
+			$api.byId("rightImage").addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				var parent = $api.byId(pidcheck);
+				var childs = parent.children;
+				if(checkIndex < 0){
+					checkIndex = checkindexForArr(childs, target);
+				}
+				if(checkIndex < checkNumber){
+					checkIndex ++;
+					deleteUrl = childs[checkIndex+""].children[0].src;
+					target = childs[checkIndex+""].getAttribute("id");
+					$api.byId('checkPhoto').src = deleteUrl;
+					$api.byId('checkPhoto').onload = function(){
+						var check = 1;
+						if($api.byId('checkPhoto').width < $api.byId('checkPhoto').height){
+							check = 2;
+						}
+						if(checkIndex >= checkNumber - 1){
+							$api.byId('rightImage').setAttribute("style", "display:none;");
+						}
+						else {
+							$api.byId('rightImage').removeAttribute("style");
+						}
+						$api.byId('leftImage').removeAttribute("style");
+						$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
+						if(check == 2){
+							$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
+						}
+						else{
+							$api.byId('showingPhoto').removeAttribute("style");
+						}
+						$api.byId('checkPhoto').onload = function(){};
+					}
+				}
+			})
+
+			$api.byId("leftImage").addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				var parent = $api.byId(pidcheck);
+				var childs = parent.children;
+				if(checkIndex < 0){
+					checkIndex = checkindexForArr(childs, target);
+				}
+				if(checkIndex > 0){
+					checkIndex --;
+					deleteUrl = childs[checkIndex+""].children[0].src;
+					target = childs[checkIndex+""].getAttribute("id");
+					$api.byId('checkPhoto').src = deleteUrl;
+					$api.byId('checkPhoto').onload = function(){
+						var check = 1;
+						if($api.byId('checkPhoto').width <= $api.byId('checkPhoto').height){
+							check = 2;
+						}
+						if(checkIndex <= 0){
+							$api.byId('leftImage').setAttribute("style", "display:none;");
+						}
+						else {
+							$api.byId('leftImage').removeAttribute("style");
+						}
+						$api.byId('rightImage').removeAttribute("style");
+						$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
+						if(check == 2){
+							$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
+						}
+						else{
+							$api.byId('showingPhoto').removeAttribute("style");
+						}
+						$api.byId('checkPhoto').onload = function(){};
+					}
+				}
+			})
 
 		}
 

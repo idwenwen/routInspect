@@ -48,6 +48,25 @@ html, body{
 	margin: auto;
 }
 
+.right-btn{
+	height: 50px;
+	position: absolute;
+	bottom: 0px;
+	right: 20px;
+	padding: 10px;
+}
+
+.right-btn > img{
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
 .header-right-btn{
 	height: 50px;
 	position: absolute;

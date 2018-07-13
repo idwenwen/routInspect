@@ -18,19 +18,27 @@ apiready = function(){
 			var group = taskinfo.group;
 			var members = "";
 			var result = taskinfo.result;
+			var ex = 1;
 			if(typeof result == "boolean"){
 				if((state == 32 || state == 64 || state == 128) && result === false){
 					information = "异常结束(" + taskinfo.statename + ")";
 				}
-				else if((state == 32 || state == 64 || state == 128) && typeof result != "boolean"){
+				else {
+					ex = 0;
+				}
+			}
+			else {
+				if(state == 32 || state == 64 || state == 128){
 					information = "待审核(" + taskinfo.statename + ")";
+				}
+				else {
+					ex = 0;
 				}
 			}
 			if(group.length == 0){
 				members = "无人员参与任务";
 			}
 			else {
-				alert(JSON.stringify(group));
 				group.forEach(function(item, index){
 					if(!members){
 						if(item.name != username){
@@ -39,7 +47,7 @@ apiready = function(){
 					}
 					else{
 						if(item.name != username){
-							members += item.name;
+							members += ", " + item.name;
 						}
 					}
 				});
@@ -55,6 +63,9 @@ apiready = function(){
 			$api.byId('actualEndTime').innerHTML = taskinfo.finishtime ? taskinfo.finishtime : "未执行";
 			$api.byId('infoContent').innerHTML = taskinfo.path;
 			$api.byId('explain').innerHTML = taskinfo.explain ? taskinfo.explain : "未上报说明";
+			if(!ex){
+				$api.byId('explainContent').setAttribute("style", "display:none;");
+			}
 			$api.byId('groupcontent').innerHTML= members;
 			if(!response){
 				$api.byId('response').setAttribute("style", "display:none;");
@@ -75,6 +86,20 @@ apiready = function(){
 			}
 		}
 
-		alert(JSON.stringify(taskinfo));
+		var dynamicWeb = function(){
+			$api.byId('returnBtn').addEventListener("click", function(e){
+	      e.preventDefault();
+	      e.stopPropagation();
+	      animationStart(function(){}, "noticelist", "../html/noticelist.html", info, false);
+	    },false);
+
+	    api.addEventListener({
+	      name: 'keyback'
+	    }, function(ret, err) {
+	      animationStart(function(){}, "noticelist", "../html/noticelist.html", info, false);
+	    });
+		}
+
 		initPage();
+		dynamicWeb();
 }

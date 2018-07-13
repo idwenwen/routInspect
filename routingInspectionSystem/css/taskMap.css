@@ -140,6 +140,26 @@ ui li {
 	text-align: center;
 }
 
+.exchange-scanner{
+	width: 40px;
+	height: 40px;
+	font-size: 80%;
+	line-height: 20px;
+	background-color: #fff;
+	border: 1px solid #444;
+	box-shadow: 0px 0px 4px #444;
+	position: fixed;
+	top: 280;
+	right: 10px;
+	z-index: 15;
+}
+
+.exchange-scanner > img {
+	width: 30px;
+	height: 30px;
+	margin: 5px;
+}
+
 .report-event{
 	width: 45%;
 	height: 50px;

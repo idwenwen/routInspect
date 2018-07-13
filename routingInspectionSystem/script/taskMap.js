@@ -189,9 +189,16 @@ apiready = function(){
 		};
 
 		//地图相关的点标记
-		var addMarker = function(lat, lon, color, index){
+		var addMarker = function(lat, lon, color, index, t){
+			var ic = "";
+			if(t != 4){
+				ic = (color == "green" ? '../icon/g-p.png' : "../icon/b-p.png");
+			}
+			else {
+				ic = (color == "green" ? '../icon/ins-g.png' : "../icon/ins-b.png");
+			}
 			var param = {
-				icon: (color == "green" ? '../icon/g-p.png' : (color == "red" ? '../icon/r-p.png': "../icon/b-p.png")),
+				icon: ic,
 				position:new AMap.LngLat(lat, lon),
 				offset: new AMap.Pixel(-16, -30)
 			}
@@ -335,6 +342,12 @@ apiready = function(){
 				animationStart(function(){}, "inspectionTask", "../html/inspectionTask.html", info, false);
 			},false);
 
+			$api.byId('scanner').addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				scannerOpen();
+			},false);
+
 			$api.byId('returnBtns').addEventListener("click", function(e){
 				e.preventDefault();
 				e.stopPropagation();
@@ -380,7 +393,7 @@ apiready = function(){
 							if(!p.markers[j]){
 								p.markers[j] = checkgps(pos, p.point[j]);
 								if(p.markers[j]){
-									requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":j, "lat":p.point[j][1], "lon":p.point[j][0]});
+									requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":j, "lat":p.point[j][1], "lon":p.point[j][0]})    ;
 								}
 							}
 						}
@@ -392,25 +405,34 @@ apiready = function(){
 							p.rele && p.rele.setColors("green");
 						}
 						else{
-							if(checkMiss(i)){
-								p.ele && p.ele.setIcon("../icon/r-p.png");
-								p.rele && p.rele.setColors("red");
-							}
+							// if(checkMiss(i)){
+							// 	p.ele && p.ele.setIcon("../icon/r-p.png");
+							// 	p.rele && p.rele.setColors("red");
+							// }
 						}
 					}
 					else {
 						p.marker = checkgps(pos, p.point);
-						if(p.marker){
+						if(p.marker && p.type != 4){
 							requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
 							if(p.ele){
 								p.ele.setIcon("../icon/g-p.png");
 							}
 							p.rele && p.rele.setColors("green");
 						}
-						else{
-							if(checkMiss(i)){
-								p.ele && p.ele.setIcon("../icon/r-p.png");
-								p.rele && p.rele.setColors("red");
+						else if(p.type != 4){
+							// if(checkMiss(i)){
+							// 	p.ele && p.ele.setIcon("../icon/r-p.png");
+							// 	p.rele && p.rele.setColors("red");
+							// }
+						}
+						else {
+							if(p.scanner){
+								if(p.ele){
+									p.ele.setIcon("../icon/ins-g.png");
+								}
+								p.rele && p.rele.setColors("green");
+								requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
 							}
 						}
 					}
@@ -467,6 +489,8 @@ apiready = function(){
 					obj.id = data[i].id;
 					obj.marker = data[i].marker;
 					obj.color = "blue";
+					obj.type = data[i].type;
+					obj.photo = data[i].photo;
 					if(data[i].point.length == 1){
 						obj.point = [data[i].point[0].lon, data[i].point[0].lat];
 					}
@@ -487,9 +511,9 @@ apiready = function(){
 							pointlist[i].color = "green";
 						}
 						else {
-							if(pointlist[i+1] && pointlist[i+1].marker){
-								pointlist[i].color = "red";
-							}
+							// if(pointlist[i+1] && pointlist[i+1].marker){
+							// 	pointlist[i].color = "red";
+							// }
 						}
 					}
 				}
@@ -512,6 +536,7 @@ apiready = function(){
 					(function(){
 						var p = pointlist[i];
 						var m  = "";
+						var t = pointlist[i].type;
 						var color = "blue";
 						if(typeof p.point[0] == "object"){
 						 	m = calculatePointForRoute(p.point);
@@ -520,7 +545,7 @@ apiready = function(){
 						else {
 							m = p.point;
 						}
-						p.ele = addMarker(m[0], m[1], p.color, i);
+						p.ele = addMarker(m[0], m[1], p.color, i, t);
 					})();
 				}
 			}
@@ -649,6 +674,7 @@ apiready = function(){
 				$api.byId('returnBtn').removeAttribute("style");
 				$api.byId('repEvent').setAttribute("style", "display:none;");
 				$api.byId('endTask').setAttribute("style", "display:none;");
+				$api.byId('scanner').setAttribute("style", "display:none;");
 				if(!inited){
 					inited = true;
 					clickToInit();
@@ -660,6 +686,7 @@ apiready = function(){
 				$api.byId('repEvent').removeAttribute("style");
 				$api.byId('endTask').setAttribute("style", "display:none;");
 				$api.byId('returnBtn').setAttribute("style", "display:none;");
+				$api.byId('scanner').removeAttribute("style");
 				if(leader == info.user.userid){
 					$api.byId('repEvent').setAttribute("class", "report-event");
 					$api.byId('endTask').removeAttribute("style");
@@ -713,5 +740,96 @@ apiready = function(){
 			}
 			return datas;
 		}
+
+		var FNScanner = api.require('FNScanner');
+	  var scannerOpen = function(){
+	    FNScanner.openView({
+	        autorotation: true
+	    }, function(ret, err) {
+	        if (ret) {
+	            if(ret.eventType == "success"){
+								FNScanner.closeView();
+								requestInstrument(ret.content);
+	            }
+	        } else {
+	            alert(JSON.stringify(err));
+	        }
+	    });
+	  }
+
+	  var requestInstrument = function(url){
+				var id = url.match(/\&id=[0-9]+/g)[0];
+				id = id.match(/[0-9]+/g)[0];
+				connectToService(url,
+					null,function(ret, err){
+							if(ret.result){
+								info.instrumentinfo = ret.data;
+								instrumentsignIn(id);
+								animationStart(function(){}, "instrumentinfo", "../html/instrumentinfo.html", info, true);
+							}
+							else {
+								alert("未获取到当前的设备信息")
+							}
+					}
+				)
+	  }
+
+		var instrumentsignIn = function(id){
+			for(var i = 0 ; i < pointlist.length; i++){
+				var p = pointlist[i];
+				if(p.type != 4){
+					continue;
+				}
+				else {
+					if(p.id == id){
+						if(p.photo){
+							getPicture(function(){
+								p.scanner = true;
+								if(p.marker){
+									if(p.ele){
+										p.ele.setIcon("../icon/ins-g.png");
+									}
+									p.rele && p.rele.setColors("green");
+									requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
+								}
+							});
+						}
+						else {
+							p.scanner = true;
+							if(p.marker){
+								if(p.ele){
+									p.ele.setIcon("../icon/ins-g.png");
+								}
+								p.rele && p.rele.setColors("green");
+								requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
+							}
+						}
+					}
+					else {
+						continue;
+					}
+				}
+			}
+		}
+
+		var getPicture = function(success){
+			api.getPicture({
+			    sourceType: 'camera',
+			    encodingType: 'jpg',
+			    mediaValue: 'pic',
+			    destinationType: 'url',
+			    allowEdit: true,
+			    quality: 50,
+			    targetWidth: 1000,
+			    saveToPhotoAlbum: false
+			}, function(ret, err) {
+			    if (ret) {
+			        success.call(null, ret);
+			    } else {
+							getPicture();
+					}
+			});
+		}
+
 		initedPage()
 }

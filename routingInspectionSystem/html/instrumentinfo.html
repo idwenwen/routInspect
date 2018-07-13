@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>routingInspectionSystem</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/instrumentinfo.css">
+    <script type="text/javascript" src="../script/api.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <div id="header">
+          <div class="return-btn" id="returnBtn">
+        		<img src="../icon/back.png">
+        	</div>
+            <div id="headerTitle">设备信息</div>
+        </div>
+        <div id="main">
+            <!-- 当前页面用于巡检任务开始和首次签到。依据数据确认页面内容 -->
+            <!-- 签到页面内容 -->
+            <div class="instrument">
+              <ul>
+                <li>
+                  <img src="../icon/tiktok.png" alt="">
+                  <span class="title">上次打卡时间:</span>
+                  <span class="message" id="lastsignin">加载中...</span>
+                </li>
+                <li>
+                  <img src="../icon/insname.png" alt="">
+                  <span class="title">设备名称:</span>
+                  <span class="message" id="insname"></span>
+                </li>
+                <li>
+                  <img src="../icon/instype.png" alt="">
+                  <span class="title">型号规格:</span>
+                  <span class="message" id="insmodel"></span>
+                </li>
+                <li>
+                  <img src="../icon/type.png" alt="">
+                  <span class="title">设备类型:</span>
+                  <span class="message" id="instype"></span>
+                </li>
+                <li>
+                  <img src="../icon/inst.png" alt="">
+                  <span class="title">设备品种:</span>
+                  <span class="message" id="instypesmall"></span>
+                </li>
+                <li>
+                  <img src="../icon/position.png" alt="">
+                  <span class="title">安装地点:</span>
+                  <span class="message" id="insaddress"></span>
+                </li>
+                <li>
+                  <img src="../icon/insdate.png" alt="">
+                  <span class="title">启用日期:</span>
+                  <span class="message" id="insstarttime"></span>
+                </li>
+                <li>
+                  <img src="../icon/company.png" alt="">
+                  <span class="title">制造厂商:</span>
+                  <span class="message" id="inscompany"></span>
+                </li>
+                <li>
+                  <img src="../icon/tiktok.png" alt="">
+                  <span class="title">出厂日期:</span>
+                  <span class="message" id="exfactorydate"></span>
+                </li>
+                <li>
+                  <img src="../icon/number.png" alt="">
+                  <span class="title">出厂编号:</span>
+                  <span class="message" id="exfactoryno"></span>
+                </li>
+                <li>
+                  <img src="../icon/remark.png" alt="">
+                  <span class="title">备注:</span>
+                  <span class="message" id="remark"></span>
+                </li>
+              </ul>
+            </div>
+        </div>
+        <div id="footer">
+            <h5>Copyright &copy;<span id="year"></span> </h5>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/instrumentinfo.js"></script>
+</html>

@@ -16,6 +16,10 @@ apiready = function(){
         showStatus = "待接单";
         parent = $api.byId('typelist1');
       }
+      else if(status == 2){
+        showStatus = "处理中";
+        parent = $api.byId('typelist2');
+      }
       else if(status == 4){
         showStatus = "挂起待审批";
         parent = $api.byId('typelist3');
@@ -23,6 +27,10 @@ apiready = function(){
       else if(status == 8){
         showStatus = "延时待审批";
         parent = $api.byId('typelist3');
+      }
+      else if(status == 16){
+        showStatus = "待处理";
+        parent = $api.byId('typelist2');
       }
       else if(status == 32){
         showStatus = "待处理";
@@ -32,9 +40,13 @@ apiready = function(){
         showStatus = "待审核";
         parent = $api.byId('typelist3');
       }
+      else if(status == 128){
+        showStatus = "超时完成";
+        parent = $api.byId('typelist4');
+      }
       else {
-        showStatus = "处理中";
-        parent = $api.byId('typelist2');
+        showStatus = "已完成";
+        parent = $api.byId('typelist4');
       }
       var time = "";
       if(!leftTime){
@@ -53,9 +65,9 @@ apiready = function(){
         container.setAttribute("class", "eves-detail");
         container.innerHTML =
                 "<span class='name-info'>" + ("" + information) + "</span>" +
-                "<span class='task-status'>" + ("状态[" + showStatus + "]") + "</span>" +
+                "<span class='task-status'>" + ("状态（" + showStatus + "）") + "</span>" +
                 "<span class='task-info'>" + ( "说明:" + repTime ) + "</span>" +
-                "<span class='task-time'>" + ( "" + time ) + "</span>";
+                (parent.getAttribute("id") != "typelist4" ? ("<span class='task-time'>" + ( "" + time ) + "</span>") : "");
         parent.appendChild(container);
         container.addEventListener('click', function(e){
             e.preventDefault();

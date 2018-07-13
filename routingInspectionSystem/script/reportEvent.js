@@ -165,8 +165,8 @@ apiready = function(){
 		var checkData = function(showStuffO, showStuffT){
 			var data = $api.getStorage('eventclass');
 			if(data){
-				drawingDetail(data, showStuffO);
 				$api.byId('loading').setAttribute("style", "display:none;");
+				drawingDetail(data, showStuffO);
 			}
 			else {
 				connectToService(commonURL + "?action=eventclass",
@@ -245,6 +245,19 @@ apiready = function(){
 						$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
 					}
 					$api.byId('blackMode').removeAttribute("style");
+					var index = checkindexForArr($api.byId(pidcheck).children, target);
+					if(index <= 0){
+						$api.byId('leftImage').setAttribute("style", "display:none;");
+					}
+					else {
+						$api.byId('leftImage').setAttribute("style", "display:block;");
+					}
+					if(index >= checkNumber - 1){
+						$api.byId('rightImage').setAttribute("style", "display:none;");
+					}
+					else {
+						$api.byId('rightImage').setAttribute("style", "display:block;");
+					}
 				})
 				$api.byId('' + pid).insertBefore(el, $api.byId('' + pid).children[0]);
 				el.setAttribute("style", "height:" + el.offsetWidth + "px;");
@@ -333,6 +346,27 @@ apiready = function(){
 				}
 		}
 
+		var checkIndex = -1;
+		var checkNumber = 0;
+
+		var checkindexForArr = function(arr, tar){
+			var index = -1;
+			checkNumber = 0;
+			for(var i = 0 ; ; i++){
+					if(!arr[i+""]){
+						break;
+					}
+					if(arr[i+""].getAttribute("id") == "photoing2" || arr[i+""].getAttribute("id") == "photoing"){
+						break;
+					}
+					if(arr[i+""].getAttribute("id") == target){
+						index = i;
+					}
+					checkNumber ++;
+			}
+			return index;
+		}
+
 		var dynamicWeb = function(){
 			//页面数据内容绑定
 			var showStuffO = function(obj, index){
@@ -373,6 +407,7 @@ apiready = function(){
 				$api.byId('typeListDetail').setAttribute("style", "display:none;");
 				$api.byId('positionList').setAttribute("style", "display:none;");
 				$api.byId('showingPhoto').setAttribute("style", "display:none;");
+				checkIndex = -1;
 			});
 
 			$api.byId('checkPhoto').addEventListener("click", function(e){
@@ -380,9 +415,84 @@ apiready = function(){
 				e.stopPropagation();
 				$api.byId('blackMode').setAttribute("style", "display:none;");
 				$api.byId('showingPhoto').setAttribute("style", "display:none;");
+				checkIndex = -1;
 			});
 
+			$api.byId("rightImage").addEventListener("click", function(e){
+				var parent = $api.byId(pidcheck);
+				var childs = parent.children;
+				if(checkIndex < 0){
+					checkIndex = checkindexForArr(childs, target);
+				}
+				if(checkIndex < checkNumber){
+					checkIndex ++;
+					imageUrl = childs[checkIndex+""].children[0].src;
+					target = childs[checkIndex+""].getAttribute("id");
+					$api.byId('checkPhoto').src = imageUrl;
+					$api.byId('checkPhoto').onload = function(){
+						var check = 1;
+						if($api.byId('checkPhoto').width < $api.byId('checkPhoto').height){
+							check = 2;
+						}
+						if(checkIndex >= checkNumber - 1){
+							$api.byId('rightImage').setAttribute("style", "display:none;");
+						}
+						else {
+							$api.byId('rightImage').removeAttribute("style");
+						}
+						$api.byId('leftImage').removeAttribute("style");
+						$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
+						if(check == 2){
+							$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
+						}
+						else{
+							$api.byId('showingPhoto').removeAttribute("style");
+						}
+						$api.byId('checkPhoto').onload = function(){};
+					}
+				}
+			})
+
+			$api.byId("leftImage").addEventListener("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				var parent = $api.byId(pidcheck);
+				var childs = parent.children;
+				if(checkIndex < 0){
+					checkIndex = checkindexForArr(childs, target);
+				}
+				if(checkIndex > 0){
+					checkIndex --;
+					imageUrl = childs[checkIndex+""].children[0].src;
+					target = childs[checkIndex+""].getAttribute("id");
+					$api.byId('checkPhoto').src = imageUrl;
+					$api.byId('checkPhoto').onload = function(){
+						var check = 1;
+						if($api.byId('checkPhoto').width <= $api.byId('checkPhoto').height){
+							check = 2;
+						}
+						if(checkIndex <= 0){
+							$api.byId('leftImage').setAttribute("style", "display:none;");
+						}
+						else {
+							$api.byId('leftImage').removeAttribute("style");
+						}
+						$api.byId('rightImage').removeAttribute("style");
+						$api.byId("checkPhoto").setAttribute("class", check == 1 ? "checkPhoto1" : "checkPhoto2");
+						if(check == 2){
+							$api.byId('showingPhoto').setAttribute("style", "height: 80%;");
+						}
+						else{
+							$api.byId('showingPhoto').removeAttribute("style");
+						}
+						$api.byId('checkPhoto').onload = function(){};
+					}
+				}
+			})
+
 			$api.byId('searchroad').addEventListener("input", function(e){
+				e.preventDefault();
+				e.stopPropagation();
 				var val = $api.byId('searchroad').value;
 				var child = $api.byId('positionLists').children;
 				var i = 0 ;
@@ -454,6 +564,7 @@ apiready = function(){
 				}
 				$api.byId('blackMode').setAttribute("style", "display:none;");
 				$api.byId('showingPhoto').setAttribute("style", "display:none;");
+				checkIndex = -1;
 			});
 
 			$api.byId('reportEvents').addEventListener("click", function(e){
