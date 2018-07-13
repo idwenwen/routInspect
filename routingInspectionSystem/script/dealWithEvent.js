@@ -221,6 +221,7 @@ apiready = function(){
 
 		var addResponseRepair = function(response, check, showing){
 			for(var i = 0 ; i < response.length ; i ++){
+				(function(){
 				var strss = response[i].statename ? response[i].statename + "说明" : "处理说明";
 				var pic = response[i].picture || [];
 				var str = "<div class='message-list'>"+
@@ -309,7 +310,7 @@ apiready = function(){
 				"</div>";
 				if(response[i].responsename){
 					$api.append($api.byId("responseMessage"), str2);
-				}
+				}})();
 			}
 		}
 		//new addResponse
