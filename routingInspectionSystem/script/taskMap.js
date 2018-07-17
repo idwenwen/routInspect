@@ -158,18 +158,21 @@ apiready = function(){
 		//定时刷新定位与路径内容
 		var refreshMap = function(){
 			// alert("refreshMap");
-				var arr = [];
+				var refarr = [];
 				var pos = JSON.parse($api.getStorage('position'));
+				var start = (pos.length > 10 ? 9 : pos.length - 1);
 				if(pos && pos.length >= 2){
-
-					for(var i = pos.length - 1; i >= 0 && i < 10 ; i--){
-						arr.push(pos[i]);
-						checksignin(pos[i]);
+					for(var i = start; i >= 0; i--){
+						(function(){
+							var ch = pos[i];
+							checksignin(ch);
+							refarr.push(ch);
+						})();
 					}
 					// alert(JSON.stringify(arr));
 					if(userMark){
 						userMark.setPosition(new AMap.LngLat(pos[0][0], pos[0][1]));
-						drawLine(arr);
+						drawLine(refarr);
 					}
 					// api.sendEvent({
 					// 	name: 'changePositionList',
@@ -743,7 +746,7 @@ apiready = function(){
 
 		var FNScanner = api.require('FNScanner');
 	  var scannerOpen = function(){
-	    FNScanner.openView({
+	    FNScanner.open({
 	        autorotation: true
 	    }, function(ret, err) {
 	        if (ret) {
