@@ -41,6 +41,7 @@ apiready = function(){
             }
             else {
               positioncache = pos;
+              userMark.setPosition(new AMap.LngLat(pos[0], pos[1]));
               api.sendEvent({
                   name: 'uploadgps'
               });
