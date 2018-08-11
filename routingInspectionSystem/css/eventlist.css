@@ -151,3 +151,13 @@
 	bottom: 0;
 	margin: auto;
 }
+
+.number-info{
+	display: block;
+	padding-left: 10px;
+}
+
+.report-time{
+	display: block;
+	padding-left: 10px;
+}

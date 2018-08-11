@@ -9,7 +9,7 @@ apiready = function(){
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
-    var addMessage = function(messageId, name, status, information, leftTime, repTime, funcdescide){
+    var addMessage = function(messageId, name, status, information, leftTime, repTime, information, funcdescide){
       var showStatus  = "";
       var parent = "";
       if(status == 1){
@@ -69,8 +69,10 @@ apiready = function(){
         container.setAttribute("class", "eves-detail");
         container.innerHTML =
                 "<span class='name-info'>" + ("" + information) + "</span>" +
+                "<span class='number-info'>" + ("编号（" + messageId + "）") + "</span>" +
+                "<span class='report-time'>" + ("上报时间：" + repTime) + "</span>" +
                 "<span class='task-status'>" + ("状态（" + showStatus + "）") + "</span>" +
-                "<span class='task-info'>" + ( "说明:" + repTime ) + "</span>" +
+                "<span class='task-info'>" + ( "说明:" + information ) + "</span>" +
                 (parent.getAttribute("id") != "typelist4" ? ("<span class='task-time'>" + ( "" + time ) + "</span>") : "");
         parent.appendChild(container);
         container.addEventListener('click', function(e){
@@ -99,7 +101,7 @@ apiready = function(){
           var subcategoryname = data[i].subcategoryname;
           var types = bigcategoryname + "-" + subcategoryname;
 
-          addMessage(id, name, status, types, leftTime, information,
+          addMessage(id, name, status, types, leftTime, repTime, information,
             function(e, mid, mname, mstatus, minfo, mtime){
               //操作相关的info对象内容，并进行页面的内容的跳转。
               info.eventid = mid;
