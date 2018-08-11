@@ -15,15 +15,18 @@ apiready = function(){
     var parent = "";
     if(type == 2){
       parent = $api.byId('typelist2');
+      list1content[1]++;
     }
     else if(type == 1){
       parent = $api.byId('typelist1');
       cachelist.n.push({id:noticeId, name:name});
+      list1content[0]++;
     }
     else if((type == 32 || type == 128) && typeof result != "boolean"){
       parent = $api.byId('typelist3');
       information = "待审核（"+information+")";
       cachelist.c.push({id:noticeId, name:name});
+      list1content[2]++;
     }
     else {
       parent = $api.byId('typelist4');
@@ -63,11 +66,13 @@ apiready = function(){
   }
 
   var havetask = false;
+  var list1content = [0,0,0];
   var accordingToDatan = function(data){
     $api.byId('typelist3').innerHTML = "";
     $api.byId('typelist1').innerHTML = "";
     $api.byId('typelist2').innerHTML = "";
     $api.byId('typelist4').innerHTML = "";
+    list1content = [0,0,0];
     if(data.length){
       var num = data.length;
       for(var i = 0 ; i < data.length ; i++){
@@ -133,6 +138,7 @@ apiready = function(){
               else {
                 info.taskid = id;
                 info.taskdata = ret.data;
+                alert(JSON.stringify(ret.data));
                 animationStart(function(){}, "mistakeForTask" , "../html/mistakeForTask.html" , info, true);
               }
             }
@@ -213,6 +219,14 @@ apiready = function(){
       function(ret){
         if(ret.result){
           accordingToDatan(ret.data);
+          list1content.forEach(function(item, index){
+            if(item == 0){
+              $api.byId('bs'+(index+1)).setAttribute("hidden", "hidden");
+            }else {
+              $api.byId('bs'+(index+1)).removeAttribute("hidden");
+              $api.byId('bs'+(index+1)).innerHTML = item + "";
+            }
+          });
           $api.byId('loading').setAttribute("style", "display:none;");
           callback && callback();
           notification();

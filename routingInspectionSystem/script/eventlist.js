@@ -9,40 +9,47 @@ apiready = function(){
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
-    var addMessage = function(messageId, name, status, information, leftTime, repTime, information, funcdescide){
+    var addMessage = function(messageId, name, status, types, leftTime, repTime, information, funcdescide){
       var showStatus  = "";
       var parent = "";
       if(status == 1){
         showStatus = "待接单";
         parent = $api.byId('typelist1');
         cachelist.n.push({id:messageId, name:name});
+        list1content[0]++;
       }
       else if(status == 2){
         showStatus = "处理中";
         parent = $api.byId('typelist2');
+        list1content[1]++;
       }
       else if(status == 4){
         showStatus = "挂起待审批";
         parent = $api.byId('typelist3');
         cachelist.c.push({id:messageId, name:name});
+        list1content[2]++;
       }
       else if(status == 8){
         showStatus = "延时待审批";
         parent = $api.byId('typelist3');
         cachelist.c.push({id:messageId, name:name});
+        list1content[2]++;
       }
       else if(status == 16){
         showStatus = "待处理";
         parent = $api.byId('typelist2');
+        list1content[1]++;
       }
       else if(status == 32){
         showStatus = "待处理";
         parent = $api.byId('typelist2');
+        list1content[1]++;
       }
       else if(status == 64){
         showStatus = "待审核";
         parent = $api.byId('typelist3');
         cachelist.c.push({id:messageId, name:name});
+        list1content[2]++;
       }
       else if(status == 128){
         showStatus = "超时完成";
@@ -68,7 +75,7 @@ apiready = function(){
      	var container = document.createElement("div");
         container.setAttribute("class", "eves-detail");
         container.innerHTML =
-                "<span class='name-info'>" + ("" + information) + "</span>" +
+                "<span class='name-info'>" + ("" + types) + "</span>" +
                 "<span class='number-info'>" + ("编号（" + messageId + "）") + "</span>" +
                 "<span class='report-time'>" + ("上报时间：" + repTime) + "</span>" +
                 "<span class='task-status'>" + ("状态（" + showStatus + "）") + "</span>" +
@@ -78,15 +85,17 @@ apiready = function(){
         container.addEventListener('click', function(e){
             e.preventDefault();
             e.stopPropagation();
-            funcdescide && funcdescide(e, messageId, name, status, information, leftTime);
+            funcdescide && funcdescide(e, messageId, name, status, types, leftTime, repTime, information);
         }, false);
     }
 
+    var list1content = [0,0,0];
     var accordingToData = function(data){
       $api.byId('typelist3').innerHTML = "";
       $api.byId('typelist1').innerHTML = "";
       $api.byId('typelist2').innerHTML = "";
       $api.byId('typelist4').innerHTML = "";
+      list1content = [0,0,0];
       if(data.length){
         var num = data.length;
         for(var i = 0 ; i < data.length ; i++){
@@ -108,7 +117,7 @@ apiready = function(){
               info.eventstatus = mstatus;
               info.check = addcheck;
               animationStart(function(){}, "dealWithEvent", "../html/dealWithEvent.html", info, true);
-          })
+          });
         }
       }
       var eli = [];
@@ -148,6 +157,14 @@ apiready = function(){
         function(ret){
           if(ret.result){
             accordingToData(ret.data);
+            list1content.forEach(function(item, index){
+              if(item == 0){
+                $api.byId('bs'+(index+1)).setAttribute("hidden", "hidden");
+              }else {
+                $api.byId('bs'+(index+1)).removeAttribute("hidden");
+                $api.byId('bs'+(index+1)).innerHTML = item + "";
+              }
+            });
             $api.byId('loading').setAttribute("style", "display:none;");
             callback && callback();
             notification();

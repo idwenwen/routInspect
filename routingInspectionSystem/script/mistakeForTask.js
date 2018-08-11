@@ -18,7 +18,9 @@ apiready = function(){
 			var group = taskinfo.group;
 			var members = "";
 			var result = taskinfo.result;
+			var point = taskinfo.point;
 			var ex = 1;
+			var missp = "";
 			if(typeof result == "boolean"){
 				if((state == 32 || state == 64 || state == 128) && result === false){
 					information = "异常结束(" + taskinfo.statename + ")";
