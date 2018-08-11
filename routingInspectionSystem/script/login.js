@@ -207,7 +207,16 @@ apiready = function(){
 
     }
 
-    $api.clearStorage();
+    var idle = function(){
+      api.addEventListener({
+          name:'appidle',
+          extra:{
+              timeout:300            //设置经过多长时间不操作屏幕时触发，单位秒，数字类型
+          }
+      }, function(ret, err){
+          alert('已闲置');
+      });
+    }
 
     window.$api.byId('submitBtn').addEventListener("click", function(){
 

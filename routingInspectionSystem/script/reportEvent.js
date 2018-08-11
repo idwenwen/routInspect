@@ -81,6 +81,7 @@ apiready = function(){
 		}
 
 		//照片添加
+		var FNPhotograph = api.require('FNPhotograph');
 		var getPicture = function(success, fail){
 			api.getPicture({
 			    sourceType: 'camera',
@@ -88,16 +89,60 @@ apiready = function(){
 			    mediaValue: 'pic',
 			    destinationType: 'url',
 			    allowEdit: true,
-			    quality: 40,
+			    quality: 50,
 					targetWidth: 1000,
-			    saveToPhotoAlbum: false
+			    saveToPhotoAlbum: true
 			}, function(ret, err) {
-			    if (ret) {
-			        success && success(ret);
-			    } else {
-			        fail && fail(err);
+					if( ret ){
+			// FNPhotograph.openCameraView({
+			// 		rect: {
+			//        x: 0,
+			//        y: 0,
+			//        w: "auto",
+			//        h: "auto"
+			//     },
+			//     quality: 'medium',
+			// 		orientation: 'portrait',
+			//     fixedOn: api.frameName,
+			//     fixed: true
+			// }, function(ret){
+			//     if (ret.eventType == "takePhoto") {
+			// 				alert(ret.imagePath);
+							// var img = new Image();
+							// img.src = ret.imagePath;
+							// img.onload = function(){
+							// 	EXIF.getData(img, function(){
+							// 		var or = EXIF.getAllTags(this);
+							// 		alert(JSON.stringify(or));
+							// 	});
+							// }
+							// ret.data = ret.imagePath;
+							var img = new Image();
+							img.onload = function(){
+								EXIF.getData(img, function(){
+									//获取oritention数据依据数据进行数据判断内容。
+								});
+								success && success(ret);
+							}
+							img.src = ret.data;
+							// FNPhotograph.close(function(ret) {
+							//     if (ret) {
+							//         alert(JSON.stringify(ret));
+							//     }
+							// });
 			    }
 			});
+		}
+
+		function getBase64Image(img) {
+		     var canvas = document.createElement("canvas");
+		     canvas.width = img.width;
+		     canvas.height = img.height;
+		     var ctx = canvas.getContext("2d");
+		     ctx.drawImage(img, 0, 0, img.width, img.height);
+		     var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+		     var dataURL = canvas.toDataURL("image/"+ext);
+		     return dataURL;
 		}
 
 		//添加路段内容

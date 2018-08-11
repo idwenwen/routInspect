@@ -8,6 +8,157 @@ apiready = function(){
 		username : userInfo.username,
 	}
 
+	var eventcache = {};
+	var enew = -1;
+	var echeck = -1;
+
+	var taskcache = {};
+	var tnew = -1;
+	var tcache = -1;
+
+	var checkdifferent = function(arr1, arr2){
+		if(arr1.length != arr2.length){
+			return true;
+		}
+		arr1.forEach(function(item, index){
+			if(item.id != arr2[index].id){
+				return true;
+			}
+		});
+		return false;
+	}
+
+	var eventNotice = function(){
+		api.addEventListener({
+				name: 'notificationE'
+		}, function(ret, err){
+				var eventc = ret.value.cachelist;
+				if(eventcache.n){
+					if(checkdifferent(eventc.n, eventcache.n)){
+						alert("new");
+						if(enew == -1){
+							// 说明当前没有任何的提示内容
+							api.notification({
+							    notify: {
+							        content: '有新的事项有待处理！',
+											extra: "newEvent"
+							    }
+							}, function(ret, err){
+							    if( ret ){
+							         enew = ret.id;
+							    }
+							});
+						}
+					}
+				}
+				if(eventcache.c){
+					if(checkdifferent(eventc.c, eventcache.c)){
+						if(echeck == -1){
+							// 说明当前没有任何的提示内容
+							api.notification({
+							    notify: {
+							        content: '有新的待审核事项哟！',
+											extra: "checkEvent"
+							    }
+							}, function(ret, err){
+							    if( ret ){
+							         echeck = ret.id;
+							    }
+							});
+						}
+					}
+				}
+				eventcache = eventc;
+			}
+		);
+	}
+
+	var taskNotice = function(){
+		api.addEventListener({
+				name: 'notificationT'
+		}, function(ret, err){
+				var taskc = ret.value.cachelist;
+				if(taskcache.n){
+					if(checkdifferent(taskc.n, taskcache.n)){
+						if(tnew == -1){
+							// 说明当前没有任何的提示内容
+							api.notification({
+							    notify: {
+							        content: '有新的任务有待处理！',
+											extra: "newTask"
+							    }
+							}, function(ret, err){
+							    if( ret ){
+							         tnew = ret.id;
+							    }
+							});
+						}
+					}
+				}
+				if(taskcache.c){
+					if(checkdifferent(taskc.c, taskcache.c)){
+						if(tcheck == -1){
+							// 说明当前没有任何的提示内容
+							api.notification({
+							    notify: {
+							        content: '有新的待审核任务哟！',
+											extra: "checkTask"
+							    }
+							}, function(ret, err){
+							    if( ret ){
+							         tcheck = ret.id;
+							    }
+							});
+						}
+					}
+				}
+				taskcache = taskc;
+			}
+		);
+	}
+
+	//消息提醒监控
+	var noticeWatching = function(){
+		api.addEventListener({
+		    name: 'noticeclicked'
+		}, function(ret, err){
+		    if( ret ){
+		    	var check = ret.value;
+					if(check == "newEvent"){
+						api.cancelNotification({
+						    id: enew
+						});
+						enew = -1;
+						animationStart(function(){}, "eventlist" ,"./html/eventlist.html", true);
+					}
+					else if(check == "checkEvent"){
+						api.cancelNotification({
+						    id: echeck
+						});
+						echeck = -1;
+						animationStart(function(){}, "eventlist" ,"./html/eventlist.html", true);
+					}
+					else if(check == "tnew"){
+						api.cancelNotification({
+						    id: tnew
+						});
+						tnew = -1;
+						animationStart(function(){}, "noticelist" ,"./html/noticelist.html", true);
+					}
+					else if(check == "checkEvent"){
+						api.cancelNotification({
+						    id: tcheck
+						});
+						tcheck = -1;
+						animationStart(function(){}, "noticelist" ,"./html/noticelist.html", true);
+					}
+		    }
+		});
+	}
+	eventNotice();
+	taskNotice();
+	noticeWatching();
+
 	// var amapLocation = api.require('aMapLocation');
 	// var myx = 0;
 	// var myy = 0;

@@ -430,13 +430,13 @@ apiready = function(){
 							// }
 						}
 						else {
-							if(p.scanner){
-								if(p.ele){
-									p.ele.setIcon("../icon/ins-g.png");
-								}
-								p.rele && p.rele.setColors("green");
-								requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
-							}
+							// if(p.scanner){
+							// 	if(p.ele){
+							// 		p.ele.setIcon("../icon/ins-g.png");
+							// 	}
+							// 	p.rele && p.rele.setColors("green");
+							// 	requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
+							// }
 						}
 					}
 				}
@@ -788,25 +788,21 @@ apiready = function(){
 						if(p.photo){
 							getPicture(function(){
 								p.scanner = true;
-								if(p.marker){
 									if(p.ele){
 										p.ele.setIcon("../icon/ins-g.png");
 									}
 									p.rele && p.rele.setColors("green");
 									requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
-								}
 							});
 						}
 						else {
 							p.scanner = true;
-							if(p.marker){
 								if(p.ele){
 									p.ele.setIcon("../icon/ins-g.png");
 								}
 								p.rele && p.rele.setColors("green");
 								requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
 							}
-						}
 					}
 					else {
 						continue;

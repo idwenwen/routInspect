@@ -18,10 +18,12 @@ apiready = function(){
     }
     else if(type == 1){
       parent = $api.byId('typelist1');
+      cachelist.n.push({id:noticeId, name:name});
     }
     else if((type == 32 || type == 128) && typeof result != "boolean"){
       parent = $api.byId('typelist3');
-      information = "待审核（"+information+")"
+      information = "待审核（"+information+")";
+      cachelist.c.push({id:noticeId, name:name});
     }
     else {
       parent = $api.byId('typelist4');
@@ -202,6 +204,7 @@ apiready = function(){
     });
   }
 
+
   var request = function(callback){
     connectToService(commonURL + "?action=tasklist",
       {
@@ -212,6 +215,7 @@ apiready = function(){
           accordingToDatan(ret.data);
           $api.byId('loading').setAttribute("style", "display:none;");
           callback && callback();
+          notification();
         }
         else {
           alert("获取任务信息失败");
@@ -278,16 +282,27 @@ apiready = function(){
     });
   }
 
+  var cachelist = {n:[], c:[]};
   var initedPage = function(){
     dynamic();
     request();
     changelist(check);
     var refreshInterval = function(){
       setTimeout(function(){
+        cachelist = {n:[], c:[]};
         request(refreshInterval);
       },15000);
     }
     refreshInterval();
+  }
+
+  var notification = function(data){
+    api.sendEvent({
+        name: 'notificationT',
+        extra: {
+            cachelist: cachelist
+        }
+    });
   }
 
   initedPage();

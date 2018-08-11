@@ -15,6 +15,7 @@ apiready = function(){
       if(status == 1){
         showStatus = "待接单";
         parent = $api.byId('typelist1');
+        cachelist.n.push({id:messageId, name:name});
       }
       else if(status == 2){
         showStatus = "处理中";
@@ -23,10 +24,12 @@ apiready = function(){
       else if(status == 4){
         showStatus = "挂起待审批";
         parent = $api.byId('typelist3');
+        cachelist.c.push({id:messageId, name:name});
       }
       else if(status == 8){
         showStatus = "延时待审批";
         parent = $api.byId('typelist3');
+        cachelist.c.push({id:messageId, name:name});
       }
       else if(status == 16){
         showStatus = "待处理";
@@ -39,6 +42,7 @@ apiready = function(){
       else if(status == 64){
         showStatus = "待审核";
         parent = $api.byId('typelist3');
+        cachelist.c.push({id:messageId, name:name});
       }
       else if(status == 128){
         showStatus = "超时完成";
@@ -144,6 +148,7 @@ apiready = function(){
             accordingToData(ret.data);
             $api.byId('loading').setAttribute("style", "display:none;");
             callback && callback();
+            notification();
           }
         },
         function(ret){
@@ -218,16 +223,28 @@ apiready = function(){
 
     }
 
+    var cachelist = {n:[], c:[]};
     var initedPage = function(){
       dynamic();
       request();
       changelist(check);
       var refreshInterval = function(){
         setTimeout(function(){
+          cachelist = {n:[], c:[]};
           request(refreshInterval);
         },15000);
       }
       refreshInterval();
+    }
+
+    //存储当前的列表内容。
+    var notification = function(data){
+      api.sendEvent({
+          name: 'notificationE',
+          extra: {
+              cachelist: cachelist
+          }
+      });
     }
 
     initedPage();
