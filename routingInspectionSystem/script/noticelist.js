@@ -138,7 +138,6 @@ apiready = function(){
               else {
                 info.taskid = id;
                 info.taskdata = ret.data;
-                alert(JSON.stringify(ret.data));
                 animationStart(function(){}, "mistakeForTask" , "../html/mistakeForTask.html" , info, true);
               }
             }

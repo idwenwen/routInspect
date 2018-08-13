@@ -18,7 +18,8 @@ apiready = function(){
 			var group = taskinfo.group;
 			var members = "";
 			var result = taskinfo.result;
-			var point = taskinfo.point;
+			var tpoints = taskinfo.point;
+			var misspointStr = "";
 			var ex = 1;
 			var missp = "";
 			if(typeof result == "boolean"){
@@ -57,6 +58,25 @@ apiready = function(){
 					members = " 组员：" + members;
 				}
 				members = "组长：" + taskinfo.username + members;
+			}
+			//整理没有打卡的点
+			var infomiss = "";
+			for(var a = 0; a < tpoints.length; a++){
+				if(!tpoints[a].marker){
+					if(!infomiss){
+						infomiss += tpoints[a].name;
+					}
+					else {
+						infomiss += ", "+tpoints[a].name;
+					}
+				}
+			}
+			if(infomiss) {
+				$api.byId('misspointsinfo').innerHTML = infomiss;
+				ex = 1;
+			}
+			else {
+				$api.byId('missPoint').setAttribute("style", "display:none;");
 			}
 			$api.byId('infoStatus').innerHTML = information;
 			$api.byId('infoTitle').innerHTML = taskinfo.name;
