@@ -8,6 +8,22 @@ apiready = function(){
 		username : userInfo.username,
 	}
 
+	var background = false;
+	api.addEventListener({
+	    name: 'pause'
+	}, function(ret, err){
+	    background = true;
+			//TODO:唤醒
+	});
+
+	api.addEventListener({
+	    name: 'resume'
+	}, function(ret, err){
+	    background = false;
+	});
+
+
+
 	var eventcache = {};
 	var enew = -1;
 	var echeck = -1;
@@ -32,6 +48,9 @@ apiready = function(){
 		api.addEventListener({
 				name: 'notificationE'
 		}, function(ret, err){
+				if(!background){
+					return false;
+				}
 				var eventc = ret.value.cachelist;
 				if(eventcache.n){
 					if(checkdifferent(eventc.n, eventcache.n)){
@@ -76,6 +95,9 @@ apiready = function(){
 		api.addEventListener({
 				name: 'notificationT'
 		}, function(ret, err){
+				if(!background){
+					return false;
+				}
 				var taskc = ret.value.cachelist;
 				if(taskcache.n){
 					if(checkdifferent(taskc.n, taskcache.n)){
