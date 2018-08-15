@@ -35,7 +35,6 @@ apiready = function(){
 				var eventc = ret.value.cachelist;
 				if(eventcache.n){
 					if(checkdifferent(eventc.n, eventcache.n)){
-						alert("new");
 						if(enew == -1){
 							// 说明当前没有任何的提示内容
 							api.notification({
