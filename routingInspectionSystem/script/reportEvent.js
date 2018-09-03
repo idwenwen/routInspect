@@ -259,7 +259,6 @@ apiready = function(){
 				values: { "userid": info.user.userid }
 			},
 			function(ret){
-				alert(JSON.stringify(ret));
 				if(ret.result == true){
 					ret.data.forEach(function(item, index){
 						var sl = item.area.split("|");
@@ -281,7 +280,6 @@ apiready = function(){
 								values: { "areaid": areasId[i] }
 							},
 							function(ret){
-								alert(JSON.stringify(ret));
 								if(ret.result == true){
 									areas = [];
 									areasId = [];
@@ -435,7 +433,6 @@ apiready = function(){
 						files: {"accident": addMessageP, "position": addPositionP}
 				},
 				function(ret){
-					alert(JSON.stringify(ret));
 						if(ret.result){
 							//上报成功。
 							if(func){
