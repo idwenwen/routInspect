@@ -30,15 +30,20 @@
               <div class="button-con b3" id="b3">待审核<span class="hintnum" id="bs3">0</span></div>
               <div class="button-con b4" id="b4">已完成</div>
             </div>
+            <div class="button-list">
+              <div class="button-con-big b5" id="b5">筛选</div>
+              <div class="button-con-big b6" id="b6">我发布</div>
+              <div class="button-con-big b7" id="b7" style="display:none;">我处理</div>
+            </div>
             <div class="content-list" id="typelist1">
-              <div class="notice-detail">
+              <!-- <div class="notice-detail">
                 <span class='name-info'>某某大类-某某小类</span>
                 <span class="number-info">(1012348691023)</span>
                 <span class="report-time">上报时间：2018-08-12</span>
                 <span class='task-status'>待处理</span>
                 <span class='task-info'>说明：我们当前的说明产业相关内弄。</span>
                 <span class='task-time'>无限时</span>
-              </div>
+              </div> -->
             </div>
             <div class="content-list" id="typelist2" style="display:none;">
 
@@ -48,6 +53,41 @@
             </div>
             <div class="content-list" id="typelist4" style="display:none;">
 
+            </div>
+            <div class="search-box" id="searchboxdiv" hidden="hidden">
+              <div class="blackground" id="blackgrounds"></div>
+              <div class="middle-search">
+                <input type="text" placeholder="请输入事项编号" id="search-number">
+                <div id="search-road" class="middles-d">请选择事项路段</div>
+                <div id="search-type-big" class="middles-d">请选择事项大类型</div>
+                <div id="search-type-small" class="middles-d">请选择事项小类型</div>
+                <div class="search-time">
+                  <input type="text" id="year" placeholder="年"> -
+                  <input type="text" id="mounth" placeholder="月"> -
+                  <input type="text" id="day" placeholder="日">
+                </div>
+                <button class="searchbtn" id="searchbtn">确定</button>
+                <button class="searchbtn" id="restbtn">重置</button>
+              </div>
+            </div>
+            <div class="search-box" style="z-index:31" id="searchboxdivroad" hidden="hidden">
+              <div class="blackground" id="blackgroundroad"></div>
+              <div class="choose-search">
+                <input type="text" id="searchroad" class="searchroad" placeholder="搜索路段"/>
+                <div class="detail-info" id="roadcontent">
+                </div>
+              </div>
+            </div>
+            <div class="search-box" style="z-index:31" id="searchboxdivbig" hidden="hidden">
+              <div class="blackground" id="blackgroundbig"></div>
+              <div class="choose-search" id="bigtypecontent">
+
+              </div>
+            </div>
+            <div class="search-box" style="z-index:31" id="searchboxdivsmall" hidden="hidden">
+              <div class="blackground" id="blackgroundsmall"></div>
+              <div class="choose-search" id="smalltypecontent">
+              </div>
             </div>
         </div>
         <div id="footer">

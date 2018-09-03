@@ -246,6 +246,80 @@ apiready = function(){
 			}
 		}
 
+		var areas = [];
+		var areasId = [];
+		var getAreaId = [];
+
+		var requestArea = function(pos, checkstuff, obj){
+			areas = [];
+			areasId = [];
+		  getAreaId = [];
+			connectToService(commonURL + "?action=area",
+			{
+				values: { "userid": info.user.userid }
+			},
+			function(ret){
+				alert(JSON.stringify(ret));
+				if(ret.result == true){
+					ret.data.forEach(function(item, index){
+						var sl = item.area.split("|");
+						var originl = [];
+						sl.forEach(function(item, index){
+							var poss = item.split(",");
+							originl.push(poss);
+						})
+						areas.push(originl);
+						areasId.push(item.id);
+					});
+					for(var i = 0; i < areas.length ; i++){
+						var checkpoint = [pos.lon, pos.lat];
+						var check = AMap.GeometryUtil.isPointInRing(checkpoint, areas[i]);
+						if(check){
+							getAreaId.push(areasId[i]);
+							connectToService(commonURL + "?action=subarea",
+							{
+								values: { "areaid": areasId[i] }
+							},
+							function(ret){
+								alert(JSON.stringify(ret));
+								if(ret.result == true){
+									areas = [];
+									areasId = [];
+									ret.data.forEach(function(item, index){
+										var sl = item.area.split("|");
+										var originl = [];
+										sl.forEach(function(item, index){
+											var poss = item.split(",");
+											originl.push(poss);
+										})
+										areas.push(originl);
+										areasId.push(item.id);
+									});
+								}
+							});
+							for(var j = 0; j < areas.length ; j++){
+								var checkpoint = [pos.lon, pos.lat];
+								var checksub = AMap.GeometryUtil.isPointInRing(checkpoint, areas[j]);
+								if(checksub){
+									getAreaId.push(areasId[j]);
+								}
+							}
+						}
+						break;
+					}
+					if(checkstuff){
+						requestEvent(pos, true, obj);
+					}
+					else {
+						requestEvent(pos, false, obj);
+					}
+				}
+				else {
+					alert("无法确定当前用户所属区域，事项提交失败");
+				}
+			});
+		}
+
 		//当前页面照片内容获取\
 		var target = "";
 		var imageUrl = "";
@@ -337,58 +411,56 @@ apiready = function(){
 					    if( ret ){
 					         alert( JSON.stringify( err ) );
 					    }
-							connectToService( commonURL + "?action=event",
-								{
-									values: {"road": sectionid, "type": chooseid, "explain": explain, "address": address,
-										"lat": position.lat, "lon": position.lon, "userid": userid},
-										files: {"accident": addMessageP, "position": addPositionP}
-								},
-								function(ret){
-										if(ret.result){
-											//上报成功。
-										}
-										else {
-											alert("事件未上报成功: " + ret.desc);
-										}
-						    },
-						    function(ret, err){
-									alert(JSON.stringify(err));
-						    }
-							);
+							requestArea(position, false, {"explain":explain, "address":address});
 							api.removeEventListener({
 							    name: 'hasGetPosition'
 							});
 					});
-					setTimeout(function(){
-						$api.byId('checkTypeList').removeAttribute("style");
-					}, 500);
-					animationStart(function(){}, history.page, history.url, info);
-
+					changePages();
 				}
 				else {
-				  connectToService( commonURL + "?action=event",
-						{
-							values: {"road": sectionid, "type": chooseid, "explain": explain, "address": address,
-								"lat": position.lat, "lon": position.lon, "userid": userid},
-								files: {"accident": addMessageP, "position": addPositionP}
-						},
-						function(ret){
-								if(ret.result){
-									alert("事件上报成功!");
-									setTimeout(function(){
-										$api.byId('checkTypeList').removeAttribute("style");
-									}, 500);
-									animationStart(function(){}, history.page, history.url, info);
-								}
-								else {
-									alert("事件未上报成功: " + ret.desc);
-								}
-				    },
-				    function(ret, err){
-							alert(JSON.stringify(err));
-				    }
-					);
+					requestArea(position, true, {"explain":explain, "address":address});
 				}
+		}
+
+		var requestEvent = function(position, func, obj){
+			var areaStr = "";
+			if(getAreaId.length > 0){
+				areaStr = getAreaId.toString();
+			}
+			connectToService( commonURL + "?action=event",
+				{
+					values: {"road": sectionid, "type": chooseid, "explain": obj.explain, "address": obj.address,
+						"lat": position.lat, "lon": position.lon, "userid": userid, "areaid": areaStr},
+						files: {"accident": addMessageP, "position": addPositionP}
+				},
+				function(ret){
+					alert(JSON.stringify(ret));
+						if(ret.result){
+							//上报成功。
+							if(func){
+								alert("事件上报成功!");
+								changePages();
+							}
+							else {
+								//TODO:暂定
+							}
+						}
+						else {
+							alert("事件未上报成功: " + ret.desc);
+						}
+				},
+				function(ret, err){
+					alert(JSON.stringify(err));
+				}
+			);
+		}
+
+		var changePages = function(){
+			setTimeout(function(){
+				$api.byId('checkTypeList').removeAttribute("style");
+			}, 500);
+			animationStart(function(){}, history.page, history.url, info);
 		}
 
 		var checkIndex = -1;

@@ -1,15 +1,17 @@
 apiready = function(){
     var info = api.pageParam.info;
-    var history = info.history ;
+
+    if(!info.history){info.history = {};}
     info.history.page = "eventlist";
     info.history.url = "../html/eventlist.html";
+    var history = info.history ;
     var check = info.check || 1;
     var addcheck = check;
 
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
-    var addMessage = function(messageId, name, status, types, leftTime, repTime, information, funcdescide){
+    var addMessage = function(messageId, name, status, types, leftTime, repTime, information, road, handlename, funcdescide){
       var showStatus  = "";
       var parent = "";
       if(status == 1){
@@ -77,16 +79,26 @@ apiready = function(){
         container.innerHTML =
                 "<span class='name-info'>" + ("" + types) + "</span>" +
                 "<span class='number-info'>" + ("编号（" + messageId + "）") + "</span>" +
+                "<span class='report-time'>" + ("上报人员：" + name) + "</span>" +
+                "<span class='report-time'>" + ("所处路段：" + road) + "</span>" +
                 "<span class='report-time'>" + ("上报时间：" + repTime) + "</span>" +
+                "<span class='report-time' style='display:none;'>" + ("处理人员" + handlename) + "</span>" +
                 "<span class='task-status'>" + ("状态（" + showStatus + "）") + "</span>" +
                 "<span class='task-info'>" + ( "说明:" + information ) + "</span>" +
                 (parent.getAttribute("id") != "typelist4" ? ("<span class='task-time'>" + ( "" + time ) + "</span>") : "");
         parent.appendChild(container);
+        screenForSure(container);
         container.addEventListener('click', function(e){
             e.preventDefault();
             e.stopPropagation();
             funcdescide && funcdescide(e, messageId, name, status, types, leftTime, repTime, information);
         }, false);
+    }
+
+    var screenForSure = function(container){
+       hidechoose(container);
+       checkmyrequest(container);
+       checkmyhandle(container);
     }
 
     var list1content = [0,0,0];
@@ -109,8 +121,10 @@ apiready = function(){
           var bigcategoryname = data[i].bigcategoryname;
           var subcategoryname = data[i].subcategoryname;
           var types = bigcategoryname + "-" + subcategoryname;
+          var road = data[i].road;
+          var handlename = data[i].handlname;
 
-          addMessage(id, name, status, types, leftTime, repTime, information,
+          addMessage(id, name, status, types, leftTime, repTime, information, road, handlename,
             function(e, mid, mname, mstatus, minfo, mtime){
               //操作相关的info对象内容，并进行页面的内容的跳转。
               info.eventid = mid;
@@ -194,28 +208,52 @@ apiready = function(){
         e.preventDefault();
         e.stopPropagation();
         changelist(1);
+        recovery(addcheck);
+        clearscreen();
+        clearmycheck();
         addcheck = 1;
+        $api.byId("b6").removeAttribute("style");
+        $api.byId("b7").removeAttribute("style");
+        changeShowing(false);
       });
 
       $api.byId('b2').addEventListener("click", function(e){
         e.preventDefault();
         e.stopPropagation();
         changelist(2);
+        recovery(addcheck);
+        clearscreen();
+        clearmycheck();
         addcheck = 2;
+        $api.byId("b6").removeAttribute("style");
+        $api.byId("b7").removeAttribute("style");
+        changeShowing(true);
       });
 
       $api.byId('b3').addEventListener("click", function(e){
         e.preventDefault();
         e.stopPropagation();
         changelist(3);
+        recovery(addcheck);
+        clearscreen();
+        clearmycheck();
         addcheck = 3;
+        $api.byId("b6").removeAttribute("style");
+        $api.byId("b7").removeAttribute("style");
+        changeShowing(true);
       });
 
       $api.byId('b4').addEventListener("click", function(e){
         e.preventDefault();
         e.stopPropagation();
         changelist(4);
+        recovery(addcheck);
+        clearscreen();
+        clearmycheck();
         addcheck = 4;
+        $api.byId("b6").removeAttribute("style");
+        $api.byId("b7").removeAttribute("style");
+        changeShowing(true);
       });
 
       $api.byId('reportEve').addEventListener("click", function(e){
@@ -232,6 +270,113 @@ apiready = function(){
         info.check = 1;
         animationStart(function(){}, "modellist", "../html/modellist.html", info);
       });
+
+      $api.byId('b5').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId("searchboxdiv").removeAttribute("hidden");
+      });
+
+      $api.byId('b6').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        hidelist(recovery);
+        if($api.byId('b6').getAttribute("style")){
+          $api.byId('b6').removeAttribute("style");
+          myrequest = false;
+          recoveryfrommyrequest();
+        }
+        else {
+          $api.byId("b6").setAttribute("style", "background-color:#336699;color:white");
+          myrequest = true;
+          hidelistforMy(checkmyrequest);
+        }
+      });
+
+      $api.byId('b7').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        hidelist(recovery);
+        if($api.byId('b7').getAttribute("style")){
+          $api.byId('b7').removeAttribute("style");
+          myhandle = false;
+          recoveryfrommyhandle();
+        }
+        else {
+          $api.byId("b7").setAttribute("style", "background-color:#336699;color:white");
+          myhandle = true;
+          hidelistforMy(checkmyhandle);
+        }
+      });
+
+      $api.byId('blackgrounds').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId("searchboxdiv").setAttribute("hidden", "hidden");
+      });
+
+      $api.byId('blackgroundbig').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId("searchboxdivbig").setAttribute("hidden", "hidden");
+      });
+
+      $api.byId('blackgroundsmall').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId("searchboxdivsmall").setAttribute("hidden", "hidden");
+      });
+
+      $api.byId('blackgroundroad').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId("searchboxdivroad").setAttribute("hidden", "hidden");
+      });
+
+      $api.byId('search-type-big').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId('searchboxdivbig').removeAttribute("hidden", "hidden");
+      });
+
+      $api.byId("search-road").addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId('searchboxdivroad').removeAttribute("hidden");
+      });
+
+      $api.byId('searchroad').addEventListener("input", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var inputData = $api.byId('searchroad').value;
+        var child = $api.byId('roadcontent').children;
+        for(var i = 0 ; i < child.length ; i ++){
+          if(!(child[i].innerHTML.match(inputData))){
+            child[i].setAttribute("style", "display:none;");
+          }
+          else {
+            child[i].removeAttribute("style");
+          }
+        }
+      });
+
+
+      $api.byId('searchbtn').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        //todo:依据编号
+        screenData();
+        hidelist(recovery);
+        $api.byId('searchboxdiv').setAttribute("hidden", "hidden");
+      });
+
+      $api.byId('restbtn').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        //todo:依据编号
+        clearscreen();
+      });
+
 
       api.addEventListener({
         name: 'keyback'
@@ -266,5 +411,319 @@ apiready = function(){
       });
     }
 
+    var gettypedata = function(){
+      var data = $api.getStorage('eventclass');
+			if(data){
+				drawingDetail(data);
+			}
+			else {
+				connectToService(commonURL + "?action=eventclass",
+		    	null,function(ret){
+	        	if(ret.result == true){
+							$api.setStorage('eventclass', ret.data);
+							drawingDetail(ret.data);
+						}
+			    },
+			    function(ret){
+	          alert(JSON.stringify(ret.desc));
+			    }
+				);
+			}
+    }
+
+    var biglist = [];
+    var smallList = [];
+    var drawingDetail = function(data){
+      data.forEach(function(item, index){
+        biglist.push(item.name);
+        var sl = [];
+        item.items.forEach(function(item, index){
+          sl.push(item.name);
+        });
+        smallList.push(sl);
+      });
+      addingbigType(biglist);
+    }
+
+    var addingbigType = function(list){
+      $api.byId("bigtypecontent").innerHTML = "";
+      list.forEach(function(item, index){
+        var spanc = document.createElement("span");
+        spanc.setAttribute("class", "type-de");
+        spanc.setAttribute("id", "bigtype-"+index);
+        spanc.innerHTML = item;
+        spanc.addEventListener("click", function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          var showingsmall = smallList[index];
+          addingSmallType(showingsmall);
+          $api.byId("search-type-big").innerHTML = item;
+          $api.byId('searchboxdivbig').setAttribute("hidden", "hidden");
+          $api.byId('search-type-small').addEventListener("click", function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            $api.byId('searchboxdivsmall').removeAttribute("hidden", "hidden");
+          });
+          $api.byId('search-type-small').innerHTML = "请选择事项小类型";
+          $api.byId('');
+
+        });
+        $api.byId('bigtypecontent').appendChild(spanc);
+      });
+    }
+
+    var addingSmallType = function(data){
+      $api.byId("smalltypecontent").innerHTML = "";
+      data.forEach(function(item, index){
+        var spanc = document.createElement("span");
+        spanc.setAttribute("class", "type-de");
+        spanc.setAttribute("id", "smalltyle-"+index);
+        spanc.innerHTML = item;
+        spanc.addEventListener("click", function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          $api.byId("search-type-small").innerHTML = item;
+          $api.byId('searchboxdivsmall').setAttribute("hidden", "hidden");
+        });
+        $api.byId('smalltypecontent').appendChild(spanc);
+      });
+    }
+
+    var getroad = function(){
+      var data = $api.getStorage("eventroad");
+      if(data){
+        drawingDetailP(data);
+      }
+      else {
+        connectToService(commonURL + "?action=eventroad",
+          null,function(ret){
+            if(ret.result == true){
+              $api.setStorage('eventroad', ret.data);
+              drawingDetailP(ret.data);
+            }
+          },
+          function(ret){
+            alert(JSON.stringify(ret.desc));
+          }
+        );
+      }
+    }
+
+    var drawingDetailP = function(data){
+      var roadlist = [];
+      data.forEach(function(item, index){
+        roadlist.push(item.name);
+      });
+      roadlist.forEach(function(item, index){
+        var spanc = document.createElement("span");
+        spanc.setAttribute("class", "type-de");
+        spanc.setAttribute("id", "roadtype-"+index);
+        spanc.innerHTML = item;
+        spanc.addEventListener("click", function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          $api.byId('search-road').innerHTML = item;
+          $api.byId('searchboxdivroad').setAttribute("hidden", "hidden");
+        });
+        $api.byId('roadcontent').appendChild(spanc);
+      });
+    }
+
+    var snumber = "";
+    var sroad = "";
+    var sbtype = "";
+    var sstype = "";
+    var tyear = "";
+    var tmonth = "";
+    var tday = "";
+    var time = "";
+    var screenData = function(){
+      checkscreen = true;
+      snumber = $api.byId('search-number').value;
+      sroad = $api.byId('search-road').innerHTML;
+      sbtype = $api.byId('search-type-big').innerHTML;
+      sstype = $api.byId('search-type-small').innerHTML;
+      tyear = $api.byId('year').value;
+      tmonth = $api.byId('mounth').value;
+      tday = $api.byId('day').value;
+      if(sroad == "请选择事项路段") {
+        sroad = "";
+      }
+      if(sbtype == "请选择事项大类型"){
+        sbtype = "";
+      }
+      if(sstype == "请选择事项小类型"){
+        sstype = "";
+      }
+      var nowd = new Date();
+      if(!tyear && !tmonth && !tday){
+        time = "";
+      }
+      else {
+        if(!tyear){
+          tyear = nowd.getFullYear();
+        }
+        if(!tmonth){
+          tmonth = nowd.getMonth() + 1;
+          if(tmonth < 10){
+            tmonth = "0" + tmonth;
+          }
+        }
+        if(!tday){
+          tday = nowd.getDay();
+          if(tday < 10){
+            tday = "0" + tday;
+          }
+        }
+        time = tyear+"-"+tmonth+"-"+tday;
+      }
+    }
+
+    var checkscreen = false;
+    var clearscreen = function(){
+      $api.byId('search-number').value = "";
+      $api.byId('search-road').innerHTML = "请选择事项路段";
+      $api.byId('search-type-big').innerHTML = "请选择事项大类型";
+      $api.byId('search-type-small').innerHTML = "请选择事项小类型";
+      $api.byId('year').value = "";
+      $api.byId('mounth').value = "";
+      $api.byId('day').value = "";
+      checkscreen = false;
+    }
+
+    var clearmycheck = function(){
+      myrequest = false;
+      myhandle = false;
+    }
+
+    var hidelist = function(func){
+      var page = addcheck ? addcheck : 1;
+      var list = $api.byId('typelist' + page).children;
+
+      if(func){
+        func(page);
+      }
+
+      for(var i = 0 ; i < list.length ; i ++){
+        hidechoose(list[i]);
+      }
+    }
+
+    var hidelistforMy = function(func){
+      var page = addcheck ? addcheck : 1;
+      var list = $api.byId('typelist' + page).children;
+      for(var i = 0 ; i < list.length ; i ++){
+        func(list[i]);
+      }
+    }
+
+    var hidechoose = function(list){
+      if(!checkscreen){
+        return ;
+      }
+      var childs = list.children;
+      var types = childs[0].innerHTML.split("-");
+      var checkfinal = true;
+      if(sbtype && sbtype != types[0]){
+        checkfinal = false;
+      }
+      if(sstype && sstype != types[1] && checkfinal){
+        checkfinal = false;
+      }
+      var num = childs[1].innerHTML;
+      if(snumber && !num.match(snumber) && checkfinal){
+        checkfinal = false;
+      }
+      var road = childs[3].innerHTML;
+      if(sroad && !road.match(sroad) && checkfinal){
+        checkfinal = false;
+      }
+      var repTime = childs[4].innerHTML;
+      if(time && !repTime.match(time) && checkfinal){
+        checkfinal = false;
+      }
+      if(!checkfinal){
+        list.setAttribute("hidden", "hidden");
+      }
+    }
+
+    var myrequest = false;
+    var checkmyrequest = function(list){
+      if(!myrequest){
+        return ;
+      }
+      var childs = list.children;
+      if(childs.length < 6){
+        return ;
+      }
+      var checkfinal = true;
+      var checkmine = childs[2].innerHTML;
+      var myname = myrequest ? info.user.name : "";
+      if(myname && !checkmine.match(myname)){
+        checkfinal = false;
+      }
+      if(!checkfinal){
+        list.setAttribute("hidden", "hidden");
+      }
+    }
+
+    var myhandle = false;
+    var checkmyhandle = function(list){
+      if(!myhandle){
+        return ;
+      }
+      var childs = list.children;
+      if(childs.length < 6){
+        return ;
+      }
+      var checkfinal = true;
+      var checkmine = childs[5].innerHTML; //需要修改
+      var myname = myhandle ? info.user.name : "";
+      if(myname && !checkmine.match(myname)){
+        checkfinal = false;
+      }
+      if(!checkfinal){
+        list.setAttribute("hidden", "hidden");
+      }
+    }
+
+    var recoveryfrommyrequest = function(){
+      hidelist(recovery);
+      hidelistforMy(checkmyhandle);
+    }
+
+    var recoveryfrommyhandle = function(){
+      hidelist(recovery);
+      hidelistforMy(checkmyrequest);
+    }
+
+    var recoveryfromall = function(){
+      hidelist(recovery);
+    }
+
+    var recovery = function(page){
+      var list = $api.byId('typelist' + page).children;
+      for(var i = 0 ; i < list.length; i ++){
+        list[i].removeAttribute("hidden");
+      }
+    }
+
+    var changeShowing = function(style){
+      if(style){
+        $api.byId('b5').setAttribute("class", "button-con-big-2 b5");
+        $api.byId('b6').setAttribute("class", "button-con-big-2 b6");
+        $api.byId('b7').setAttribute("class", "button-con-big-2 b7");
+        $api.byId('b7').removeAttribute("style");
+      }
+      else {
+        $api.byId('b5').setAttribute("class", "button-con-big b5");
+        $api.byId('b6').setAttribute("class", "button-con-big b6");
+        $api.byId('b7').setAttribute("class", "button-con-big b7");
+        $api.byId('b7').setAttribute("style", "display:none;");
+      }
+    }
+
     initedPage();
+    gettypedata();
+    getroad();
 }
