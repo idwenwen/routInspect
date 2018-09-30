@@ -31,8 +31,8 @@
               <div class="button-con b4" id="b4">已完成</div>
             </div>
             <div class="button-list">
-              <div class="button-con-big b5" id="b5">筛选</div>
-              <div class="button-con-big b6" id="b6">我发布</div>
+              <div class="button-con-big b5" id="b5">查询</div>
+              <div class="button-con-big b6" id="b6">我上报</div>
               <div class="button-con-big b7" id="b7" style="display:none;">我处理</div>
             </div>
             <div class="content-list" id="typelist1">
@@ -61,10 +61,15 @@
                 <div id="search-road" class="middles-d">请选择事项路段</div>
                 <div id="search-type-big" class="middles-d">请选择事项大类型</div>
                 <div id="search-type-small" class="middles-d">请选择事项小类型</div>
-                <div class="search-time">
-                  <input type="text" id="year" placeholder="年"> -
-                  <input type="text" id="mounth" placeholder="月"> -
-                  <input type="text" id="day" placeholder="日">
+                <span class="titleforrange">上报时间</span>
+                <div class="search-time" id="handletime">
+                  <input type="text" name="" value="" class="start_time" placeholder="起始时间" id="hst" readonly="readonly"> -
+                  <input type="text" name="" value="" class="end_time" placeholder="结束时间" id="het" readonly="readonly">
+                </div>
+                <span class="titleforrange">处理时间</span>
+                <div class="search-time" id="reportTime">
+                  <input type="text" name="" value="" class="start_time" placeholder="起始时间" id="rst" readonly="readonly"> -
+                  <input type="text" name="" value="" class="end_time" placeholder="结束时间" id="ret" readonly="readonly">
                 </div>
                 <button class="searchbtn" id="searchbtn">确定</button>
                 <button class="searchbtn" id="restbtn">重置</button>
@@ -90,6 +95,7 @@
               </div>
             </div>
         </div>
+        <div class="blackgroundbody" id="blackgroundsbody" style="display:none;"></div>
         <div id="footer">
             <h5>Copyright &copy;<span id="year"></span> </h5>
         </div>

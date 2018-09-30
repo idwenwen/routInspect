@@ -85,6 +85,7 @@ apiready = function(){
                 "<span class='report-time' style='display:none;'>" + ("处理人员" + handlename) + "</span>" +
                 "<span class='task-status'>" + ("状态（" + showStatus + "）") + "</span>" +
                 "<span class='task-info'>" + ( "说明:" + information ) + "</span>" +
+                "<span hidden='hidden'>" + ( leftTime ) + "</span>" +
                 (parent.getAttribute("id") != "typelist4" ? ("<span class='task-time'>" + ( "" + time ) + "</span>") : "");
         parent.appendChild(container);
         screenForSure(container);
@@ -201,7 +202,15 @@ apiready = function(){
           $api.byId('b' + i).setAttribute("class", "button-con b" + i);
         }
       }
+      if(check == 1){
+        changeShowing(false);
+      }
+      else {
+        changeShowing(true);
+      }
     }
+
+    var UICalendar = api.require('UICalendar');
 
     var dynamic = function(){
       $api.byId('b1').addEventListener("click", function(e){
@@ -377,6 +386,215 @@ apiready = function(){
         clearscreen();
       });
 
+      $api.byId('hst').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId('blackgroundsbody').removeAttribute("style");
+
+
+        UICalendar.open({
+            rect:{
+              y:100
+            },
+            styles: {
+                bg: 'rgba(255,255,255,1)',
+                week: {
+                    weekdayColor: '#3b3b3b',
+                    weekendColor: '#a8d400',
+                    size: 12
+                },
+                date: {
+                    color: '#3b3b3b',
+                    selectedColor: '#fff',
+                    selectedBg: '#a8d500',
+                    size: 12
+                },
+                today: {
+                    color: 'rgb(230,46,37)',
+                    bg: ''
+                },
+                specialDate: {
+                    color: '#a8d500',
+                    bg: 'widget://image/a.png'
+                }
+            },
+            switchMode: 'vertical',
+            fixedOn: api.frameName,
+            fixed: false
+        }, function(ret, err) {
+            if (ret) {
+                var str = ret.year + "-" + ret.month + '-' + ret.day;
+                $api.byId('hst').value = str;
+                if(ret.eventType == 'special' || ret.eventType == 'normal'){
+                    UICalendar.close();
+                    $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
+                }
+            } else {
+                alert(JSON.stringify(err));
+                UICalendar.close();
+                $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
+            }
+        });
+      });
+
+      $api.byId('het').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId('blackgroundsbody').removeAttribute("style");
+
+        UICalendar.open({
+            rect:{
+              y:100
+            },
+            styles: {
+                bg: 'rgba(255,255,255,1)',
+                week: {
+                    weekdayColor: '#3b3b3b',
+                    weekendColor: '#a8d400',
+                    size: 12
+                },
+                date: {
+                    color: '#3b3b3b',
+                    selectedColor: '#fff',
+                    selectedBg: '#a8d500',
+                    size: 12
+                },
+                today: {
+                    color: 'rgb(230,46,37)',
+                    bg: '#aaa'
+                },
+                specialDate: {
+                    color: '#a8d500',
+                    bg: 'widget://image/a.png'
+                }
+            },
+            switchMode: 'vertical',
+            fixedOn: api.frameName,
+            fixed: false
+        }, function(ret, err) {
+            if (ret) {
+                var str = ret.year + "-" + ret.month + '-' + ret.day;
+                $api.byId('het').value = str;
+                if(ret.eventType == 'special' || ret.eventType == 'normal'){
+                    UICalendar.close();
+                    $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
+                }
+            } else {
+                alert(JSON.stringify(err));
+                UICalendar.close();
+                $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
+            }
+        });
+      });
+
+      $api.byId('rst').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId('blackgroundsbody').removeAttribute("style");
+
+        UICalendar.open({
+            rect:{
+              y:100
+            },
+            styles: {
+                bg: 'rgba(255,255,255,1)',
+                week: {
+                    weekdayColor: '#3b3b3b',
+                    weekendColor: '#a8d400',
+                    size: 12
+                },
+                date: {
+                    color: '#3b3b3b',
+                    selectedColor: '#fff',
+                    selectedBg: '#a8d500',
+                    size: 12
+                },
+                today: {
+                    color: 'rgb(230,46,37)',
+                    bg: ''
+                },
+                specialDate: {
+                    color: '#a8d500',
+                    bg: 'widget://image/a.png'
+                }
+            },
+            switchMode: 'vertical',
+            fixedOn: api.frameName,
+            fixed: false
+        }, function(ret, err) {
+            if (ret) {
+                var str = ret.year + "-" + ret.month + '-' + ret.day;
+                $api.byId('rst').value = str;
+                if(ret.eventType == 'special' || ret.eventType == 'normal'){
+                    UICalendar.close();
+                    $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
+                }
+            } else {
+                alert(JSON.stringify(err));
+                UICalendar.close();
+                $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
+            }
+        });
+      });
+
+      $api.byId('ret').addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $api.byId('blackgroundsbody').removeAttribute("style");
+
+        UICalendar.open({
+            rect:{
+              y:100
+            },
+            styles: {
+                bg: 'rgba(255,255,255,1)',
+                week: {
+                    weekdayColor: '#3b3b3b',
+                    weekendColor: '#a8d400',
+                    size: 12
+                },
+                date: {
+                    color: '#3b3b3b',
+                    selectedColor: '#fff',
+                    selectedBg: '#a8d500',
+                    size: 12
+                },
+                today: {
+                    color: 'rgb(230,46,37)',
+                    bg: ''
+                },
+                specialDate: {
+                    color: '#a8d500',
+                    bg: 'widget://image/a.png'
+                }
+            },
+            switchMode: 'vertical',
+            fixedOn: api.frameName,
+            fixed: false
+        }, function(ret, err) {
+            if (ret) {
+                var str = ret.year + "-" + ret.month + '-' + ret.day;
+                $api.byId('ret').value = str;
+                if(ret.eventType == 'special' || ret.eventType == 'normal'){
+                    UICalendar.close();
+                    $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
+                }
+            } else {
+                alert(JSON.stringify(err));
+                UICalendar.close();
+                $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
+            }
+        });
+      });
+
+      $api.byId('blackgroundsbody').addEventListener("click", function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        UICalendar.close();
+        $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
+      });
+
+
 
       api.addEventListener({
         name: 'keyback'
@@ -533,19 +751,20 @@ apiready = function(){
     var sroad = "";
     var sbtype = "";
     var sstype = "";
-    var tyear = "";
-    var tmonth = "";
-    var tday = "";
-    var time = "";
+    var hstime = "";
+    var hetime = "";
+    var rstime = "";
+    var retime = "";
     var screenData = function(){
       checkscreen = true;
       snumber = $api.byId('search-number').value;
       sroad = $api.byId('search-road').innerHTML;
       sbtype = $api.byId('search-type-big').innerHTML;
       sstype = $api.byId('search-type-small').innerHTML;
-      tyear = $api.byId('year').value;
-      tmonth = $api.byId('mounth').value;
-      tday = $api.byId('day').value;
+      hstime = $api.byId('hst').value;
+      hetime = $api.byId('het').value;
+      rstime = $api.byId('rst').value;
+      retime = $api.byId('ret').value;
       if(sroad == "请选择事项路段") {
         sroad = "";
       }
@@ -555,28 +774,6 @@ apiready = function(){
       if(sstype == "请选择事项小类型"){
         sstype = "";
       }
-      var nowd = new Date();
-      if(!tyear && !tmonth && !tday){
-        time = "";
-      }
-      else {
-        if(!tyear){
-          tyear = nowd.getFullYear();
-        }
-        if(!tmonth){
-          tmonth = nowd.getMonth() + 1;
-          if(tmonth < 10){
-            tmonth = "0" + tmonth;
-          }
-        }
-        if(!tday){
-          tday = nowd.getDay();
-          if(tday < 10){
-            tday = "0" + tday;
-          }
-        }
-        time = tyear+"-"+tmonth+"-"+tday;
-      }
     }
 
     var checkscreen = false;
@@ -585,9 +782,10 @@ apiready = function(){
       $api.byId('search-road').innerHTML = "请选择事项路段";
       $api.byId('search-type-big').innerHTML = "请选择事项大类型";
       $api.byId('search-type-small').innerHTML = "请选择事项小类型";
-      $api.byId('year').value = "";
-      $api.byId('mounth').value = "";
-      $api.byId('day').value = "";
+      $api.byId('hst').value = "";
+      $api.byId('het').value = "";
+      $api.byId('rst').value = "";
+      $api.byId('ret').value = "";
       checkscreen = false;
     }
 
@@ -638,8 +836,18 @@ apiready = function(){
       if(sroad && !road.match(sroad) && checkfinal){
         checkfinal = false;
       }
-      var repTime = childs[4].innerHTML;
-      if(time && !repTime.match(time) && checkfinal){
+      var repTime = new Date(childs[4].innerHTML.replace('上报时间：', '')).getTime();
+      if((!hstime || repTime >= (new Date(hstime).getTime())) && checkfinal){
+        checkfinal = false;
+      }
+      if((!hetime || repTime <= (new Date(hetime).getTime())) && checkfinal){
+        checkfinal = false;
+      }
+      var limitTime  = new Date(childs[8].innerHTML).getTime();
+      if((!rstime || limitTime >= (new Date(rstime).getTime())) && checkfinal){
+        checkfinal = false;
+      }
+      if((!retime || limitTime <= (new Date(retime).getTime())) && checkfinal){
         checkfinal = false;
       }
       if(!checkfinal){

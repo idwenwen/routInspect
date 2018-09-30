@@ -249,11 +249,16 @@ apiready = function(){
 		var areas = [];
 		var areasId = [];
 		var getAreaId = [];
+		var clicked = false;
 
 		var requestArea = function(pos, checkstuff, obj){
 			areas = [];
 			areasId = [];
 		  getAreaId = [];
+			if(clicked){
+				return false;
+			}
+			clicked = true;
 			connectToService(commonURL + "?action=area",
 			{
 				values: { "userid": info.user.userid }
