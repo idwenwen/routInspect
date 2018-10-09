@@ -275,6 +275,7 @@ apiready = function(){
 						areas.push(originl);
 						areasId.push(item.id);
 					});
+					var len = areas.length;
 					for(var i = 0; i < areas.length ; i++){
 						var checkpoint = [pos.lon, pos.lat];
 						var check = AMap.GeometryUtil.isPointInRing(checkpoint, areas[i]);
@@ -298,23 +299,31 @@ apiready = function(){
 										areas.push(originl);
 										areasId.push(item.id);
 									});
+									for(var j = 0; j < areas.length ; j++){
+										var checkpoint = [pos.lon, pos.lat];
+										var checksub = AMap.GeometryUtil.isPointInRing(checkpoint, areas[j]);
+										if(checksub){
+											getAreaId.push(areasId[j]);
+										}
+									}
+									if(checkstuff){
+										requestEvent(pos, true, obj);
+									}
+									else {
+										requestEvent(pos, false, obj);
+									}
 								}
 							});
-							for(var j = 0; j < areas.length ; j++){
-								var checkpoint = [pos.lon, pos.lat];
-								var checksub = AMap.GeometryUtil.isPointInRing(checkpoint, areas[j]);
-								if(checksub){
-									getAreaId.push(areasId[j]);
-								}
+							break;
+						}
+						if(i > len){
+							if(checkstuff){
+								requestEvent(pos, true, obj);
+							}
+							else {
+								requestEvent(pos, false, obj);
 							}
 						}
-						break;
-					}
-					if(checkstuff){
-						requestEvent(pos, true, obj);
-					}
-					else {
-						requestEvent(pos, false, obj);
 					}
 				}
 				else {
