@@ -21,7 +21,7 @@ apiready = function(){
 						return false;
 					}
 					if(err){
-						alert(JSON.stringify(err));
+						// alert(JSON.stringify(err));
 						return false;
 					}
 					var positions = $api.getStorage('position');
@@ -223,7 +223,7 @@ apiready = function(){
 						}
 			    },
 			    function(ret){
-	          alert(JSON.stringify(ret.desc));
+	          // alert(JSON.stringify(ret.desc));
 			    }
 				);
 			}
@@ -240,7 +240,7 @@ apiready = function(){
 						}
 			    },
 			    function(ret){
-	          alert(JSON.stringify(ret.desc));
+	          // alert(JSON.stringify(ret.desc));
 			    }
 				);
 			}
@@ -277,6 +277,7 @@ apiready = function(){
 					});
 					var len = areas.length;
 					for(var i = 0; i < areas.length ; i++){
+						alert("i:" + i);
 						var checkpoint = [pos.lon, pos.lat];
 						var check = AMap.GeometryUtil.isPointInRing(checkpoint, areas[i]);
 						if(check){
@@ -308,21 +309,26 @@ apiready = function(){
 									}
 									if(checkstuff){
 										requestEvent(pos, true, obj);
+										return true;
 									}
 									else {
 										requestEvent(pos, false, obj);
+										return true;
 									}
 								}
 							});
 							break;
 						}
-						if(i > len){
-							if(checkstuff){
-								requestEvent(pos, true, obj);
-							}
-							else {
-								requestEvent(pos, false, obj);
-							}
+					}
+					alert("i:" + i + "&&" + "len:" + len);
+					if(i >= len){
+						if(checkstuff){
+							requestEvent(pos, true, obj);
+							return true;
+						}
+						else {
+							requestEvent(pos, false, obj);
+							return true;
 						}
 					}
 				}
@@ -421,13 +427,14 @@ apiready = function(){
 					    name: 'hasGetPosition'
 					}, function(ret, err){
 					    if( ret ){
-					         alert( JSON.stringify( err ) );
+					        //  alert( JSON.stringify( err ) );
 					    }
 							requestArea(position, false, {"explain":explain, "address":address});
 							api.removeEventListener({
 							    name: 'hasGetPosition'
 							});
 					});
+					alert("由于当前GPS信号弱，上报事项将会在获取位置之后，自动上传。");
 					changePages();
 				}
 				else {
@@ -462,7 +469,7 @@ apiready = function(){
 						}
 				},
 				function(ret, err){
-					alert(JSON.stringify(err));
+					// alert(JSON.stringify(err));
 				}
 			);
 		}
@@ -647,7 +654,7 @@ apiready = function(){
 						$api.byId('photoing').setAttribute("style", "display:none;");
 					}
 				}, function(ret){
-					alert(JSON.stringify(ret));
+					// alert(JSON.stringify(ret));
 				})
 			});
 
@@ -662,7 +669,7 @@ apiready = function(){
 						$api.byId('photoing2').setAttribute("style", "display:none;");
 					}
 				}, function(ret){
-					alert(JSON.stringify(ret));
+					// alert(JSON.stringify(ret));
 				})
 			});
 
