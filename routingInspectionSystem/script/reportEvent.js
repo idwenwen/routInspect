@@ -317,7 +317,6 @@ apiready = function(){
 							break;
 						}
 					}
-					alert("i:" + i + "&&" + "len:" + len);
 					if(i >= len){
 						if(checkstuff){
 							requestEvent(pos, true, obj);
