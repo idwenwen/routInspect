@@ -36,8 +36,6 @@ apiready = function(){
 						});
 					}
 			});
-
-
 		}
 
 		//绘制问题类型选择
@@ -277,7 +275,6 @@ apiready = function(){
 					});
 					var len = areas.length;
 					for(var i = 0; i < areas.length ; i++){
-						alert("i:" + i);
 						var checkpoint = [pos.lon, pos.lat];
 						var check = AMap.GeometryUtil.isPointInRing(checkpoint, areas[i]);
 						if(check){
