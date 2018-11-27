@@ -121,4 +121,6 @@ html, body{
 
 input {
 	-webkit-appearance:none;
+	resize: none;
+	box-sizing: border-box;
 }
