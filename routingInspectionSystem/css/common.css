@@ -118,3 +118,7 @@ html, body{
 .picture2{
 	width: 100%;
 }
+
+input {
+	-webkit-appearance:none;
+}
