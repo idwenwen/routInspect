@@ -1,4 +1,4 @@
-	var commonURL = "https://dgj.itgwy.com.cn:7090/TongAn/AppAPI.ashx";
+	var commonURL = "https://dgj.itgwy.com.cn:7090/XiangAn/AppAPI.ashx";
 
 	var transferToPage = function(pname, purl, info, reload){
 		api.openWin({
