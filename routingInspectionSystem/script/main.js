@@ -144,7 +144,7 @@ apiready = function(){
           var etime = data[i].endtime;
           var type = data[i].state
           var nowTime = new Date();
-          var limitT = new Date(etime);
+          var limitT = new Date(etime.replace(/-/g,'/'));
           var between = limitT.getTime() - nowTime.getTime();
           var left = "";
           if(between > 0){

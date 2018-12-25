@@ -836,18 +836,18 @@ apiready = function(){
       if(sroad && !road.match(sroad) && checkfinal){
         checkfinal = false;
       }
-      var repTime = new Date(childs[4].innerHTML.replace('上报时间：', '')).getTime();
-      if((!hstime || repTime >= (new Date(hstime).getTime())) && checkfinal){
+      var repTime = new Date(childs[4].innerHTML.replace('上报时间：', '').replace(/-/g,'/')).getTime();
+      if((!hstime || repTime >= (new Date(hstime.replace(/-/g,'/')).getTime())) && checkfinal){
         checkfinal = false;
       }
-      if((!hetime || repTime <= (new Date(hetime).getTime())) && checkfinal){
+      if((!hetime || repTime <= (new Date(hetime.replace(/-/g,'/')).getTime())) && checkfinal){
         checkfinal = false;
       }
-      var limitTime  = new Date(childs[8].innerHTML).getTime();
-      if((!rstime || limitTime >= (new Date(rstime).getTime())) && checkfinal){
+      var limitTime  = new Date(childs[8].innerHTML.replace(/-/g,'/')).getTime();
+      if((!rstime || limitTime >= (new Date(rstime.replace(/-/g,'/')).getTime())) && checkfinal){
         checkfinal = false;
       }
-      if((!retime || limitTime <= (new Date(retime).getTime())) && checkfinal){
+      if((!retime || limitTime <= (new Date(retime.replace(/-/g,'/')).getTime())) && checkfinal){
         checkfinal = false;
       }
       if(!checkfinal){
