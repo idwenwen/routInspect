@@ -226,7 +226,7 @@ apiready = function(){
 				);
 			}
 			var data2 = $api.getStorage('eventroad');
-			if(data2){
+			if(data2 && data2.length > 0){
 				drawingDetailT(data2, showStuffT);
 			}
 			else {
