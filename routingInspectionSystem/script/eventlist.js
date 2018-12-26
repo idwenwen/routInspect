@@ -67,7 +67,7 @@ apiready = function(){
       }
       else {
         var arr = leftTime.split(/[- : \/]/);
-        var date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
+        var date = new Date(arr[2], arr[0]-1, arr[1], arr[3], arr[4], arr[5]);
         var nowDate = new Date();
         var ms = (date.getTime() - nowDate.getTime()) / 1000 / 60;
         time = Math.floor(ms / 60) + '小时' + Math.floor(ms%60) + '分钟';
