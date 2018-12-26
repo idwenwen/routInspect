@@ -600,7 +600,8 @@ apiready = function(){
 			var unmark = [];
 			var plantime = info.taskdata.planendtime;
 			var date1 = new Date();
-			var date2 = new Date(plantime.replace(/-/g,'/'));
+			var arr = plantime.split(/[- : \/]/);
+			var date2 = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
 			var vuired = false;
 			if(date1.getTime() - date2.getTime() > 0){
 				vuired = true;

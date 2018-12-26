@@ -85,7 +85,8 @@ apiready = function(){
         time = "无限时";
       }
       else {
-        var date = new Date(leftTime.replace(/-/g,"/"));
+        var arr = leftTime.split(/[- : \/]/);
+        var date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
         var nowDate = new Date();
         var ms = (date.getTime() - nowDate.getTime()) / 1000 / 60;
         time = Math.floor(ms / 60) + '小时' + Math.floor(ms%60) + '分钟';
@@ -144,7 +145,8 @@ apiready = function(){
           var etime = data[i].endtime;
           var type = data[i].state
           var nowTime = new Date();
-          var limitT = new Date(etime.replace(/-/g,'/'));
+          var arr = etime.split(/[- : \/]/);
+          var limitT = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
           var between = limitT.getTime() - nowTime.getTime();
           var left = "";
           if(between > 0){
