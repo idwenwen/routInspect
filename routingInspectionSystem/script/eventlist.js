@@ -66,7 +66,8 @@ apiready = function(){
         time = "无限时";
       }
       else {
-        var date = new Date(leftTime.replace(/-/g,"/"));
+        var arr = leftTime.split(/[- : \/]/);
+        var date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
         var nowDate = new Date();
         var ms = (date.getTime() - nowDate.getTime()) / 1000 / 60;
         time = Math.floor(ms / 60) + '小时' + Math.floor(ms%60) + '分钟';
@@ -836,18 +837,22 @@ apiready = function(){
       if(sroad && !road.match(sroad) && checkfinal){
         checkfinal = false;
       }
-      var repTime = new Date(childs[4].innerHTML.replace('上报时间：', '').replace(/-/g,'/')).getTime();
-      if((!hstime || repTime >= (new Date(hstime.replace(/-/g,'/')).getTime())) && checkfinal){
+      var arr = childs[4].innerHTML.replace('上报时间：', '').split(/[- : \/]/);
+      var repTime = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]).getTime();
+      var arrh = hstime.split(/[- : \/]/);
+      if((!hstime || repTime >= (new Date(arrh[0], arrh[1]-1, arrh[2], arrh[3], arrh[4], arrh[5]).getTime())) && checkfinal){
         checkfinal = false;
       }
-      if((!hetime || repTime <= (new Date(hetime.replace(/-/g,'/')).getTime())) && checkfinal){
+      if((!hetime || repTime <= (new Date(arrh[0], arrh[1]-1, arrh[2], arrh[3], arrh[4], arrh[5]).getTime())) && checkfinal){
         checkfinal = false;
       }
-      var limitTime  = new Date(childs[8].innerHTML.replace(/-/g,'/')).getTime();
-      if((!rstime || limitTime >= (new Date(rstime.replace(/-/g,'/')).getTime())) && checkfinal){
+      var arr8 = childs[8].innerHTML.split(/[- : \/]/);
+      var limitTime  = new Date(arr8[0], arr8[1]-1, arr8[2], arr8[3], arr8[4], arr8[5]).getTime();
+      var arrr = rstime.split(/[- : \/]/);
+      if((!rstime || limitTime >= (new Date(arrr[0], arrr[1]-1, arrr[2], arrr[3], arrr[4], arrr[5]).getTime())) && checkfinal){
         checkfinal = false;
       }
-      if((!retime || limitTime <= (new Date(retime.replace(/-/g,'/')).getTime())) && checkfinal){
+      if((!retime || limitTime <= (new Date(arrr[0], arrr[1]-1, arrr[2], arrr[3], arrr[4], arrr[5]).getTime())) && checkfinal){
         checkfinal = false;
       }
       if(!checkfinal){
