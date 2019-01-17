@@ -115,7 +115,7 @@ apiready = function() {
         mapObj = new AMap.Map('iCenter');
         mapObj.plugin('AMap.Geolocation', function() {
             geolocation = new AMap.Geolocation({
-                enableHighAccuracy: true, //是否使用高精度定位，默认:true
+                enableHighAccuracy: false, //是否使用高精度定位，默认:true
                 convert: true, //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
                 showButton: false, //显示定位按钮，默认：true
                 buttonOffset: new AMap.Pixel(10, 20), //定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
