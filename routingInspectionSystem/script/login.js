@@ -44,6 +44,7 @@ apiready = function() {
     var showingFailMessage = false;
     var alerts = true;
     var checkrefresh = 0;
+    var notGPS = false;
 
     var startlbsPO = function(ms, ms2, userid) {
         // aMapLBS.configManager({
@@ -125,6 +126,13 @@ apiready = function() {
             });
             mapObj.addControl(geolocation);
             AMap.event.addListener(geolocation, 'complete', function(data) {
+                if(!notGPS){
+                  return ;
+                }
+                else {
+                  alert("GPS 信号已回复!");
+                  notGPS = false;
+                }
                 var ret = data.position;
                 if (positions.length >= 100) {
                     positions.pop();
@@ -140,6 +148,10 @@ apiready = function() {
                 }
             }); //返回定位信息
             AMap.event.addListener(geolocation, 'error', function() {
+                if(notGPS){
+                  return ;
+                }
+                notGPS = true;
                 alert("当前GPS信号不佳");
             }); //返回定位出错信息
             setInterval(function() {
