@@ -13,7 +13,7 @@ apiready = function() {
     var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
     $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
-    var addMessage = function(messageId, name, status, types, leftTime, repTime, information, road, handlename, reportuserid, funcdescide) {
+    var addMessage = function(messageId, name, status, types, leftTime, repTime, information, road, handlename, reportuserid, handleuserid, funcdescide) {
         var showStatus = "";
         var parent = "";
         if (status == 1) {
@@ -93,6 +93,7 @@ apiready = function() {
             "<span class='task-info'>" + ("说明:" + information) + "</span>" +
             "<span hidden='hidden'>" + (leftTime) + "</span>" +
             "<span hidden='hidden'>" + (reportuserid) + "</span>" +
+            "<span hidden='hidden'>" + (handleuserid) + "</span>" +
             (parent.getAttribute("id") != "typelist4" ? ("<span class='task-time'>" + ("" + time) + "</span>") : "");
         parent.appendChild(container);
         screenForSure(container);
@@ -135,8 +136,9 @@ apiready = function() {
                 var road = data[i].road;
                 var handlename = data[i].handlname;
                 var reportuserid = data[i].reportuserid;
+                var handleuserid = data[i].handluserid;
 
-                addMessage(id, name, status, types, leftTime, repTime, information, road, handlename, reportuserid,
+                addMessage(id, name, status, types, leftTime, repTime, information, road, handlename, reportuserid, handleuserid,
                     function(e, mid, mname, mstatus, minfo, mtime) {
                         //操作相关的info对象内容，并进行页面的内容的跳转。
                         info.eventid = mid;
@@ -597,8 +599,6 @@ apiready = function() {
             $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
         });
 
-
-
         api.addEventListener({
             name: 'keyback'
         }, function(ret, err) {
@@ -884,10 +884,14 @@ apiready = function() {
             return;
         }
         var checkfinal = true;
-        var checkmine = childs[2].innerHTML;
-        var myname = myrequest ? info.user.name : "";
-        if (myname && !checkmine.match(myname)) {
+        var checkmine = childs[9].innerHTML;
+        var myname = myrequest ? info.user.userid : "";
+        if (myname && checkmine != myname) {
             checkfinal = false;
+        }
+        else {
+            alert(checkmine);
+            alert(info.user.userid);
         }
         if (!checkfinal) {
             list.setAttribute("hidden", "hidden");
@@ -905,9 +909,9 @@ apiready = function() {
             return;
         }
         var checkfinal = true;
-        var checkmine = childs[5].innerHTML; //需要修改
-        var myname = myhandle ? info.user.name : "";
-        if (myname && !checkmine.match(myname)) {
+        var checkmine = childs[10].innerHTML; //需要修改
+        var myname = myhandle ? info.user.userid : "";
+        if (myname && checkmine != myname) {
             checkfinal = false;
         }
         if (!checkfinal) {
