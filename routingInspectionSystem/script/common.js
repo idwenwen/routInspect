@@ -31,7 +31,7 @@
 		    url: urls,
 		    method: 'post',
 		    data: data || "",
-				timeout:5,
+				timeout:30,
 		}, function(ret, err) {
 		    if (ret) {
 		        success.call(null, ret, err);
