@@ -11,7 +11,7 @@ apiready = function(){
   var mainH = api.winHeight - $api.offset($api.byId("header")).h - $api.offset($api.byId("footer")).h;
   $api.byId("main").setAttribute("style", "height:" + mainH + "px;");
 
-  var addNotcie = function(noticeId, time, name, information, routing, type , explain, response, result, urgent, funcdescide){
+  var addNotcie = function(noticeId, time, name, information, routing, type , explain, response, result, urgent, roadname, funcdescide){
     var parent = "";
     if(type == 2){
       parent = $api.byId('typelist2');
@@ -48,7 +48,7 @@ apiready = function(){
       container.innerHTML =
           "<div class='notice-content " + (urgent ? "notice-content2" : "") + "'>"+
           "<span class='notice-name'>" + ("" + name) + "</span>" +
-          (routing ? ("<span class='notice-routing'>" + ("" + routing) + "</span>") : "") +
+          (routing ? ("<span class='notice-routing'>"  + ( roadname + ": " + routing) + "</span>") : "") +
           "<span class='notice-introduction'>" + ("" + information) +
           ((parent.getAttribute("id") !== "typelist3" && parent.getAttribute("id") !== "typelist4" ) ? ("<span class='notice-time'>" + ("" + time) + "</span></span>"): "") +
           "</div>";
@@ -81,6 +81,7 @@ apiready = function(){
         var id = data[i].id;
         var name = data[i].name;
         var routing = data[i].path;
+        var roadName = data[i].roadname;
         var information = data[i].statename;
         var time = data[i].startime;
         var etime = data[i].endtime;
@@ -105,7 +106,7 @@ apiready = function(){
         if(type == 2){
           havetask = true;
         }
-        addNotcie(id, left, name, information, routing, type, explain, response, result, urgent,
+        addNotcie(id, left, name, information, routing, type, explain, response, result, urgent, roadName,
           function(e, id, time, name, information, routing, type){
             //依据type来进行页面的跳转。如果是进行之中的任务则直接跳转到地图页面.
             //如果是为开始跳转到inspectionRouting页面，警告跳转到处理界面。
