@@ -126,12 +126,9 @@ apiready = function() {
             });
             mapObj.addControl(geolocation);
             AMap.event.addListener(geolocation, 'complete', function(data) {
-                if(!notGPS){
-                  return ;
-                }
-                else {
-                  alert("GPS 信号已恢复!");
+                if(notGPS){
                   notGPS = false;
+                  alert("当前GPS信号已恢复");
                 }
                 var ret = data.position;
                 if (positions.length >= 100) {
