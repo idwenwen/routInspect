@@ -130,7 +130,7 @@ apiready = function() {
                   return ;
                 }
                 else {
-                  alert("GPS 信号已回复!");
+                  alert("GPS 信号已恢复!");
                   notGPS = false;
                 }
                 var ret = data.position;
