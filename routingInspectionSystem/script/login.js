@@ -129,9 +129,13 @@ var startlbsPO = function(ms, ms2, userid) {
                 }
                 positions.unshift([ret.lon, ret.lat]);
                 $api.setStorage('position', JSON.stringify(positions));
-                api.sendEvent({
-                    name: 'refreshmap'
-                });
+                checkrefresh ++;
+                if(checkrefresh >= 2){
+                  checkrefresh = 0 ;
+                  api.sendEvent({
+                      name: 'refreshmap'
+                  });
+                }
                 // alert($api.getStorage("position"));
 
             } else {
