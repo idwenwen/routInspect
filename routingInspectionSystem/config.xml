@@ -10,28 +10,28 @@
     <content src="index.html" />
     <access origin="*" />
     <preference name="pageBounce" value="false"/>
-	<preference name="appBackground" value="rgba(0,0,0,0.0)"/>
-	<preference name="windowBackground" value="rgba(0,0,0,0.0)"/>
-	<preference name="frameBackgroundColor" value="rgba(0,0,0,0.0)"/>
-	<preference name="hScrollBarEnabled" value="true"/>
-	<preference name="vScrollBarEnabled" value="true"/>
-	<preference name="autoLaunch" value="true"/>
-	<preference name="fullScreen" value="false"/>
-	<preference name="autoUpdate" value="true" />
-	<preference name="smartUpdate" value="true" />
-	<preference name="debug" value="false"/>
-	<preference name="statusBarAppearance" value="true"/>
-  <preference name="iOS7StatusBarAppearance" value="true" />
-	<permission name="readPhoneState" />
-	<permission name="camera" />
-	<permission name="record" />
-	<permission name="location" />
-	<permission name="fileSystem" />
-	<permission name="internet" />
-	<permission name="bootCompleted" />
-	<permission name="hardware" />
-	<permission name="location" />
-  <preference name="backgroundMode" value="location"/>
+  	<preference name="appBackground" value="rgba(0,0,0,0.0)"/>
+  	<preference name="windowBackground" value="rgba(0,0,0,0.0)"/>
+  	<preference name="frameBackgroundColor" value="rgba(0,0,0,0.0)"/>
+  	<preference name="hScrollBarEnabled" value="true"/>
+  	<preference name="vScrollBarEnabled" value="true"/>
+  	<preference name="autoLaunch" value="true"/>
+  	<preference name="fullScreen" value="false"/>
+  	<preference name="autoUpdate" value="true" />
+  	<preference name="smartUpdate" value="true" />
+  	<preference name="debug" value="false"/>
+  	<preference name="statusBarAppearance" value="true"/>
+    <preference name="iOS7StatusBarAppearance" value="true" />
+  	<permission name="readPhoneState" />
+  	<permission name="camera" />
+  	<permission name="record" />
+  	<permission name="location" />
+  	<permission name="fileSystem" />
+  	<permission name="internet" />
+  	<permission name="bootCompleted" />
+  	<permission name="hardware" />
+  	<permission name="location" />
+    <preference name="backgroundMode" value="location"/>
 
 	<!-- <feature name="aMapLocation">
     	<param name="android_api_key" value="54b8a17b13b01af767a45203b8cc2d85" />
@@ -41,5 +41,10 @@
       <param name="android_api_key" value="54b8a17b13b01af767a45203b8cc2d85" />
       <param name="ios_api_key" value="d70fcb6fe4587a70eea838bd7448fe4d" />
     </feature>
+
+    <!-- <feature name="aMap">
+      <param name="android_api_key" value="54b8a17b13b01af767a45203b8cc2d85" />
+      <param name="ios_api_key" value="d70fcb6fe4587a70eea838bd7448fe4d" />
+    </feature> -->
 
 </widget>
