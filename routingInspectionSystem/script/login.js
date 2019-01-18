@@ -49,8 +49,8 @@ var showingmsg = 10;
 
 var startlbsPO = function(ms, ms2, userid) {
     aMapLBS.configManager({
-        accuracy: 'hundredMeters',
-        filter: 1
+        accuracy: 'kilometer',
+        filter: 0.1
     }, function(ret, err) {
         if (ret.status) {
               setInterval(function() {
@@ -129,13 +129,9 @@ var startlbsPO = function(ms, ms2, userid) {
                 }
                 positions.unshift([ret.lon, ret.lat]);
                 $api.setStorage('position', JSON.stringify(positions));
-                checkrefresh++;
-                if (checkrefresh >= 2) {
-                    checkrefresh = 0;
-                    api.sendEvent({
-                        name: 'refreshmap'
-                    });
-                }
+                api.sendEvent({
+                    name: 'refreshmap'
+                });
                 // alert($api.getStorage("position"));
 
             } else {
