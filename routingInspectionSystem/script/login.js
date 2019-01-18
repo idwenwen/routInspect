@@ -49,7 +49,7 @@ apiready = function() {
     var notGPS = false;
     var showingmsg = 10;
 
-    var sendPos = function(ms2, userid) {
+    var sendPos = function(ms2) {
             setInterval(function() {
                 var pos = positions[0];
                 var lat = 0;
@@ -58,9 +58,12 @@ apiready = function() {
                     lat = pos[1];
                     lon = pos[0];
                 }
+                if(!userIdStuff){
+                  return ;
+                }
                 connectToService(commonURL + "?action=position", {
                         values: {
-                            "userid": userid,
+                            "userid": userIdStuff,
                             "lat": lat,
                             "lon": lon
                         }
@@ -296,6 +299,7 @@ apiready = function() {
     // });
 }
 
+var userIdStuff = "";
 var loginfunc = function(username, password) {
     connectToService(commonURL + "?action=login", {
             values: {
@@ -305,7 +309,7 @@ var loginfunc = function(username, password) {
         },
         function(ret) {
             if (ret.result) {
-                startlbsPO(intervalTime, requestTime, ret.data.id);
+                userIdStuff = ret.data.id
                 var param = {
                     user: {},
                     history: {}
@@ -395,4 +399,5 @@ api.addEventListener({
 });
 
 autoLogin();
+startlbsPO(intervalTime, requestTime, userIdStuff);
 }
