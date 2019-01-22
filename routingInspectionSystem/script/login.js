@@ -48,6 +48,8 @@ apiready = function() {
     var checkrefresh = 0;
     var notGPS = false;
     var showingmsg = 10;
+    var prespective = 0;
+    var systemType = api.systemType;
 
     var sendPos = function(ms2) {
             setInterval(function() {
@@ -126,7 +128,7 @@ apiready = function() {
         //     });
 
     aMapLBS.configManager({
-        accuracy: 'kilometer',
+        accuracy: 'hundredMeters',
         filter: 1
     }, function(ret, err) {
         if (ret.status) {
@@ -172,6 +174,45 @@ apiready = function() {
                     if (positions.length >= 100) {
                         positions.pop();
                     }
+                    // var accuracyforIOS = 0;
+                    // if(systemType == "ios"){
+                    //     accuracyforIOS = ret.accuracy;
+                    // }
+                    // var dis = 0;
+                    // if(positions.length >= 1){
+                    //     dis = AMap.GeometryUtil.distance(positions[0], [ret.lon, ret.lat]);
+                    // }
+                    // if(positions.length >= 20 && accuracyforIOS <= 100){
+                    //     if (dis <= 10){
+                    //         positions.unshift([ret.lon, ret.lat]);
+                    //         prespective = 0;
+                    //     }
+                    //     else {
+                    //         prespective++;
+                    //         if (prespective >= 30){
+                    //             positions.unshift([ret.lon, ret.lat]);
+                    //             prespective = 0;
+                    //         }
+                    //         else if (prespective >= 20){
+                    //             if(dis <= 70){
+                    //                 positions.unshift([ret.lon, ret.lat]);
+                    //                 prespective = 0;
+                    //             }
+                    //         }
+                    //         else if(prespective >= 10){
+                    //             if(dis <= 50){
+                    //                 positions.unshift([ret.lon, ret.lat]);
+                    //                 prespective = 0;
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                    // else {
+                    //     if(accuracyforIOS <= 100){
+                    //         positions.unshift([ret.lon, ret.lat]);
+                    //         prespective = 0;
+                    //     }
+                    // }
                     positions.unshift([ret.lon, ret.lat]);
                     $api.setStorage('position', JSON.stringify(positions));
                     api.setGlobalData({
