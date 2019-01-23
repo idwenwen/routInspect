@@ -183,23 +183,23 @@ apiready = function() {
                     //     dis = AMap.GeometryUtil.distance(positions[0], [ret.lon, ret.lat]);
                     // }
                     // if(positions.length >= 20 && accuracyforIOS <= 100){
-                    //     if (dis <= 10){
+                    //     if (dis <= 20){
                     //         positions.unshift([ret.lon, ret.lat]);
                     //         prespective = 0;
                     //     }
                     //     else {
                     //         prespective++;
-                    //         if (prespective >= 30){
+                    //         if (prespective >= 60){
                     //             positions.unshift([ret.lon, ret.lat]);
                     //             prespective = 0;
                     //         }
-                    //         else if (prespective >= 20){
-                    //             if(dis <= 70){
+                    //         else if (prespective >= 40){
+                    //             if(dis <= 100){
                     //                 positions.unshift([ret.lon, ret.lat]);
                     //                 prespective = 0;
                     //             }
                     //         }
-                    //         else if(prespective >= 10){
+                    //         else if(prespective >= 20){
                     //             if(dis <= 50){
                     //                 positions.unshift([ret.lon, ret.lat]);
                     //                 prespective = 0;
