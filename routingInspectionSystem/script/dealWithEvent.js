@@ -472,7 +472,7 @@ apiready = function(){
 					$api.byId('hangup').setAttribute("style", "display:none;");
 					$api.byId('statusmessage').innerHTML = "延时-待审核";
 				}
-				else if(statusinfo == 32){
+				else if(statusinfo == 32 || statusinfo == 16){
 					$api.byId('responseMessage').removeAttribute("style");
 					$api.byId('responseList').removeAttribute("style");
 					$api.byId('completeStuff').removeAttribute("style");
