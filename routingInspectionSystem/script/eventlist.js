@@ -391,6 +391,16 @@ apiready = function() {
             clearscreen();
         });
 
+        $api.byId('cancelbtn').addEventListener("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            //todo:依据编号
+            clearscreen();
+            screenData();
+            hidelist(recovery);
+            $api.byId('searchboxdiv').setAttribute("hidden", "hidden");
+        });
+
         $api.byId('hst').addEventListener("click", function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -435,7 +445,6 @@ apiready = function() {
                         $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
                     }
                 } else {
-                    alert(JSON.stringify(err));
                     UICalendar.close();
                     $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
                 }
@@ -485,7 +494,6 @@ apiready = function() {
                         $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
                     }
                 } else {
-                    alert(JSON.stringify(err));
                     UICalendar.close();
                     $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
                 }
@@ -535,7 +543,6 @@ apiready = function() {
                         $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
                     }
                 } else {
-                    alert(JSON.stringify(err));
                     UICalendar.close();
                     $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
                 }
@@ -585,7 +592,6 @@ apiready = function() {
                         $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
                     }
                 } else {
-                    alert(JSON.stringify(err));
                     UICalendar.close();
                     $api.byId('blackgroundsbody').setAttribute("style", "display:none;");
                 }
@@ -804,6 +810,7 @@ apiready = function() {
     }
 
     var hidelist = function(func) {
+
         var page = addcheck ? addcheck : 1;
         var list = $api.byId('typelist' + page).children;
 
@@ -849,21 +856,22 @@ apiready = function() {
         var arr = childs[4].innerHTML.replace('上报时间：', '').split(/[- : \/]/);
         var repTime = new Date(arr[2], arr[0] - 1, arr[1], arr[3], arr[4], arr[5]).getTime();
         var arrh = hstime.split(/[- : \/]/);
-        if ((!hstime || repTime >= (new Date(arrh[0], arrh[1] - 1, arrh[2]).getTime())) && checkfinal) {
+        if ((hstime && repTime < (new Date(arrh[0], arrh[1] - 1, arrh[2]).getTime())) && checkfinal) {
             checkfinal = false;
         }
         arrh = hetime.split(/[- : \/]/);
-        if ((!hetime || repTime <= (new Date(arrh[0], arrh[1] - 1, arrh[2]).getTime())) && checkfinal) {
+        if ((hetime && repTime > (new Date(arrh[0], arrh[1] - 1, arrh[2]).getTime())) && checkfinal) {
             checkfinal = false;
         }
+
         var arr8 = childs[8].innerHTML.split(/[- : \/]/);
         var limitTime = new Date(arr8[2], arr8[0] - 1, arr8[1], arr8[3], arr8[4], arr8[5]).getTime();
         var arrr = rstime.split(/[- : \/]/);
-        if ((!rstime || limitTime >= (new Date(arrr[0], arrr[1] - 1, arrr[2]).getTime())) && checkfinal) {
+        if ((rstime && limitTime < (new Date(arrr[0], arrr[1] - 1, arrr[2]).getTime())) && checkfinal) {
             checkfinal = false;
         }
         arrr = retime.split(/[- : \/]/);
-        if ((!retime || limitTime <= (new Date(arrr[0], arrr[1] - 1, arrr[2]).getTime())) && checkfinal) {
+        if ((retime || limitTime > (new Date(arrr[0], arrr[1] - 1, arrr[2]).getTime())) && checkfinal) {
             checkfinal = false;
         }
         if (page == 1 && childs[9].innerHTML == info.user.userid && !myrequest){
@@ -888,10 +896,6 @@ apiready = function() {
         var myname = myrequest ? info.user.userid : "";
         if (myname && checkmine != myname) {
             checkfinal = false;
-        }
-        else {
-            alert(checkmine);
-            alert(info.user.userid);
         }
         if (!checkfinal) {
             list.setAttribute("hidden", "hidden");
