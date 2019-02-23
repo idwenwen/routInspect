@@ -491,7 +491,7 @@ apiready = function(){
 			setTimeout(function(){
 				$api.byId('checkTypeList').removeAttribute("style");
 			}, 500);
-			animationStart(function(){}, history.page, history.url, info);
+			animationStart(function(){}, history.page, history.url, info, true);
 		}
 
 		var checkIndex = -1;
