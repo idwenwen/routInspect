@@ -26,18 +26,24 @@
 		});
 	}
 
-	var connectToService = function(urls, data, success, fail){
+	var connectToService = function(urls, data, success, fail, report){
 		api.ajax({
-		    url: urls,
-		    method: 'post',
-		    data: data || "",
-				timeout:30,
+				url: urls,
+				method: 'post',
+				data: data || "",
+				timeout:3,
 		}, function(ret, err) {
-		    if (ret) {
-		        success.call(null, ret, err);
-		    } else {
-		    	connectToService(urls, data, success, fail);
-		    }
+				if (ret) {
+						success.call(null, ret, err);
+				} else {
+					fail.call(null, ret, err);
+					if(!report){
+						connectToService(urls, data, success, fail);
+					}
+					else {
+						alert("当前网络环境不佳，反馈用时可能较长，请耐心等待");
+					}
+				}
 		});
 	}
 
