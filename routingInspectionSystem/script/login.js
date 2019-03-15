@@ -376,7 +376,8 @@ var loginfunc = function(username, password) {
         },
         function(ret, err) {
             // alert(JSON.stringify(err));
-        }
+        },
+        true
     );
 }
 
