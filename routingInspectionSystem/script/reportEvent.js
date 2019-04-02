@@ -347,6 +347,7 @@ apiready = function(){
 				}
 				else {
 					alert("无法确定当前用户所属区域，事项提交失败");
+					$api.byId('reportEvents').removeAttribute("disabled");
 				}
 			});
 		}
@@ -433,6 +434,7 @@ apiready = function(){
 					alert("请上传辅助位置图片");
 					return false;
 				}
+				$api.byId('reportEvents').setAttribute("disabled", "disabled");
 				var explain = $api.byId('questionMessage').value || "";
 				var address = $api.byId("positionMessage").value || "";
 				if(!position.lat){
@@ -479,6 +481,7 @@ apiready = function(){
 						}
 						else {
 							alert("事件未上报成功: " + ret.desc);
+							$api.byId('reportEvents').removeAttribute("disabled");
 						}
 				},
 				function(ret, err){
