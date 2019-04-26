@@ -429,7 +429,8 @@ apiready = function(){
 							// 	p.rele && p.rele.setColors("red");
 							// }
 						}
-						else {
+						else if(p.marker && p.type == 4){
+							p.getToPosition = true;
 							// if(p.scanner){
 							// 	if(p.ele){
 							// 		p.ele.setIcon("../icon/ins-g.png");
@@ -560,18 +561,23 @@ apiready = function(){
 		}
 
 		//上报打卡成功的点或者路段内容
-		var requestMark = function(val){
-			connectToService( commonURL + "?action=taskposition",
-			 {
-					 values: val
-			 },
+		var requestMark = function(val, files){
+			var obj = {};
+			if(val){
+				obj.values = val;
+			}
+			if(files){
+				obj.files = files;
+			}
+			connectToService(commonURL + "?action=taskposition",
+			 obj,
 			 function(ret){
 				 if(!ret.result){
-					 requestMark(val);
+					 requestMark(val,files);
 				 }
 			 },
 			 function(ret,err){
-				 requestMark(val);
+				 requestMark(val,files);
 			 }
 			);
 		}
@@ -728,6 +734,10 @@ apiready = function(){
 			return $api.getStorage(key);
 		}
 
+		var removePoints = function(key){
+			return $api.rmStorage(key);
+		}
+
 		var reduce = 0;
 		var easyMark = function(datas){
 			reduce = 0;
@@ -768,8 +778,11 @@ apiready = function(){
 					null,function(ret, err){
 							if(ret.result){
 								info.instrumentinfo = ret.data;
-								instrumentsignIn(id);
-								animationStart(function(){}, "instrumentinfo", "../html/instrumentinfo.html", info, true);
+
+								var bool = instrumentsignIn(id);
+								if(bool){
+									animationStart(function(){}, "instrumentinfo", "../html/instrumentinfo.html", info, true);
+								}
 							}
 							else {
 								alert("未获取到当前的设备信息")
@@ -786,14 +799,18 @@ apiready = function(){
 				}
 				else {
 					if(p.id == id){
+						if(!p.getToPosition){
+							alert("请尽量靠近设备所在地。");
+							return false;
+						}
 						if(p.photo){
-							getPicture(function(){
+							getPicture(function(ret){
 								p.scanner = true;
 									if(p.ele){
 										p.ele.setIcon("../icon/ins-g.png");
 									}
 									p.rele && p.rele.setColors("green");
-									requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]});
+									requestMark({"userid": info.user.userid, "taskid": info.taskid, "markerid":p.id, "index":0, "lat":p.point[1], "lon":p.point[0]}, {"photo": ret.data});
 							});
 						}
 						else {
@@ -808,6 +825,7 @@ apiready = function(){
 					else {
 						continue;
 					}
+					return true;
 				}
 			}
 		}
