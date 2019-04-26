@@ -1,4 +1,4 @@
-var commonURL = "https://dgj.itgwy.com.cn:7090/TongAn/AppAPI.ashx";
+var commonURL = "https://dgj.itgwy.com.cn:7090/XiangAn/AppAPI.ashx";
 
 // var commonURL = "http://csygj.liveej.com/AppAPI.ashx";
 
