@@ -1,5 +1,7 @@
 apiready = function() {
 
+    $api.clearStorage();
+
     var intervalTime = 5000;
     var requestTime = 2000;
 
